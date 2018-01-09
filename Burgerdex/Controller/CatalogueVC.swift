@@ -10,8 +10,8 @@ import UIKit
 
 class CatalogueVC: UITableViewController {
     
-    var selectedBurger: Burger!
-    var burgers = [Burger]()
+    var selectedBurger: BurgerPreview!
+    var burgers = [BurgerPreview]()
     
     override func viewDidLoad() {
         
@@ -20,23 +20,23 @@ class CatalogueVC: UITableViewController {
         
         self.title = "Catalogue"
         
-        guard let burgerOne = Burger.init(name: "The Highway Man",kitchen: "Goody's Diner", catalogueNumber: 23,photoUrl: "highwayMan",burgerID: 23)else {
+        guard let burgerOne = BurgerPreview.init(name: "The Highway Man",kitchen: "Goody's Diner", catalogueNumber: 23,photoUrl: "highwayMan",burgerID: 23)else {
             fatalError("Unable to instantiate burgerOne")
         }
         
-        guard let burgerTwo = Burger.init(name: "Macho Nacho",kitchen: "Goody's Diner", catalogueNumber: 24,photoUrl: "machoNacho",burgerID: 24)else {
+        guard let burgerTwo = BurgerPreview.init(name: "Macho Nacho",kitchen: "Goody's Diner", catalogueNumber: 24,photoUrl: "machoNacho",burgerID: 24)else {
             fatalError("Unable to instantiate burgerTwo")
         }
         
-        guard let burgerThree = Burger.init(name: "Figgy Piggy",kitchen: "Goody's Diner", catalogueNumber: 25,photoUrl: "figgyPiggy",burgerID: 25)else {
+        guard let burgerThree = BurgerPreview.init(name: "Figgy Piggy",kitchen: "Goody's Diner", catalogueNumber: 25,photoUrl: "figgyPiggy",burgerID: 25)else {
             fatalError("Unable to instantiate burgerThree")
         }
         
-        guard let burgerFour = Burger.init(name: "The Bacon Beast",kitchen: "Burger Delight", catalogueNumber: 19,photoUrl: "baconBeast", burgerID: 19)else {
+        guard let burgerFour = BurgerPreview.init(name: "The Bacon Beast",kitchen: "Burger Delight", catalogueNumber: 19,photoUrl: "baconBeast", burgerID: 19)else {
             fatalError("Unable to instantiate burgerFour")
         }
         
-        guard let burgerFive = Burger.init(name: "The Copperworks Burger",kitchen: "Copperworks", catalogueNumber: 17,photoUrl: "copperworks", burgerID: 17)else {
+        guard let burgerFive = BurgerPreview.init(name: "The Copperworks Burger",kitchen: "Copperworks", catalogueNumber: 17,photoUrl: "copperworks", burgerID: 17)else {
             fatalError("Unable to instantiate burgerFive")
         }
         
