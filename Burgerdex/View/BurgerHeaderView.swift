@@ -43,7 +43,7 @@ class BurgerHeaderView: UIView {
         containerView.addSubview(burgerImage)
         
         let layerHeight = frame.size.height
-        let layerWidth = frame.size.width
+        let layerWidth = frame.size.width * 3
         
         // Create Path
         let bezierPath = UIBezierPath()

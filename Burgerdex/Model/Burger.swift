@@ -8,7 +8,13 @@
 
 import UIKit
 
-class BurgerPreview {
+//Only using protocol and : BurgerObject on multiple classes due to using multiple different object types in a table view.
+//Instead of class BurgerPreview : BurgerObject { syntax, use class BurgerPreview { elsewhere
+protocol BurgerObject {
+    
+}
+
+class BurgerPreview : BurgerObject {
     
 
     var name: String
@@ -34,7 +40,7 @@ class BurgerPreview {
     
 }
 
-class Burger {
+class Burger : BurgerObject{
     
     var name: String
     var kitchen: String
@@ -100,7 +106,7 @@ class Burger {
     
 }
 
-class Badge {
+class Badge : BurgerObject{
     
     var ratingTitle: String
     var badgeTitle: String

@@ -11,8 +11,9 @@ class BurgerVC: UITableViewController {
     
     var burger: BurgerPreview!
     
-    var burgerAttr = [Burger]()
+    var burgerAttr = [Array<BurgerObject>]()
     var badges = [Badge]()
+    var fusionBurgers = [BurgerPreview]()
     
     override func viewDidLoad() {
         
@@ -39,7 +40,7 @@ class BurgerVC: UITableViewController {
                                          location: "Clarington",
                                          rating: "9.2",
                                          price: "CAD $17.00",
-                                         ingredients: "BBQ Sauce,Fresh (never frozen delivered that day) double patty, Bacon,Cheese, standard toppings of your choice.",
+                                         ingredients: "BBQ Sauce,Fresh (never frozen delivered that day) double patty,Bacon,Cheese,standard toppings of your choice.",
                                          fusion: true,
                                          veggie: true,
                                          spicy: false,
@@ -51,8 +52,19 @@ class BurgerVC: UITableViewController {
                                         
             fatalError("Unable to instantiate burger")
         }
-    
-        burgerAttr += [burgerInfo]
+        
+        guard let burgerOne = BurgerPreview.init(name: "The Bacon Beast",kitchen: "Burger Delight", catalogueNumber: 19,photoUrl: "baconBeast", burgerID: 19)else {
+            fatalError("Unable to instantiate burgerFour")
+        }
+        
+        guard let burgerTwo = BurgerPreview.init(name: "The Copperworks Burger",kitchen: "Copperworks", catalogueNumber: 17,photoUrl: "copperworks", burgerID: 17)else {
+            fatalError("Unable to instantiate burgerFive")
+        }
+        
+        fusionBurgers += [burgerOne, burgerTwo]
+        
+        burgerAttr.append([burgerInfo as Burger])
+        burgerAttr.append(fusionBurgers)
         
         guard let ratingBadge = Badge.init(ratingTitle: burgerInfo.rating,
                                            badgeTitle: "rating",
@@ -173,49 +185,83 @@ class BurgerVC: UITableViewController {
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         
-        return 1
+        return burgerAttr.count
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
        
-        return burgerAttr.count
+        return burgerAttr[section].count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        // Table view cells are reused and should be dequeued using a cell identifier.
-        let cellIdentifier = "BurgerInfoCell"
-        
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? BurgerTableViewCell  else{
-            fatalError("The dequeued cell is not an instance of BurgerTableViewCell.")
+        //If first row it's our burgers information. Else it's fusion burger cells.
+         if indexPath.section == 0 {
+            
+            // Table view cells are reused and should be dequeued using a cell identifier.
+            let cellIdentifier = "BurgerInfoCell"
+            
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? BurgerTableViewCell  else{
+                fatalError("The dequeued cell is not an instance of BurgerTableViewCell.")
+            }
+            
+            let burger = burgerAttr[indexPath.section][indexPath.row] as! Burger
+            
+            cell.discoveryDate.text = burger.name
+            cell.price.text = burger.price
+            cell.region.text = burger.location
+            cell.descript.text = burger.descript
+            
+            let ingredients = "• " + burger.ingredients.replacingOccurrences(of: ",", with: "\n\n• ")
+            
+            cell.ingredients.text = ingredients
+            
+            return cell
+            
+         }else{
+            
+            // Table view cells are reused and should be dequeued using a cell identifier.
+            let cellIdentifier = "CatalogueTableViewCell"
+            
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? CatalogueTableViewCell  else {
+                fatalError("The dequeued cell is not an instance of CatalogueTableViewCell.")
+            }
+            
+            let burger = burgerAttr[indexPath.section][indexPath.row] as! BurgerPreview
+            
+            cell.burgerName.text = burger.name
+            cell.kitchenName.text = burger.kitchen
+            cell.catalogueNumberLabel.text = "No."
+            cell.catalogueNumberNumber.text = String(burger.catalogueNumber)
+            cell.burgerImage.image = UIImage(named: burger.photoUrl)
+            cell.burgerID = 23
+            
+            return cell
         }
         
-        let burger = burgerAttr[indexPath.row]
-   
-        cell.discoveryDate.text = burger.name
-        cell.price.text = burger.price
-        cell.region.text = burger.location
-        cell.descript.text = burger.descript
-                
-        let ingredients = burger.ingredients.replacingOccurrences(of: ",", with: "\n\n")
-        
-        cell.ingredients.text = ingredients
- 
-        return cell
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
-        let  cell = tableView.dequeueReusableCell(withIdentifier: "BurgerHeaderCell") as! BurgerHeaderTableViewCell
+         if section == 0 {
+            
+            let  cell = tableView.dequeueReusableCell(withIdentifier: "BurgerHeaderCell") as! BurgerHeaderTableViewCell
+            
+            cell.burgerName.text = burger.name
+            cell.kitchenName.text = burger.kitchen
+            cell.catalogueNumberLabel.text = "No."
+            cell.catalogueNumberNumber.text = String(burger.catalogueNumber)
+            
+            return cell
+            
+         }else{
+            
+            return nil
+            
+        }
         
-        cell.burgerName.text = burger.name
-        cell.kitchenName.text = burger.kitchen
-        cell.catalogueNumberLabel.text = "No."
-        cell.catalogueNumberNumber.text = String(burger.catalogueNumber)
-        
-        
-        return cell
     }
+    
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
@@ -227,14 +273,29 @@ class BurgerVC: UITableViewController {
         }
 
     }
-    /*
+    
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
     {
-        return 400.0;
+        
+        if indexPath.section == 1 {
+            
+            return 80;
+            
+        }else{
+            
+            return tableView.rowHeight;
+        }
     }
-    */
+    
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 80.0
+        if section == 1 {
+            
+            return 0;
+            
+        }else{
+            
+            return 80
+        }
     }
     /*
     // MARK: - Navigation
