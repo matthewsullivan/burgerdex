@@ -14,7 +14,8 @@ class BurgerVC: UITableViewController {
     var burgerAttr = [Array<BurgerObject>]()
     var badges = [Badge]()
     var fusionBurgers = [BurgerPreview]()
-    
+    var burgerThumbnail : UIImage!
+  
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -26,147 +27,182 @@ class BurgerVC: UITableViewController {
         
         self.tableView.tableHeaderView  = burgerHeaderView
         
-        burgerHeaderView.burgerImage.image = UIImage(named: burger.photoUrl)
+        burgerHeaderView.burgerImage.image =  burgerThumbnail
         
+        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        
+        //always fill the view
+        blurEffectView.frame = burgerHeaderView.burgerImage.bounds
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        blurEffectView.alpha = 0.9
+        
+        burgerHeaderView.burgerImage.addSubview(blurEffectView)
+    
+        let url = URL(string: burger.photoUrl)
+        
+        URLSession.shared.dataTask(with: url!, completionHandler: { (data, response, error) in
+            
+            if error != nil {
+                print(error!)
+                return
+            }
+            DispatchQueue.main.async(execute: {
+                
+
+                UIView.animate(withDuration: 0.5, animations: {
+                    
+                     blurEffectView.alpha = 0.0
+                    
+                }, completion: { _ in
+                    
+                    burgerHeaderView.burgerImage.image  = UIImage(data: data!)
+                    
+                    blurEffectView.removeFromSuperview()
+                })
+                
+               
+            })
+            
+        }).resume()
+    
         tableView.estimatedRowHeight = 85.0
         tableView.rowHeight = UITableViewAutomaticDimension
         
-        guard let burgerInfo = Burger.init(name: burger.name,
-                                         kitchen: burger.kitchen,
-                                         catalogueNumber: burger.catalogueNumber,
-                                         descript: "Best burger in Clarington, hands down. The bacon on this burger is the best bacon I have ever eaten. You have to try this burger.\n\n$17 CAD because of poutine combo.",
-                                         burgerID: burger.burgerID,
-                                         photoUrl: burger.photoUrl,
-                                         location: "Clarington",
-                                         rating: "9.2",
-                                         price: "CAD $17.00",
-                                         ingredients: "BBQ Sauce,Fresh (never frozen delivered that day) double patty,Bacon,Cheese,standard toppings of your choice.",
-                                         fusion: true,
-                                         veggie: true,
-                                         spicy: false,
-                                         extinct: false,
-                                         seasonal: true,
-                                         hasChallenge: true,
-                                         hasMods: true,
-                                         dateCaptured: "Oct 18, 2017")else {
-                                        
-            fatalError("Unable to instantiate burger")
-        }
-        
-        guard let burgerOne = BurgerPreview.init(name: "The Bacon Beast",kitchen: "Burger Delight", catalogueNumber: 19,photoUrl: "baconBeast", burgerID: 19)else {
-            fatalError("Unable to instantiate burgerFour")
-        }
-        
-        guard let burgerTwo = BurgerPreview.init(name: "The Copperworks Burger",kitchen: "Copperworks", catalogueNumber: 17,photoUrl: "copperworks", burgerID: 17)else {
-            fatalError("Unable to instantiate burgerFive")
-        }
-        
-        fusionBurgers += [burgerOne, burgerTwo]
-        
-        burgerAttr.append([burgerInfo as Burger])
-        burgerAttr.append(fusionBurgers)
-        
-        guard let ratingBadge = Badge.init(ratingTitle: burgerInfo.rating,
-                                           badgeTitle: "rating",
-                                           badgeIcon: UIImage(named: "rating")!
-                                           )else {
-                                            
-                                        fatalError("Unable to instantiate rating badge")
-        }
-        
-        badges += [ratingBadge]
-        
-        if burgerInfo.fusion {
+        Burger.fetchBurgerDetails(burgerID: burger.burgerID,completion: { (data) in
             
-            guard let fusionBadge = Badge.init(ratingTitle: "",
-                                               badgeTitle: "fusion",
-                                               badgeIcon: UIImage(named: "fusion")!
-                )else {
-                    
-                    fatalError("Unable to instantiate fusion badge")
+            let burgerInfo = data
+            
+            guard let burgerOne = BurgerPreview.init(name: "The Bacon Beast",
+                                                     kitchen: "Burger Delight",
+                                                     catalogueNumber: 19,
+                                                     photoUrl: "baconBeast",
+                                                     photo: Data(),
+                                                     burgerID: 19)else {
+                                                        
+                                                        fatalError("Unable to instantiate burgerFour")
             }
             
-             badges += [fusionBadge]
-        }
-        
-        if burgerInfo.veggie {
-            
-            guard let veggieBadge = Badge.init(ratingTitle: "",
-                                               badgeTitle: "veggie",
-                                               badgeIcon: UIImage(named: "veggie")!
-                )else {
-                    
-                    fatalError("Unable to instantiate veggie badge")
+            guard let burgerTwo = BurgerPreview.init(name: "The Copperworks Burger",
+                                                     kitchen: "Copperworks",
+                                                     catalogueNumber: 17,
+                                                     photoUrl: "baconBeast",
+                                                     photo: Data(),
+                                                     burgerID: 17)else {
+                                                        
+                                                        fatalError("Unable to instantiate burgerFive")
             }
             
-            badges += [veggieBadge]
-        }
-        
-        if burgerInfo.spicy {
+            self.fusionBurgers += [burgerOne, burgerTwo]
             
-            guard let spicyBadge = Badge.init(ratingTitle: "",
-                                               badgeTitle: "spicy",
-                                               badgeIcon: UIImage(named: "spicy")!
+            self.burgerAttr.append([burgerInfo as BurgerObject])
+            self.burgerAttr.append(self.fusionBurgers)
+            
+            guard let ratingBadge = Badge.init(ratingTitle: burgerInfo.rating,
+                                               badgeTitle: "rating",
+                                               badgeIcon: UIImage(named: "rating")!
                 )else {
                     
-                    fatalError("Unable to instantiate spicy badge")
+                    fatalError("Unable to instantiate rating badge")
             }
             
-            badges += [spicyBadge]
-        }
-        
-        if burgerInfo.extinct {
+            self.badges += [ratingBadge]
             
-            guard let extinctBadge = Badge.init(ratingTitle: "",
-                                              badgeTitle: "extinct",
-                                              badgeIcon: UIImage(named: "extinct")!
-                )else {
-                    
-                    fatalError("Unable to instantiate extinct badge")
+            if burgerInfo.fusion {
+                
+                guard let fusionBadge = Badge.init(ratingTitle: "",
+                                                   badgeTitle: "fusion",
+                                                   badgeIcon: UIImage(named: "fusion")!
+                    )else {
+                        
+                        fatalError("Unable to instantiate fusion badge")
+                }
+                
+                self.badges += [fusionBadge]
             }
             
-            badges += [extinctBadge]
-        }
-        
-        if burgerInfo.seasonal {
-            
-            guard let seasonalBadge = Badge.init(ratingTitle: "",
-                                                badgeTitle: "seasonal",
-                                                badgeIcon: UIImage(named: "seasonal")!
-                )else {
-                    
-                    fatalError("Unable to instantiate seasonal badge")
+            if burgerInfo.veggie {
+                
+                guard let veggieBadge = Badge.init(ratingTitle: "",
+                                                   badgeTitle: "veggie",
+                                                   badgeIcon: UIImage(named: "veggie")!
+                    )else {
+                        
+                        fatalError("Unable to instantiate veggie badge")
+                }
+                
+                self.badges += [veggieBadge]
             }
             
-            badges += [seasonalBadge]
-        }
-        
-        if burgerInfo.hasChallenge {
-            
-            guard let hasChallengeBadge = Badge.init(ratingTitle: "",
-                                                 badgeTitle: "challenge",
-                                                 badgeIcon: UIImage(named: "hasChallenge")!
-                )else {
-                    
-                    fatalError("Unable to instantiate hasChallenge badge")
+            if burgerInfo.spicy {
+                
+                guard let spicyBadge = Badge.init(ratingTitle: "",
+                                                  badgeTitle: "spicy",
+                                                  badgeIcon: UIImage(named: "spicy")!
+                    )else {
+                        
+                        fatalError("Unable to instantiate spicy badge")
+                }
+                
+                self.badges += [spicyBadge]
             }
             
-            badges += [hasChallengeBadge]
-        }
-        
-        if burgerInfo.hasMods {
+            if burgerInfo.extinct {
+                
+                guard let extinctBadge = Badge.init(ratingTitle: "",
+                                                    badgeTitle: "extinct",
+                                                    badgeIcon: UIImage(named: "extinct")!
+                    )else {
+                        
+                        fatalError("Unable to instantiate extinct badge")
+                }
+                
+                self.badges += [extinctBadge]
+            }
             
-            guard let hasModsBadge = Badge.init(ratingTitle: "",
+            if burgerInfo.seasonal {
+                
+                guard let seasonalBadge = Badge.init(ratingTitle: "",
+                                                     badgeTitle: "seasonal",
+                                                     badgeIcon: UIImage(named: "seasonal")!
+                    )else {
+                        
+                        fatalError("Unable to instantiate seasonal badge")
+                }
+                
+                self.badges += [seasonalBadge]
+            }
+            
+            if burgerInfo.hasChallenge {
+                
+                guard let hasChallengeBadge = Badge.init(ratingTitle: "",
+                                                         badgeTitle: "challenge",
+                                                         badgeIcon: UIImage(named: "hasChallenge")!
+                    )else {
+                        
+                        fatalError("Unable to instantiate hasChallenge badge")
+                }
+                
+                self.badges += [hasChallengeBadge]
+            }
+            
+            if burgerInfo.hasMods {
+                
+                guard let hasModsBadge = Badge.init(ratingTitle: "",
                                                     badgeTitle: "mods",
                                                     badgeIcon: UIImage(named: "hasMods")!
-                )else {
-                    
-                    fatalError("Unable to instantiate hasChallege badge")
+                    )else {
+                        
+                        fatalError("Unable to instantiate hasChallege badge")
+                }
+                
+                self.badges += [hasModsBadge]
             }
             
-            badges += [hasModsBadge]
-        }
-        
+            self.tableView.reloadData()
+            
+        })
+    
     }
     
     override func didReceiveMemoryWarning() {
@@ -233,8 +269,7 @@ class BurgerVC: UITableViewController {
             cell.kitchenName.text = burger.kitchen
             cell.catalogueNumberLabel.text = "No."
             cell.catalogueNumberNumber.text = String(burger.catalogueNumber)
-            cell.burgerImage.image = UIImage(named: burger.photoUrl)
-            cell.burgerID = 23
+            cell.burgerID = burger.burgerID
             
             return cell
         }

@@ -11,43 +11,56 @@ import UIKit
 class CatalogueVC: UITableViewController {
     
     var selectedBurger: BurgerPreview!
+    var burgerThumbnail: Data!
     var burgers = [BurgerPreview]()
+    var filters = [String]()
+    var selectedFilterIndex = Int()
     
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        
+    
         self.title = "Catalogue"
-        
-        guard let burgerOne = BurgerPreview.init(name: "The Highway Man",kitchen: "Goody's Diner", catalogueNumber: 23,photoUrl: "highwayMan",burgerID: 23)else {
-            fatalError("Unable to instantiate burgerOne")
-        }
-        
-        guard let burgerTwo = BurgerPreview.init(name: "Macho Nacho",kitchen: "Goody's Diner", catalogueNumber: 24,photoUrl: "machoNacho",burgerID: 24)else {
-            fatalError("Unable to instantiate burgerTwo")
-        }
-        
-        guard let burgerThree = BurgerPreview.init(name: "Figgy Piggy",kitchen: "Goody's Diner", catalogueNumber: 25,photoUrl: "figgyPiggy",burgerID: 25)else {
-            fatalError("Unable to instantiate burgerThree")
-        }
-        
-        guard let burgerFour = BurgerPreview.init(name: "The Bacon Beast",kitchen: "Burger Delight", catalogueNumber: 19,photoUrl: "baconBeast", burgerID: 19)else {
-            fatalError("Unable to instantiate burgerFour")
-        }
-        
-        guard let burgerFive = BurgerPreview.init(name: "The Copperworks Burger",kitchen: "Copperworks", catalogueNumber: 17,photoUrl: "copperworks", burgerID: 17)else {
-            fatalError("Unable to instantiate burgerFive")
-        }
-        
-        burgers += [burgerOne, burgerTwo, burgerThree, burgerFour, burgerFive]
+    
+        BurgerPreview.fetchBurgerPreviews(page: 1, filter: 1,completion: { (data) in
+            
+            self.burgers = data as! [BurgerPreview]
+            
+            self.tableView.reloadData()
+            
+        })
         
         burgers.sort(by: { $0.catalogueNumber < $1.catalogueNumber })
+        
+        filters += ["Featured",
+                    "No",
+                    "Discovered",
+                    "Rating",
+                    "Vegetarian",
+                    "Spicy",
+                    "Seasonal",
+                    "Extinct",
+                    "Challenge",
+                    "Price-Hi",
+                    "Price-Low",
+                    "Fusion",
+                    "Modded",
+                    "Location",
+                    "Kitchen"]
     }
+
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+
+    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        
+        guard let tableViewCell = view as? FilterCatalogueCell else { return }
+    
+        tableViewCell.setCollectionViewDataSourceDelegate(self, forRow: section)
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -75,24 +88,56 @@ class CatalogueVC: UITableViewController {
         cell.kitchenName.text = burger.kitchen
         cell.catalogueNumberLabel.text = "No."
         cell.catalogueNumberNumber.text = String(burger.catalogueNumber)
-        cell.burgerImage.image = UIImage(named: burger.photoUrl)
-        cell.burgerID = 23
+        cell.burgerID = burger.burgerID
+        
+        if burger.photo.count == 0{
+            
+            let url = URL(string: burger.photoUrl)
+            URLSession.shared.dataTask(with: url!, completionHandler: { (data, response, error) in
+                
+                if error != nil {
+                    print(error!)
+                    return
+                }
+                DispatchQueue.main.async(execute: {
+                    
+                    burger.photo = data!
+                    cell.burgerImage.image  = UIImage(data: data!)
+                })
+                
+            }).resume()
+        }
         
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        
+        let  cell = tableView.dequeueReusableCell(withIdentifier: "FilterCatalogueCell") as! FilterCatalogueCell
+        
+        return cell
+
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         let burger = burgers[indexPath.row]
         
+        burgerThumbnail = burger.photo
         selectedBurger = burger
         
         self.performSegue(withIdentifier: "burgerSegue", sender: self)
     }
     
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
-    {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat{
+        
         return 80.0;
+        
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+       
+        return 60
     }
     
     // This function is called before the segue
@@ -100,9 +145,63 @@ class CatalogueVC: UITableViewController {
     
         let burgerViewController = segue.destination as! BurgerVC
         
+        burgerViewController.burgerThumbnail = UIImage(data:burgerThumbnail)
         burgerViewController.burger = selectedBurger
     }
 
 
+}
+
+extension CatalogueVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        
+        return filters.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        let filterNames = filters[indexPath.row]
+        
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FilterCatalogueCell", for: indexPath) as? FilterCatalogueCollectionViewCell  else{
+            
+            fatalError("The dequeued cell is not an instance of FilterCatalogueCell.")
+        }
+
+        cell.filterName.text = filterNames
+        
+        if selectedFilterIndex == indexPath.row {
+            
+            cell.backgroundColor = UIColor(red: 249/255, green: 208/255, blue: 93/255, alpha: 1)
+            
+        }else{
+            
+            cell.backgroundColor = UIColor.clear
+        }
+    
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        
+        let size: CGSize = filters[indexPath.row].size(withAttributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14.0)])
+        return CGSize(width: size.width + 25.0, height: collectionView.bounds.size.height)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        print("Collection view at row \(collectionView.tag) selected index path \(indexPath)")
+        
+        selectedFilterIndex = indexPath.row
+        
+        collectionView.scrollToItem(at: IndexPath(row: selectedFilterIndex, section: 0), at: .centeredHorizontally, animated: true)
+        
+        collectionView.reloadData()
+        
+    }
+    
 }
 

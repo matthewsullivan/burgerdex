@@ -111,8 +111,67 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="FilterCatalogueCell" rowHeight="60" id="vKE-QD-wDS" customClass="FilterCatalogueCell" customModule="Burgerdex" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="28" width="375" height="60"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="vKE-QD-wDS" id="EAR-GP-YFB">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="59.666666666666664"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ACm-0A-yUt">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="58"/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="58" id="OPD-IT-Ir9"/>
+                                            </constraints>
+                                            <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="bpq-I1-RYS">
+                                                <size key="itemSize" width="104" height="44"/>
+                                                <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                                <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                                <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                            </collectionViewFlowLayout>
+                                            <cells>
+                                                <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="FilterCatalogueCell" id="c09-GV-tgc" customClass="FilterCatalogueCollectionViewCell" customModule="Burgerdex" customModuleProvider="target">
+                                                    <rect key="frame" x="0.0" y="7" width="104" height="44"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                                        <rect key="frame" x="0.0" y="0.0" width="104" height="44"/>
+                                                        <autoresizingMask key="autoresizingMask"/>
+                                                        <subviews>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Featured" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5tI-5e-r1f">
+                                                                <rect key="frame" x="0.0" y="0.0" width="104" height="44"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                                <color key="textColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                        </subviews>
+                                                    </view>
+                                                    <constraints>
+                                                        <constraint firstItem="5tI-5e-r1f" firstAttribute="top" secondItem="c09-GV-tgc" secondAttribute="top" id="GEA-OJ-bbE"/>
+                                                        <constraint firstAttribute="trailing" secondItem="5tI-5e-r1f" secondAttribute="trailing" id="IaD-dn-N0x"/>
+                                                        <constraint firstAttribute="bottom" secondItem="5tI-5e-r1f" secondAttribute="bottom" id="O6w-ie-NGm"/>
+                                                        <constraint firstItem="5tI-5e-r1f" firstAttribute="leading" secondItem="c09-GV-tgc" secondAttribute="leading" id="RGc-9d-YVg"/>
+                                                    </constraints>
+                                                    <connections>
+                                                        <outlet property="filterName" destination="5tI-5e-r1f" id="eLC-v5-DFz"/>
+                                                    </connections>
+                                                </collectionViewCell>
+                                            </cells>
+                                        </collectionView>
+                                    </subviews>
+                                    <color key="backgroundColor" red="0.84889701235717929" green="0.84889701235717929" blue="0.84889701235717929" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <constraints>
+                                        <constraint firstItem="ACm-0A-yUt" firstAttribute="top" secondItem="EAR-GP-YFB" secondAttribute="top" id="TZQ-n3-JjU"/>
+                                        <constraint firstItem="ACm-0A-yUt" firstAttribute="leading" secondItem="EAR-GP-YFB" secondAttribute="leading" id="bd9-LQ-gMR"/>
+                                        <constraint firstAttribute="trailing" secondItem="ACm-0A-yUt" secondAttribute="trailing" id="y6e-QT-PHr"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="collectionView" destination="ACm-0A-yUt" id="ejb-0V-e3z"/>
+                                </connections>
+                            </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CatalogueTableViewCell" rowHeight="80" id="RhA-6B-egq" customClass="CatalogueTableViewCell" customModule="Burgerdex" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="28" width="375" height="80"/>
+                                <rect key="frame" x="0.0" y="88" width="375" height="80"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="RhA-6B-egq" id="scm-LG-Y5Y">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="79.666666666666671"/>
@@ -377,7 +436,7 @@ $17 CAD because of poutine combo.</string>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bouncesZoom="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="y0q-Kf-8Me">
-                                            <rect key="frame" x="16" y="252" width="346" height="70"/>
+                                            <rect key="frame" x="0.0" y="252" width="375" height="70"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="70" id="JhR-AY-6P6"/>
@@ -448,7 +507,7 @@ $17 CAD because of poutine combo.</string>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <view alpha="0.15000000596046448" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HXT-25-vwS">
-                                            <rect key="frame" x="10" y="443" width="359" height="1"/>
+                                            <rect key="frame" x="10" y="443" width="365" height="1"/>
                                             <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.25882352939999997" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="359" id="QNM-lv-KRX"/>
@@ -466,7 +525,7 @@ $17 CAD because of poutine combo.</string>
                                         <constraint firstAttribute="trailing" secondItem="kvE-YG-AVG" secondAttribute="trailing" constant="13" id="0V0-T1-TFU"/>
                                         <constraint firstItem="Kjj-c8-OuJ" firstAttribute="top" secondItem="f07-UM-ohu" secondAttribute="bottom" constant="8.6666666666666714" id="2On-Pr-pIO"/>
                                         <constraint firstItem="HXT-25-vwS" firstAttribute="leading" secondItem="4HN-Xw-6OI" secondAttribute="leading" constant="10" id="2h7-nU-xeI"/>
-                                        <constraint firstItem="y0q-Kf-8Me" firstAttribute="leading" secondItem="4HN-Xw-6OI" secondAttribute="leading" constant="16" id="3Zr-cc-Zui"/>
+                                        <constraint firstItem="y0q-Kf-8Me" firstAttribute="leading" secondItem="4HN-Xw-6OI" secondAttribute="leading" id="3Zr-cc-Zui"/>
                                         <constraint firstItem="Q1V-KR-1tn" firstAttribute="baseline" secondItem="uSa-9z-gxa" secondAttribute="baseline" id="5Xc-Vb-VdM"/>
                                         <constraint firstItem="tFe-6E-qKF" firstAttribute="leading" secondItem="4HN-Xw-6OI" secondAttribute="leading" constant="16" id="5mE-Bw-ooa"/>
                                         <constraint firstAttribute="trailing" secondItem="sjo-aC-eKM" secondAttribute="trailing" id="9Ic-tX-W8w"/>
@@ -477,7 +536,7 @@ $17 CAD because of poutine combo.</string>
                                         <constraint firstItem="4sR-Ud-gfV" firstAttribute="leading" secondItem="4HN-Xw-6OI" secondAttribute="leading" constant="16" id="Jno-1r-hBW"/>
                                         <constraint firstItem="m0j-iG-RXx" firstAttribute="leading" secondItem="xEN-2X-eGH" secondAttribute="trailing" constant="52" id="LQh-Ow-Niw"/>
                                         <constraint firstItem="Q1V-KR-1tn" firstAttribute="leading" secondItem="uSa-9z-gxa" secondAttribute="trailing" constant="10" id="Lst-BN-Hb5"/>
-                                        <constraint firstAttribute="trailing" secondItem="HXT-25-vwS" secondAttribute="trailing" constant="6" id="MQF-h3-E7J"/>
+                                        <constraint firstAttribute="trailing" secondItem="HXT-25-vwS" secondAttribute="trailing" id="MQF-h3-E7J"/>
                                         <constraint firstItem="y0q-Kf-8Me" firstAttribute="top" secondItem="kvE-YG-AVG" secondAttribute="bottom" constant="3" id="Mg8-gY-m1b"/>
                                         <constraint firstAttribute="trailing" secondItem="f07-UM-ohu" secondAttribute="trailing" constant="13" id="MjX-58-ddh"/>
                                         <constraint firstItem="f07-UM-ohu" firstAttribute="leading" secondItem="4HN-Xw-6OI" secondAttribute="leading" constant="16" id="N5E-LC-5b7"/>
@@ -500,7 +559,7 @@ $17 CAD because of poutine combo.</string>
                                         <constraint firstItem="ioW-wm-Lqh" firstAttribute="top" secondItem="tFe-6E-qKF" secondAttribute="bottom" constant="8.6666666666666714" id="jPA-Vj-xE0"/>
                                         <constraint firstAttribute="trailing" secondItem="YzB-la-DR6" secondAttribute="trailing" constant="16" id="k55-Uj-Fmz"/>
                                         <constraint firstItem="YzB-la-DR6" firstAttribute="baseline" secondItem="kvl-Pl-RrE" secondAttribute="baseline" id="l7k-4z-g5q"/>
-                                        <constraint firstAttribute="trailing" secondItem="y0q-Kf-8Me" secondAttribute="trailing" constant="13" id="lx9-Yl-KwY"/>
+                                        <constraint firstAttribute="trailing" secondItem="y0q-Kf-8Me" secondAttribute="trailing" id="lx9-Yl-KwY"/>
                                         <constraint firstItem="xEN-2X-eGH" firstAttribute="top" secondItem="kvl-Pl-RrE" secondAttribute="bottom" constant="8" id="mXM-4T-dwK"/>
                                         <constraint firstAttribute="trailing" secondItem="0Ws-yl-eii" secondAttribute="trailing" constant="16" id="noj-7n-17O"/>
                                         <constraint firstItem="uSa-9z-gxa" firstAttribute="leading" secondItem="4HN-Xw-6OI" secondAttribute="leading" constant="16" id="o5C-dI-FT8"/>

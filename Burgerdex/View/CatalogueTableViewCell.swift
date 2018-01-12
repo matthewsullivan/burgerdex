@@ -17,6 +17,7 @@ class CatalogueTableViewCell: UITableViewCell {
     @IBOutlet weak var catalogueNumberNumber: UILabel!
     @IBOutlet weak var burgerImage: UIImageView!
     
+    
     var burgerID: Int!
     
     override func awakeFromNib() {

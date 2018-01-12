@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EB3C2140200645D400EAC1CB /* FilterCatalogueCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3C213F200645D400EAC1CB /* FilterCatalogueCell.swift */; };
+		EB3C21422006487A00EAC1CB /* FilterCatalogueCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3C21412006487A00EAC1CB /* FilterCatalogueCollectionViewCell.swift */; };
 		EB77F68420054C0400ECCD1E /* BurgerBadgeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB77F68320054C0400ECCD1E /* BurgerBadgeCollectionViewCell.swift */; };
 		EB857A661FFC0959003E5BF1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB857A651FFC0959003E5BF1 /* AppDelegate.swift */; };
 		EB857A681FFC0959003E5BF1 /* CatalogueVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB857A671FFC0959003E5BF1 /* CatalogueVC.swift */; };
@@ -24,6 +26,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		EB3C213F200645D400EAC1CB /* FilterCatalogueCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCatalogueCell.swift; sourceTree = "<group>"; };
+		EB3C21412006487A00EAC1CB /* FilterCatalogueCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCatalogueCollectionViewCell.swift; sourceTree = "<group>"; };
 		EB77F68320054C0400ECCD1E /* BurgerBadgeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurgerBadgeCollectionViewCell.swift; sourceTree = "<group>"; };
 		EB857A621FFC0959003E5BF1 /* Burgerdex.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Burgerdex.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB857A651FFC0959003E5BF1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -109,8 +113,10 @@
 				EBE820EC1FFC21C800F5A895 /* CatalogueTableViewCell.swift */,
 				EBE820F21FFD88F900F5A895 /* BurgerHeaderView.swift */,
 				EBE820F41FFE7EED00F5A895 /* BurgerTableViewCell.swift */,
+				EB3C21412006487A00EAC1CB /* FilterCatalogueCollectionViewCell.swift */,
 				EBE820F61FFE8B3800F5A895 /* BurgerHeaderTableViewCell.swift */,
 				EB77F68320054C0400ECCD1E /* BurgerBadgeCollectionViewCell.swift */,
+				EB3C213F200645D400EAC1CB /* FilterCatalogueCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -195,7 +201,9 @@
 				EBE820ED1FFC21C800F5A895 /* CatalogueTableViewCell.swift in Sources */,
 				EBE820F51FFE7EED00F5A895 /* BurgerTableViewCell.swift in Sources */,
 				EBE820F31FFD88F900F5A895 /* BurgerHeaderView.swift in Sources */,
+				EB3C21422006487A00EAC1CB /* FilterCatalogueCollectionViewCell.swift in Sources */,
 				EB857A7A1FFC0D7B003E5BF1 /* AccountVC.swift in Sources */,
+				EB3C2140200645D400EAC1CB /* FilterCatalogueCell.swift in Sources */,
 				EB857A661FFC0959003E5BF1 /* AppDelegate.swift in Sources */,
 				EB857A681FFC0959003E5BF1 /* CatalogueVC.swift in Sources */,
 			);
