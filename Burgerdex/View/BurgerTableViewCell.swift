@@ -17,6 +17,7 @@ class BurgerTableViewCell: UITableViewCell {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var ingredients: UILabel!
     
+    @IBOutlet weak var fusionLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

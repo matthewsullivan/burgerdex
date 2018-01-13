@@ -577,6 +577,7 @@ $17 CAD because of poutine combo.</string>
                                     <outlet property="collectionView" destination="y0q-Kf-8Me" id="ZA0-zd-1P8"/>
                                     <outlet property="descript" destination="Kjj-c8-OuJ" id="KXc-Zv-2xh"/>
                                     <outlet property="discoveryDate" destination="Q1V-KR-1tn" id="boY-nP-Oli"/>
+                                    <outlet property="fusionLabel" destination="0Ws-yl-eii" id="2xr-Es-2dh"/>
                                     <outlet property="ingredients" destination="ioW-wm-Lqh" id="z8y-1G-Whw"/>
                                     <outlet property="price" destination="m0j-iG-RXx" id="ARR-eQ-eaH"/>
                                     <outlet property="region" destination="YzB-la-DR6" id="mj5-os-QiD"/>
@@ -720,7 +721,7 @@ $17 CAD because of poutine combo.</string>
         <image name="Account" width="25" height="25"/>
         <image name="Catalogue" width="25" height="25"/>
         <image name="Passport" width="25" height="25"/>
-        <image name="baconBeast" width="2000" height="1500"/>
+        <image name="baconBeast" width="200" height="131"/>
         <image name="rating" width="50" height="50"/>
     </resources>
 </document>

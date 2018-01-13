@@ -10,11 +10,14 @@ import UIKit
 
 class CatalogueVC: UITableViewController {
     
+    private let kLazyLoadCollectionCellImage = 1
+    
     var selectedBurger: BurgerPreview!
-    var burgerThumbnail: Data!
+    var burgerThumbnail: UIImage!
     var burgers = [BurgerPreview]()
     var filters = [String]()
     var selectedFilterIndex = Int()
+    var images: [String] = []
     
     override func viewDidLoad() {
         
@@ -75,7 +78,7 @@ class CatalogueVC: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        // Table view cells are reused and should be dequeued using a cell identifier.
+        
         let cellIdentifier = "CatalogueTableViewCell"
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? CatalogueTableViewCell  else {
@@ -89,32 +92,76 @@ class CatalogueVC: UITableViewController {
         cell.catalogueNumberLabel.text = "No."
         cell.catalogueNumberNumber.text = String(burger.catalogueNumber)
         cell.burgerID = burger.burgerID
-        
-        if burger.photo.count == 0{
-            
-            let url = URL(string: burger.photoUrl)
-            URLSession.shared.dataTask(with: url!, completionHandler: { (data, response, error) in
-                
-                if error != nil {
-                    print(error!)
-                    return
-                }
-                DispatchQueue.main.async(execute: {
-                    
-                    burger.photo = data!
-                    cell.burgerImage.image  = UIImage(data: data!)
-                })
-                
-            }).resume()
-            
-        }else{
-            
-            cell.burgerImage.image  = UIImage(data: burger.photo)
-        }
+    
+         updateImageForCell(cell,
+                            inTableView: tableView,
+                            withImageURL: burger.photoUrl,
+                            andImageView: cell.burgerImage!,
+                            atIndexPath: indexPath)
+
         
         return cell
     }
     
+    func updateImageForCell(_ cell: UITableViewCell,
+                            inTableView tableView: UITableView,
+                            withImageURL: String,
+                            andImageView: UIImageView,
+                            atIndexPath indexPath: IndexPath) {
+
+        let imageView = andImageView
+        
+        imageView.image = kLazyLoadPlaceholderImage
+        
+        let burger = burgers[indexPath.row]
+        
+        let imageURL = burger.photoUrl
+        
+        ImageManager.sharedInstance.downloadImageFromURL(imageURL) { (success, image) -> Void in
+            
+            if success && image != nil {
+                
+                if (tableView.indexPath(for: cell) as NSIndexPath?)?.row == (indexPath as NSIndexPath).row {
+                    
+                    imageView.image = image
+                    //Convert photo back to UIImage and use this instead
+                    burger.photo = imageView.image!
+                    
+                }
+            }
+        }
+    }
+    
+    func loadImagesForOnscreenRows() {
+        
+        if burgers.count > 0 {
+            
+            let visiblePaths = tableView.indexPathsForVisibleRows ?? [IndexPath]()
+            
+            for indexPath in visiblePaths {
+                
+                let burger = burgers[indexPath.row]
+                
+                let cell = tableView(self.tableView, cellForRowAt: indexPath) as! CatalogueTableViewCell
+                
+                updateImageForCell(cell, inTableView: tableView,
+                                   withImageURL: burger.photoUrl,
+                                   andImageView: cell.burgerImage!,
+                                   atIndexPath: indexPath)
+            }
+        }
+    }
+    
+    // MARK: - When decelerated or ended dragging, we must update visible rows
+    
+    override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        loadImagesForOnscreenRows()
+    }
+    /*
+    override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if !decelerate { loadImagesForOnscreenRows() }
+    }
+    */
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
         let  cell = tableView.dequeueReusableCell(withIdentifier: "FilterCatalogueCell") as! FilterCatalogueCell
@@ -149,7 +196,15 @@ class CatalogueVC: UITableViewController {
     
         let burgerViewController = segue.destination as! BurgerVC
         
-        burgerViewController.burgerThumbnail = UIImage(data:burgerThumbnail)
+        if burgerThumbnail != nil {
+            
+            burgerViewController.burgerThumbnail = burgerThumbnail
+            
+        }else{
+            
+            burgerViewController.burgerThumbnail = UIImage(named:"baconBeast")
+        }
+        
         burgerViewController.burger = selectedBurger
     }
 
@@ -206,6 +261,7 @@ extension CatalogueVC: UICollectionViewDelegate, UICollectionViewDataSource, UIC
         collectionView.reloadData()
         
     }
-    
 }
+
+
 

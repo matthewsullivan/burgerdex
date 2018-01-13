@@ -21,9 +21,9 @@ class BurgerPreview : BurgerObject {
     var catalogueNumber: Int
     var burgerID: Int
     var photoUrl: String
-    var photo: Data
+    var photo: UIImage
     
-    init?(name: String, kitchen: String, catalogueNumber: Int, photoUrl: String, photo: Data, burgerID: Int) {
+    init?(name: String, kitchen: String, catalogueNumber: Int, photoUrl: String, photo: UIImage, burgerID: Int) {
         
         if name.isEmpty || kitchen.isEmpty || catalogueNumber < 0 || burgerID < 0 {
             return nil
@@ -87,7 +87,7 @@ class BurgerPreview : BurgerObject {
                                                                                  kitchen: kitchen!,
                                                                                  catalogueNumber: catalogueNumber!,
                                                                                  photoUrl: pattyImagePath,
-                                                                                 photo:Data(),
+                                                                                 photo:UIImage(),
                                                                                  burgerID: catalogueNumber!)else{
                                         fatalError("Unable to instantiate burgerPreview")
                                     }

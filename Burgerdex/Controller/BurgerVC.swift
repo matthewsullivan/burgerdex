@@ -9,6 +9,8 @@ import UIKit
 
 class BurgerVC: UITableViewController {
     
+    private let kLazyLoadCollectionCellImage = 1
+    
     var burger: BurgerPreview!
     
     var burgerAttr = [Array<BurgerObject>]()
@@ -80,16 +82,20 @@ class BurgerVC: UITableViewController {
                     let name = burger["name"] as? String
                     let kitchen = burger["kitchen"] as? String
                     let imagePath = burger["image"] as? String
-                    let catalogueNumber = burger["id"] as? Int
+                    var catalogueNumber = burger["id"] as? Int
                     let imageOrigin = "https://burgerdex.ca/"
                     
                     let pattyImagePath = imageOrigin + imagePath!
+                    
+                    if catalogueNumber == nil {catalogueNumber = 0}
+                    
+                   
                     
                     guard let burgerPreview = BurgerPreview.init(name: name!,
                                                                  kitchen: kitchen!,
                                                                  catalogueNumber: catalogueNumber!,
                                                                  photoUrl: pattyImagePath,
-                                                                 photo:Data(),
+                                                                 photo: UIImage(),
                                                                  burgerID: catalogueNumber!)else{
                                                                     fatalError("Unable to instantiate burgerPreview")
                     }
@@ -156,7 +162,7 @@ class BurgerVC: UITableViewController {
                 
                 guard let extinctBadge = Badge.init(ratingTitle: "",
                                                     badgeTitle: "extinct",
-                                                    badgeIcon: UIImage(named: "extinct")!
+                                                    badgeIcon: UIImage(named: "available")!
                     )else {
                         
                         fatalError("Unable to instantiate extinct badge")
@@ -248,7 +254,7 @@ class BurgerVC: UITableViewController {
             
             let burger = burgerAttr[indexPath.section][indexPath.row] as! Burger
             
-            cell.discoveryDate.text = burger.name
+            cell.discoveryDate.text = burger.dateCaptured
             cell.price.text = burger.price
             cell.region.text = burger.location
             cell.descript.text = burger.descript
@@ -256,6 +262,8 @@ class BurgerVC: UITableViewController {
             let ingredients = "• " + burger.ingredients.replacingOccurrences(of: ",", with: "\n\n• ")
             
             cell.ingredients.text = ingredients
+            
+            if burger.fused.count == 0 {cell.fusionLabel.text = ""}
             
             return cell
             
@@ -268,59 +276,99 @@ class BurgerVC: UITableViewController {
                 fatalError("The dequeued cell is not an instance of CatalogueTableViewCell.")
             }
             
-             let burger = burgerAttr[indexPath.section][indexPath.row] as! BurgerPreview
-            
-            cell.burgerName.text = burger.name
-            cell.kitchenName.text = burger.kitchen
-            cell.catalogueNumberLabel.text = "No."
-            cell.catalogueNumberNumber.text = String(burger.catalogueNumber)
-            cell.burgerID = burger.burgerID
-            
-            if burger.photo.count == 0{
-                
-                let url = URL(string: burger.photoUrl)
-                URLSession.shared.dataTask(with: url!, completionHandler: { (data, response, error) in
-                    
-                    if error != nil {
-                        print(error!)
-                        return
-                    }
-                    DispatchQueue.main.async(execute: {
-                        
-                        burger.photo = data!
-                        cell.burgerImage.image  = UIImage(data: data!)
-                    })
-                    
-                }).resume()
-                
-            }else{
-                
-                cell.burgerImage.image  = UIImage(data: burger.photo)
-            }
-            
-            return cell
-            /*
-            // Table view cells are reused and should be dequeued using a cell identifier.
-            let cellIdentifier = "CatalogueTableViewCell"
-            
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? CatalogueTableViewCell  else {
-                fatalError("The dequeued cell is not an instance of CatalogueTableViewCell.")
-            }
-            
             let burger = burgerAttr[indexPath.section][indexPath.row] as! BurgerPreview
             
             cell.burgerName.text = burger.name
             cell.kitchenName.text = burger.kitchen
             cell.catalogueNumberLabel.text = "No."
-            cell.catalogueNumberNumber.text = String(burger.catalogueNumber)
+            
+            
+            if burger.catalogueNumber == 0 {
+                
+                cell.catalogueNumberNumber.text = "?"
+                
+            }else{
+                
+                cell.catalogueNumberNumber.text = String(burger.catalogueNumber)
+                
+            }
+            
             cell.burgerID = burger.burgerID
             
+            updateImageForCell(cell,
+                               inTableView: tableView,
+                               withImageURL: burger.photoUrl,
+                               andImageView: cell.burgerImage!,
+                               atIndexPath: indexPath)
+
+            
             return cell
-  */
+           
         }
 
         
     }
+    
+    func updateImageForCell(_ cell: UITableViewCell,
+                            inTableView tableView: UITableView,
+                            withImageURL: String,
+                            andImageView: UIImageView,
+                            atIndexPath indexPath: IndexPath) {
+        
+        let imageView = andImageView
+        
+        imageView.image = kLazyLoadPlaceholderImage
+        
+        let burger = burgerAttr[indexPath.section][indexPath.row] as! BurgerPreview
+        
+        let imageURL = burger.photoUrl
+        
+        ImageManager.sharedInstance.downloadImageFromURL(imageURL) { (success, image) -> Void in
+            
+            if success && image != nil {
+                
+                if (tableView.indexPath(for: cell) as NSIndexPath?)?.row == (indexPath as NSIndexPath).row {
+                    
+                    imageView.image = image
+                    //Convert photo back to UIImage and use this instead
+                    burger.photo = imageView.image!
+                    
+                }
+            }
+        }
+    }
+    
+    func loadImagesForOnscreenRows() {
+        
+            if burgerAttr.count > 0 {
+        
+                let visiblePaths = tableView.indexPathsForVisibleRows ?? [IndexPath]()
+    
+                for indexPath in visiblePaths {
+                    
+                    let burger = burgerAttr[indexPath.section][indexPath.row] as! BurgerPreview
+                    
+                    let cell = tableView(self.tableView, cellForRowAt: indexPath) as! CatalogueTableViewCell
+                    
+                    updateImageForCell(cell, inTableView: tableView,
+                                       withImageURL: burger.photoUrl,
+                                       andImageView: cell.burgerImage!,
+                                       atIndexPath: indexPath)
+                }
+            }
+        
+    }
+    
+    // MARK: - When decelerated or ended dragging, we must update visible rows
+    
+    override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        //loadImagesForOnscreenRows()
+    }
+    /*
+     override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+     if !decelerate { loadImagesForOnscreenRows() }
+     }
+     */
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
