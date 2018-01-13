@@ -42,10 +42,6 @@ class BurgerPreview : BurgerObject {
     class func fetchBurgerPreviews(page: Int, filter: Int, completion:@escaping (_ resultPatties:Array<Any>)->Void){
         
         var patties = [BurgerPreview]()
-    
-        //create the url with NSURL
-        //https://www.app.burgerdex.ca/services/allBurgers.php
-        //https://www.app.burgerdex.ca/services/burgerDetail.php?id=
         
         let postURL = URL(string: "https://www.app.burgerdex.ca/services/allBurgers.php")!
         
@@ -130,6 +126,7 @@ class Burger : BurgerObject{
     var price: String
     var ingredients: String
     var fusion: Bool
+    var fused: [Dictionary<String, AnyObject>]
     var veggie: Bool
     var spicy: Bool
     var extinct: Bool
@@ -148,6 +145,7 @@ class Burger : BurgerObject{
          price: String,
          ingredients: String,
          fusion: Bool,
+         fused: [Dictionary<String, AnyObject>],
          veggie: Bool,
          spicy: Bool,
          extinct: Bool,
@@ -169,6 +167,7 @@ class Burger : BurgerObject{
         self.price = price
         self.ingredients = ingredients
         self.fusion = fusion
+        self.fused = fused
         self.veggie = veggie
         self.spicy = spicy
         self.extinct = extinct
@@ -230,6 +229,7 @@ class Burger : BurgerObject{
                                     let dateCaptured = burger["dated"] as? String
                                     let catalogueNumber = burger["id"] as? Int
                                     let fusion = burger["fusion"] as? Bool
+                                    let fused = burger["fused"] as? [Dictionary<String, AnyObject>]
                                     let veggie = burger["veggie"] as? Bool
                                     let spicy = burger["spicy"] as? Bool
                                     let extinct = burger["extinct"] as? Bool
@@ -247,6 +247,7 @@ class Burger : BurgerObject{
                                                                        price: price!,
                                                                        ingredients: ingredients!,
                                                                        fusion: fusion!,
+                                                                       fused: fused!,
                                                                        veggie: veggie!,
                                                                        spicy: spicy!,
                                                                        extinct: extinct!,

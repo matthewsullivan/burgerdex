@@ -106,6 +106,10 @@ class CatalogueVC: UITableViewController {
                 })
                 
             }).resume()
+            
+        }else{
+            
+            cell.burgerImage.image  = UIImage(data: burger.photo)
         }
         
         return cell

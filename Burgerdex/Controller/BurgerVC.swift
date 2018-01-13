@@ -73,28 +73,33 @@ class BurgerVC: UITableViewController {
             
             let burgerInfo = data
             
-            guard let burgerOne = BurgerPreview.init(name: "The Bacon Beast",
-                                                     kitchen: "Burger Delight",
-                                                     catalogueNumber: 19,
-                                                     photoUrl: "baconBeast",
-                                                     photo: Data(),
-                                                     burgerID: 19)else {
-                                                        
-                                                        fatalError("Unable to instantiate burgerFour")
+            if burgerInfo.fused.count > 0 {
+            
+                for burger in burgerInfo.fused {
+                    
+                    let name = burger["name"] as? String
+                    let kitchen = burger["kitchen"] as? String
+                    let imagePath = burger["image"] as? String
+                    let catalogueNumber = burger["id"] as? Int
+                    let imageOrigin = "https://burgerdex.ca/"
+                    
+                    let pattyImagePath = imageOrigin + imagePath!
+                    
+                    guard let burgerPreview = BurgerPreview.init(name: name!,
+                                                                 kitchen: kitchen!,
+                                                                 catalogueNumber: catalogueNumber!,
+                                                                 photoUrl: pattyImagePath,
+                                                                 photo:Data(),
+                                                                 burgerID: catalogueNumber!)else{
+                                                                    fatalError("Unable to instantiate burgerPreview")
+                    }
+                    
+                    self.fusionBurgers += [burgerPreview]
+                }
+               
             }
             
-            guard let burgerTwo = BurgerPreview.init(name: "The Copperworks Burger",
-                                                     kitchen: "Copperworks",
-                                                     catalogueNumber: 17,
-                                                     photoUrl: "baconBeast",
-                                                     photo: Data(),
-                                                     burgerID: 17)else {
-                                                        
-                                                        fatalError("Unable to instantiate burgerFive")
-            }
-            
-            self.fusionBurgers += [burgerOne, burgerTwo]
-            
+
             self.burgerAttr.append([burgerInfo as BurgerObject])
             self.burgerAttr.append(self.fusionBurgers)
             
@@ -263,6 +268,45 @@ class BurgerVC: UITableViewController {
                 fatalError("The dequeued cell is not an instance of CatalogueTableViewCell.")
             }
             
+             let burger = burgerAttr[indexPath.section][indexPath.row] as! BurgerPreview
+            
+            cell.burgerName.text = burger.name
+            cell.kitchenName.text = burger.kitchen
+            cell.catalogueNumberLabel.text = "No."
+            cell.catalogueNumberNumber.text = String(burger.catalogueNumber)
+            cell.burgerID = burger.burgerID
+            
+            if burger.photo.count == 0{
+                
+                let url = URL(string: burger.photoUrl)
+                URLSession.shared.dataTask(with: url!, completionHandler: { (data, response, error) in
+                    
+                    if error != nil {
+                        print(error!)
+                        return
+                    }
+                    DispatchQueue.main.async(execute: {
+                        
+                        burger.photo = data!
+                        cell.burgerImage.image  = UIImage(data: data!)
+                    })
+                    
+                }).resume()
+                
+            }else{
+                
+                cell.burgerImage.image  = UIImage(data: burger.photo)
+            }
+            
+            return cell
+            /*
+            // Table view cells are reused and should be dequeued using a cell identifier.
+            let cellIdentifier = "CatalogueTableViewCell"
+            
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? CatalogueTableViewCell  else {
+                fatalError("The dequeued cell is not an instance of CatalogueTableViewCell.")
+            }
+            
             let burger = burgerAttr[indexPath.section][indexPath.row] as! BurgerPreview
             
             cell.burgerName.text = burger.name
@@ -272,7 +316,9 @@ class BurgerVC: UITableViewController {
             cell.burgerID = burger.burgerID
             
             return cell
+  */
         }
+
         
     }
     
