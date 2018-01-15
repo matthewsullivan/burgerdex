@@ -39,11 +39,43 @@ class BurgerPreview : BurgerObject {
         
     }
     
+    class func generatePlaceholderBurgers() ->Array<Any>{
+        
+        var patties = [BurgerPreview]()
+        
+        for _ in 1...10 {
+            
+            guard let burgerPlaceholder = BurgerPreview.init(name:"Bacon Beast",
+                                                        kitchen: "Burger Delight",
+                                                catalogueNumber: 0,
+                                                       photoUrl: "baconBeast",
+                                                          photo:UIImage(),
+                                                       burgerID: 0)else{
+                                                    
+                                                    fatalError("Unable to instantiate burgerPreview")
+            }
+            
+            patties += [burgerPlaceholder]
+            
+        }
+        
+        return patties
+        
+    }
+    
     class func fetchBurgerPreviews(page: Int, filter: Int, completion:@escaping (_ resultPatties:Array<Any>)->Void){
         
         var patties = [BurgerPreview]()
         
-        let postURL = URL(string: "https://www.app.burgerdex.ca/services/allBurgers.php")!
+        //let postURL = URL(string: "https://www.app.burgerdex.ca/services/allBurgers.php")!
+        
+        let url = "https://www.app.burgerdex.ca/services/allBurgers.php?page=1&filter="
+        
+        let path = url + String(filter)
+        
+        let postURL = URL(string: path)!
+        
+        print(postURL)
         
         var postRequest = URLRequest(url: postURL, cachePolicy: .reloadIgnoringCacheData, timeoutInterval: 60.0)
         
@@ -154,8 +186,6 @@ class Burger : BurgerObject{
          hasMods: Bool,
          dateCaptured: String) {
         
-        
-        
         // Initialize stored properties.
         self.name = name
         self.kitchen = kitchen
@@ -175,6 +205,34 @@ class Burger : BurgerObject{
         self.hasChallenge = hasChallenge
         self.hasMods = hasMods
         self.dateCaptured = dateCaptured
+        
+    }
+    
+    class func generateBurgerPlaceholderInformation() ->Burger{
+        
+        guard let burgerPlaceholder = Burger.init(name: "Bacon Beast",
+                                           kitchen: "Burger Delight",
+                                           catalogueNumber: 0,
+                                           descript: "Best burger in Clarington, hands down. The bacon on this burger is the best bacon I have ever eaten. You have to try this burger.\n\n \n\n$17 CAD because of poutine combo.",
+                                           burgerID: 0,
+                                           location: "Clarington",
+                                           rating: "9.2",
+                                           price: "CAD $17.00",
+                                           ingredients: "BBQ Sauce \n\n Fresh (never frozen, delivered that day) double patty \n\n Bacon \n\n Cheese \n\n standard toppings of your choice.",
+                                           fusion: false,
+                                           fused: [],
+                                           veggie: false,
+                                           spicy: false,
+                                           extinct: false,
+                                           seasonal: false,
+                                           hasChallenge: false,
+                                           hasMods: false,
+                                           dateCaptured: "2017-10-18 08:08:59") else {
+                                            
+                                            fatalError("Unable to instantiate burger")
+        }
+        
+        return burgerPlaceholder
         
     }
     

@@ -8,10 +8,11 @@
 
 import UIKit
 
-class CatalogueVC: UITableViewController {
+class CatalogueVC: UIViewController{
     
     private let kLazyLoadCollectionCellImage = 1
     
+    @IBOutlet weak var tableView: UITableView!
     var selectedBurger: BurgerPreview!
     var burgerThumbnail: UIImage!
     var burgers = [BurgerPreview]()
@@ -19,21 +20,18 @@ class CatalogueVC: UITableViewController {
     var selectedFilterIndex = Int()
     var images: [String] = []
     
+    @IBOutlet weak var collectionView: UICollectionView!
     override func viewDidLoad() {
         
         super.viewDidLoad()
     
         self.title = "Catalogue"
-    
-        BurgerPreview.fetchBurgerPreviews(page: 1, filter: 1,completion: { (data) in
-            
-            self.burgers = data as! [BurgerPreview]
-            
-            self.tableView.reloadData()
-            
-        })
         
-        burgers.sort(by: { $0.catalogueNumber < $1.catalogueNumber })
+        layoutCatalogueTableView()
+        
+    }
+    
+    func layoutCatalogueTableView(){
         
         filters += ["Featured",
                     "No",
@@ -50,34 +48,91 @@ class CatalogueVC: UITableViewController {
                     "Modded",
                     "Location",
                     "Kitchen"]
+        
+        self.collectionView.reloadData()
+        
+        requestCatalogueBurgerData(page:1, filter:2)
+        
     }
-
+    
+    func requestCatalogueBurgerData(page:Int, filter:Int){
+        
+        self.burgers = BurgerPreview.generatePlaceholderBurgers() as! [BurgerPreview]
+        self.tableView.allowsSelection = false
+        
+        self.tableView.reloadData()
+        
+        TableLoader.addLoaderTo(self.tableView)
+        
+        BurgerPreview.fetchBurgerPreviews(page: page, filter: filter,completion: { (data) in
+            
+            self.burgers.removeAll()
+            
+            self.burgers = data as! [BurgerPreview]
+            
+            TableLoader.removeLoaderFrom(self.tableView)
+            
+            self.tableView.reloadData()
+        
+            self.tableView.allowsSelection = true
+            
+        })
+        
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
+    
+    // This function is called before the segue
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    
+        let burgerViewController = segue.destination as! BurgerVC
+        
+        if burgerThumbnail != nil {
+            
+            burgerViewController.burgerThumbnail = burgerThumbnail
+            
+        }else{
+            
+            burgerViewController.burgerThumbnail = UIImage(named:"baconBeast")
+        }
+        
+        burgerViewController.burger = selectedBurger
+    }
 
-    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+
+}
+
+extension CatalogueVC: UITableViewDelegate, UITableViewDataSource{
+    
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         
         guard let tableViewCell = view as? FilterCatalogueCell else { return }
-    
+        
         tableViewCell.setCollectionViewDataSourceDelegate(self, forRow: section)
+        
+        //print("GOT HERE")
+        
+        //tableViewCell.collectionView.delegate?.collectionView!(tableViewCell.collectionView, didSelectItemAt: [0,1])
+        
     }
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return burgers.count
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
+        print("reload")
         
         let cellIdentifier = "CatalogueTableViewCell"
         
@@ -92,13 +147,16 @@ class CatalogueVC: UITableViewController {
         cell.catalogueNumberLabel.text = "No."
         cell.catalogueNumberNumber.text = String(burger.catalogueNumber)
         cell.burgerID = burger.burgerID
-    
-         updateImageForCell(cell,
-                            inTableView: tableView,
-                            withImageURL: burger.photoUrl,
-                            andImageView: cell.burgerImage!,
-                            atIndexPath: indexPath)
-
+        
+        if burger.catalogueNumber != 0{
+            
+            updateImageForCell(cell,
+                               inTableView: tableView,
+                               withImageURL: burger.photoUrl,
+                               andImageView: cell.burgerImage!,
+                               atIndexPath: indexPath)
+            
+        }
         
         return cell
     }
@@ -108,7 +166,7 @@ class CatalogueVC: UITableViewController {
                             withImageURL: String,
                             andImageView: UIImageView,
                             atIndexPath indexPath: IndexPath) {
-
+        
         let imageView = andImageView
         
         imageView.image = kLazyLoadPlaceholderImage
@@ -154,23 +212,21 @@ class CatalogueVC: UITableViewController {
     
     // MARK: - When decelerated or ended dragging, we must update visible rows
     
-    override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        loadImagesForOnscreenRows()
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        
+        if let _ = scrollView as? UITableView {
+            
+            loadImagesForOnscreenRows()
+            
+        }
     }
     /*
-    override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        if !decelerate { loadImagesForOnscreenRows() }
-    }
-    */
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        
-        let  cell = tableView.dequeueReusableCell(withIdentifier: "FilterCatalogueCell") as! FilterCatalogueCell
-        
-        return cell
-
-    }
+     override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+     if !decelerate { loadImagesForOnscreenRows() }
+     }
+     */
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         let burger = burgers[indexPath.row]
         
@@ -180,35 +236,12 @@ class CatalogueVC: UITableViewController {
         self.performSegue(withIdentifier: "burgerSegue", sender: self)
     }
     
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat{
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat{
         
-        return 80.0;
+        return 80.0
         
     }
     
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-       
-        return 60
-    }
-    
-    // This function is called before the segue
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    
-        let burgerViewController = segue.destination as! BurgerVC
-        
-        if burgerThumbnail != nil {
-            
-            burgerViewController.burgerThumbnail = burgerThumbnail
-            
-        }else{
-            
-            burgerViewController.burgerThumbnail = UIImage(named:"baconBeast")
-        }
-        
-        burgerViewController.burger = selectedBurger
-    }
-
-
 }
 
 extension CatalogueVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -259,6 +292,8 @@ extension CatalogueVC: UICollectionViewDelegate, UICollectionViewDataSource, UIC
         collectionView.scrollToItem(at: IndexPath(row: selectedFilterIndex, section: 0), at: .centeredHorizontally, animated: true)
         
         collectionView.reloadData()
+        
+        requestCatalogueBurgerData(page:1, filter:selectedFilterIndex)
         
     }
 }

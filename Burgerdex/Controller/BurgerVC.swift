@@ -25,6 +25,13 @@ class BurgerVC: UITableViewController {
         
         self.title = burger.name
         
+        layoutBurgerView()
+    
+        
+    }
+    
+    func layoutBurgerView(){
+        
         let burgerHeaderView = BurgerHeaderView.init(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 200))
         
         self.tableView.tableHeaderView  = burgerHeaderView
@@ -40,7 +47,7 @@ class BurgerVC: UITableViewController {
         blurEffectView.alpha = 0.9
         
         burgerHeaderView.burgerImage.addSubview(blurEffectView)
-    
+        
         let url = URL(string: burger.photoUrl)
         
         URLSession.shared.dataTask(with: url!, completionHandler: { (data, response, error) in
@@ -51,10 +58,10 @@ class BurgerVC: UITableViewController {
             }
             DispatchQueue.main.async(execute: {
                 
-
+                
                 UIView.animate(withDuration: 0.5, animations: {
                     
-                     blurEffectView.alpha = 0.0
+                    blurEffectView.alpha = 0.0
                     
                 }, completion: { _ in
                     
@@ -63,20 +70,30 @@ class BurgerVC: UITableViewController {
                     blurEffectView.removeFromSuperview()
                 })
                 
-               
+                
             })
             
         }).resume()
-    
+        
         tableView.estimatedRowHeight = 85.0
         tableView.rowHeight = UITableViewAutomaticDimension
         
+        var burgerInfo = Burger.generateBurgerPlaceholderInformation()
+        
+        self.burgerAttr.append([burgerInfo as BurgerObject])
+    
+        self.tableView.allowsSelection = false
+        
+        TableLoader.addLoaderTo(self.tableView)
+        
+        self.tableView.reloadData()
+        
         Burger.fetchBurgerDetails(burgerID: burger.burgerID,completion: { (data) in
             
-            let burgerInfo = data
+            burgerInfo = data
             
             if burgerInfo.fused.count > 0 {
-            
+                
                 for burger in burgerInfo.fused {
                     
                     let name = burger["name"] as? String
@@ -89,7 +106,7 @@ class BurgerVC: UITableViewController {
                     
                     if catalogueNumber == nil {catalogueNumber = 0}
                     
-                   
+                    
                     
                     guard let burgerPreview = BurgerPreview.init(name: name!,
                                                                  kitchen: kitchen!,
@@ -102,11 +119,13 @@ class BurgerVC: UITableViewController {
                     
                     self.fusionBurgers += [burgerPreview]
                 }
-               
+                
             }
             
-
-            self.burgerAttr.append([burgerInfo as BurgerObject])
+            self.tableView.allowsSelection = true
+            TableLoader.removeLoaderFrom(self.tableView)
+            
+            self.burgerAttr[0] = [burgerInfo as BurgerObject]
             self.burgerAttr.append(self.fusionBurgers)
             
             guard let ratingBadge = Badge.init(ratingTitle: burgerInfo.rating,
@@ -213,7 +232,7 @@ class BurgerVC: UITableViewController {
             self.tableView.reloadData()
             
         })
-    
+        
     }
     
     override func didReceiveMemoryWarning() {
@@ -362,7 +381,12 @@ class BurgerVC: UITableViewController {
     // MARK: - When decelerated or ended dragging, we must update visible rows
     
     override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        //loadImagesForOnscreenRows()
+        /*
+         if let _ = scrollView as? UITableView {
+            //loadImagesForOnscreenRows()
+            
+         }
+ */
     }
     /*
      override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
@@ -419,11 +443,11 @@ class BurgerVC: UITableViewController {
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 1 {
             
-            return 0;
+            return 0.0;
             
         }else{
             
-            return 80
+            return 80.0
         }
     }
     /*

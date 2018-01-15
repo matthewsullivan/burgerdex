@@ -10,7 +10,8 @@ import UIKit
 
 class FilterCatalogueCell: UITableViewCell {
 
-   @IBOutlet weak var collectionView: UICollectionView!
+
+    @IBOutlet weak var collectionView: UICollectionView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
