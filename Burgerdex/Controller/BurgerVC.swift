@@ -12,7 +12,6 @@ class BurgerVC: UITableViewController {
     private let kLazyLoadCollectionCellImage = 1
     
     var burger: BurgerPreview!
-    
     var burgerAttr = [Array<BurgerObject>]()
     var badges = [Badge]()
     var fusionBurgers = [BurgerPreview]()
@@ -22,12 +21,11 @@ class BurgerVC: UITableViewController {
         
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        
+ 
         self.title = burger.name
         
         layoutBurgerView()
     
-        
     }
     
     func layoutBurgerView(){

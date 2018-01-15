@@ -8,19 +8,21 @@
 
 import UIKit
 
-class CatalogueVC: UIViewController{
+class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     private let kLazyLoadCollectionCellImage = 1
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var collectionView: UICollectionView!
+    
     var selectedBurger: BurgerPreview!
     var burgerThumbnail: UIImage!
+    
     var burgers = [BurgerPreview]()
     var filters = [String]()
     var selectedFilterIndex = Int()
     var images: [String] = []
-    
-    @IBOutlet weak var collectionView: UICollectionView!
+
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -51,11 +53,13 @@ class CatalogueVC: UIViewController{
         
         self.collectionView.reloadData()
         
-        requestCatalogueBurgerData(page:1, filter:2)
+        requestCatalogueBurgerData(page:1, filter:0)
         
     }
     
     func requestCatalogueBurgerData(page:Int, filter:Int){
+        
+        self.burgers.removeAll()
         
         self.burgers = BurgerPreview.generatePlaceholderBurgers() as! [BurgerPreview]
         self.tableView.allowsSelection = false
@@ -77,47 +81,12 @@ class CatalogueVC: UIViewController{
             self.tableView.allowsSelection = true
             
         })
-        
+            
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
-    }
-    
-    
-    // This function is called before the segue
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    
-        let burgerViewController = segue.destination as! BurgerVC
-        
-        if burgerThumbnail != nil {
-            
-            burgerViewController.burgerThumbnail = burgerThumbnail
-            
-        }else{
-            
-            burgerViewController.burgerThumbnail = UIImage(named:"baconBeast")
-        }
-        
-        burgerViewController.burger = selectedBurger
-    }
-
-
-}
-
-extension CatalogueVC: UITableViewDelegate, UITableViewDataSource{
-    
-    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        
-        guard let tableViewCell = view as? FilterCatalogueCell else { return }
-        
-        tableViewCell.setCollectionViewDataSourceDelegate(self, forRow: section)
-        
-        //print("GOT HERE")
-        
-        //tableViewCell.collectionView.delegate?.collectionView!(tableViewCell.collectionView, didSelectItemAt: [0,1])
-        
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -131,8 +100,6 @@ extension CatalogueVC: UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        print("reload")
         
         let cellIdentifier = "CatalogueTableViewCell"
         
@@ -229,11 +196,14 @@ extension CatalogueVC: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         let burger = burgers[indexPath.row]
-        
+    
         burgerThumbnail = burger.photo
         selectedBurger = burger
         
+        print(selectedBurger.name)
+        
         self.performSegue(withIdentifier: "burgerSegue", sender: self)
+        
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat{
@@ -242,6 +212,24 @@ extension CatalogueVC: UITableViewDelegate, UITableViewDataSource{
         
     }
     
+    // This function is called before the segue
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        let burgerViewController = segue.destination as! BurgerVC
+        
+        if burgerThumbnail != nil {
+            
+            burgerViewController.burgerThumbnail = burgerThumbnail
+            
+        }else{
+            
+            burgerViewController.burgerThumbnail = UIImage(named:"baconBeast")
+        }
+        
+        burgerViewController.burger = selectedBurger
+        
+    }
+
 }
 
 extension CatalogueVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {

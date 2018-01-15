@@ -225,7 +225,6 @@
                                             <outlet property="catalogueNumberLabel" destination="WPg-Nj-Ejj" id="ply-JB-CUO"/>
                                             <outlet property="catalogueNumberNumber" destination="iN9-Bu-qW9" id="HS5-jk-hbY"/>
                                             <outlet property="kitchenName" destination="jDi-2T-eWi" id="Vsy-Ny-4BY"/>
-                                            <segue destination="gb2-ad-kkj" kind="show" identifier="burgerSegue" id="fzu-IX-ObS"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -256,6 +255,7 @@
                     <connections>
                         <outlet property="collectionView" destination="xti-WE-IID" id="8ZZ-Fx-ZmX"/>
                         <outlet property="tableView" destination="25u-j6-W1O" id="IC9-Ug-IIn"/>
+                        <segue destination="gb2-ad-kkj" kind="show" identifier="burgerSegue" id="Vpp-rC-idl"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zNd-IG-ntY" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -665,7 +665,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="h7v-qM-wyd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2519.1999999999998" y="-322.90640394088672"/>
+            <point key="canvasLocation" x="2612" y="-304"/>
         </scene>
         <!--Passport-->
         <scene sceneID="dN6-69-SwE">
