@@ -16,22 +16,39 @@ protocol BurgerObject {
 
 class BurgerPreview : BurgerObject {
 
+    var displayTag: String
+    var displayText: String
     var name: String
     var kitchen: String
+    var location: String
+    var year: String
     var catalogueNumber: Int
     var burgerID: Int
     var photoUrl: String
     var photo: UIImage
     
-    init?(name: String, kitchen: String, catalogueNumber: Int, photoUrl: String, photo: UIImage, burgerID: Int) {
+    init?(displayTag: String,
+          displayText: String,
+          name: String,
+          kitchen: String,
+          location: String,
+          year: String,
+          catalogueNumber: Int,
+          photoUrl: String,
+          photo: UIImage,
+          burgerID: Int) {
         
-        if name.isEmpty || kitchen.isEmpty || catalogueNumber < 0 || burgerID < 0 {
+        if displayTag.isEmpty || displayText.isEmpty || name.isEmpty || kitchen.isEmpty || catalogueNumber < 0 || burgerID < 0 || location.isEmpty  || year.isEmpty{
             return nil
         }
         
         // Initialize stored properties.
+        self.displayTag = displayTag
+        self.displayText = displayText
         self.name = name
         self.kitchen = kitchen
+        self.location = location
+        self.year = year
         self.catalogueNumber = catalogueNumber
         self.burgerID = burgerID
         self.photoUrl = photoUrl
@@ -45,8 +62,12 @@ class BurgerPreview : BurgerObject {
         
         for _ in 1...10 {
             
-            guard let burgerPlaceholder = BurgerPreview.init(name:"Bacon Beast",
+            guard let burgerPlaceholder = BurgerPreview.init(displayTag:"No.",
+                                                          displayText:"19",
+                                                          name:"Bacon Beast",
                                                         kitchen: "Burger Delight",
+                                                        location: "Clarington",
+                                                        year: "2017",
                                                 catalogueNumber: 0,
                                                        photoUrl: "baconBeast",
                                                           photo:UIImage(),
@@ -63,17 +84,24 @@ class BurgerPreview : BurgerObject {
         
     }
     
-    class func fetchBurgerPreviews(page: Int, filter: Int, completion:@escaping (_ resultPatties:Array<Any>)->Void){
+    
+    class func fetchBurgerPreviews(page: Int, filter: Int, session: URLSession,  completion:@escaping (_ resultPatties:Array<Any>)->Void){
+        
+        //Start by invalidating on going long tasks
+        session.invalidateAndCancel()
         
         var patties = [BurgerPreview]()
         
+        var burgerPreviewSuccess = [0,patties] as [Any]
+        
         //let postURL = URL(string: "https://www.app.burgerdex.ca/services/allBurgers.php")!
         
-        let url = "https://www.app.burgerdex.ca/services/allBurgers.php?page=1&filter="
+        let url = "https://www.app.burgerdex.ca/services/allBurgers.php?page="
         
-        let path = url + String(filter)
+        let path = url + String(page)
+        let pathTwo = path + "&filter=" + String(filter)
         
-        let postURL = URL(string: path)!
+        let postURL = URL(string: pathTwo)!
         
         print(postURL)
         
@@ -91,7 +119,7 @@ class BurgerPreview : BurgerObject {
             
         } catch { print("Error: unable to add parameters to POST request.")}
         
-        URLSession.shared.dataTask(with: postRequest, completionHandler: { (data, response, error) -> Void in
+        session.dataTask(with: postRequest, completionHandler: { (data, response, error) -> Void in
             
             if error != nil { print("POST Request: Communication error: \(error!)") }
             
@@ -107,16 +135,24 @@ class BurgerPreview : BurgerObject {
                                 
                                 for burger in burgers {
                                     
+                                    let displayTag = burger["displayTag"] as? String
+                                    let displayText = burger["displayText"] as? String
                                     let name = burger["name"] as? String
                                     let kitchen = burger["kitchen"] as? String
+                                    let location = burger["locations"] as? String
+                                    let year = burger["year"] as? String
                                     let imagePath = burger["image"] as? String
                                     let catalogueNumber = burger["id"] as? Int
                                     let imageOrigin = "https://burgerdex.ca/"
                                     
                                     let pattyImagePath = imageOrigin + imagePath!
                                     
-                                    guard let burgerPreview = BurgerPreview.init(name: name!,
+                                    guard let burgerPreview = BurgerPreview.init(displayTag: displayTag!,
+                                                                                 displayText: displayText!,
+                                                                                 name: name!,
                                                                                  kitchen: kitchen!,
+                                                                                 location: location!,
+                                                                                 year: year!,
                                                                                  catalogueNumber: catalogueNumber!,
                                                                                  photoUrl: pattyImagePath,
                                                                                  photo:UIImage(),
@@ -126,21 +162,42 @@ class BurgerPreview : BurgerObject {
                                     
                                     patties += [burgerPreview]
                                 }
-                                completion(patties)
+                                
+                                 burgerPreviewSuccess[0] = 1
+                                 burgerPreviewSuccess[1] = patties
+                                
+                                completion(burgerPreviewSuccess)
                             }
                             
                         } as @convention(block) () -> Void)
                     }
         
                 } catch {
+                    
                     print("Error deserializing JSON: \(error)")
+                    
+                    burgerPreviewSuccess[0] = 0
+                    burgerPreviewSuccess[1] = patties
+                    DispatchQueue.main.async(execute: {
+                        completion(burgerPreviewSuccess)
+                        
+                    })
+                    
                 }
             
             } else {
+                
                 DispatchQueue.main.async(execute: {
                     print("Received empty response.")
+                    
+                    burgerPreviewSuccess[0] = 0
+                    burgerPreviewSuccess[1] = patties
+                    
+                    completion(burgerPreviewSuccess)
+                    
                 })
             }
+            
         }).resume()
         
     }
@@ -236,7 +293,7 @@ class Burger : BurgerObject{
         
     }
     
-    class func fetchBurgerDetails(burgerID: Int, completion:@escaping (_ pattyInformation:Burger)->Void){
+    class func fetchBurgerDetails(burgerID: Int, completion:@escaping (_ pattyInformation:Array<Any>)->Void){
         
         let url = "https://www.app.burgerdex.ca/services/burgerDetail.php?id="
 
@@ -264,6 +321,8 @@ class Burger : BurgerObject{
             print(postRequest)
             
             if error != nil { print("POST Request: Communication error: \(error!)") }
+            
+            var patty = [Burger]()
             
             if data != nil {
                 
@@ -317,7 +376,9 @@ class Burger : BurgerObject{
                                                                         fatalError("Unable to instantiate burger")
                                     }
                                     
-                                     completion(burgerInfo)
+                                    patty.append(burgerInfo)
+                                    
+                                    completion(patty)
                                 }
                                 
                                
@@ -327,12 +388,18 @@ class Burger : BurgerObject{
                     }
                     
                 } catch {
+                    
                     print("Error deserializing JSON: \(error)")
+                    
+                    completion(patty)
                 }
                 
             } else {
                 DispatchQueue.main.async(execute: {
+                    
                     print("Received empty response.")
+                    
+                    completion(patty)
                 })
             }
         }).resume()

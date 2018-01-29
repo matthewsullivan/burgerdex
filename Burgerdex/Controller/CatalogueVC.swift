@@ -10,7 +10,17 @@ import UIKit
 
 class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
+    @IBOutlet weak var errorButton: UIButton!
     private let kLazyLoadCollectionCellImage = 1
+    @IBOutlet weak var errorContainerView: UIView!
+    @IBOutlet weak var errorHeaderLabel: UILabel!
+    @IBOutlet weak var errorBodyLabel: UILabel!
+    @IBOutlet weak var errorImageContainer: UIImageView!
+    @IBAction func errorButtonLabel(_ sender: Any) {
+        
+        self.requestCatalogueBurgerData(page:1, filter:self.selectedFilterIndex)
+        
+    }
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var collectionView: UICollectionView!
@@ -22,19 +32,111 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
     var filters = [String]()
     var selectedFilterIndex = Int()
     var images: [String] = []
+    
+    var pageIndex = 1
+    var noMoreData = false
+
+    var sbshown: Bool = false
+    var statusBarCorrect: CGFloat = 20.0
+    
+    //Main URL Session for previews.
+    let sharedSession = URLSession.shared
+    
+    struct BurgerSort {
+        
+        var sectionName : String!
+        var sectionObjects : [BurgerPreview]!
+    }
+    
+    var burgerSortedArray = [BurgerSort]()
 
     override func viewDidLoad() {
         
         super.viewDidLoad()
-    
-        self.title = "Catalogue"
         
+        self.title = "Catalogue"
+
         layoutCatalogueTableView()
+        checkForStatusBars()
+        
+        hideErrorView()
+        
+    }
+    
+    func hideErrorView(){
+        
+         errorContainerView.isHidden = true
+        
+    }
+    
+    func displayErrorView(errorType: Int){
+        
+        self.errorContainerView.isHidden = false
+        //Error Type 0 = Filter match
+        //Error Type 1 = Network Connection
+    
+        if errorType == 0 {
+            
+            self.errorImageContainer.image = UIImage(named: "noFood")
+            self.errorHeaderLabel.text = "SORRY"
+            self.errorBodyLabel.text = "No Burger Matches.."
+            self.errorButton.isHidden = true
+        }
+    
+        if errorType == 1 {
+            
+            self.errorImageContainer.image = UIImage(named: "noFood")
+            self.errorHeaderLabel.text = "Network Error"
+            self.errorBodyLabel.text = "It seems that the network connection has been lost."
+            self.errorButton.isHidden = false
+        }
+    
+    }
+    
+    func checkForStatusBars(){
+        
+        if UIDevice.current.modelName != "iPhone10,3" || UIDevice.current.modelName != "iPhone10,6" {
+            
+            //Status bar shown for location services or incoming call
+            if (UIApplication.shared.statusBarFrame.height == 40) {
+                
+                statusBarCorrect = UIApplication.shared.statusBarFrame.height - 20
+                
+                sbshown = true
+                
+            }else{
+                
+                sbshown = false
+                
+                statusBarCorrect = UIApplication.shared.statusBarFrame.height
+            }
+        
+            NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationDidChangeStatusBarFrame, object: nil, queue: nil, using: statusbarChange)
+        }
+        
+    }
+    
+    func statusbarChange(notif: Notification) -> Void {
+        
+
+        if (sbshown) {
+            
+            
+            sbshown = false
+            statusBarCorrect = UIApplication.shared.statusBarFrame.height
+            
+        }else{
+            
+
+            sbshown = true
+            statusBarCorrect = UIApplication.shared.statusBarFrame.height - 20
+        }
+        
         
     }
     
     func layoutCatalogueTableView(){
-        
+      
         filters += ["Featured",
                     "No",
                     "Discovered",
@@ -53,37 +155,145 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
         
         self.collectionView.reloadData()
         
+        self.burgers = BurgerPreview.generatePlaceholderBurgers() as! [BurgerPreview]
+        
         requestCatalogueBurgerData(page:1, filter:0)
         
     }
     
     func requestCatalogueBurgerData(page:Int, filter:Int){
         
-        self.burgers.removeAll()
-        
-        self.burgers = BurgerPreview.generatePlaceholderBurgers() as! [BurgerPreview]
+        UIView.animate(withDuration: 0.2, animations: {
+            
+            self.tableView.alpha = 1
+            
+        })
+
         self.tableView.allowsSelection = false
+        self.tableView.isScrollEnabled = false
+        
+        self.pageIndex = 1
         
         self.tableView.reloadData()
         
+        TableLoader.removeLoaderFrom(self.tableView)
         TableLoader.addLoaderTo(self.tableView)
         
-        BurgerPreview.fetchBurgerPreviews(page: page, filter: filter,completion: { (data) in
-            
-            self.burgers.removeAll()
-            
-            self.burgers = data as! [BurgerPreview]
-            
-            TableLoader.removeLoaderFrom(self.tableView)
-            
-            self.tableView.reloadData()
+        noMoreData = false
         
-            self.tableView.allowsSelection = true
+        BurgerPreview.fetchBurgerPreviews(page: page, filter: filter, session: sharedSession ,completion: { (data) in
+            
+            if (data[0] as! Int) == 1{
+                
+                if (data[1] as AnyObject).count > 0 {
+                    
+                    self.hideErrorView()
+                    
+                    self.burgers.removeAll()
+                    self.pageIndex = 1
+                    
+                    self.burgers = data[1] as! [BurgerPreview]
+                    
+                    self.burgerSortedArray.removeAll()
+                    
+                    if self.selectedFilterIndex == 14{
+                        
+                        let predicate = { (element: BurgerPreview) in
+                            return element.kitchen
+                        }
+                        
+                        let dictionary = Dictionary(grouping: self.burgers, by: predicate)
+                        
+                        for (key, value) in dictionary {
+                            
+                            
+                            self.burgerSortedArray.append(BurgerSort(sectionName: key, sectionObjects: value))
+                        }
+                        
+                    }
+                    
+                    if self.selectedFilterIndex == 13{
+                        
+                        let predicate = { (element: BurgerPreview) in
+                            return element.location
+                        }
+                        
+                        let dictionary = Dictionary(grouping: self.burgers, by: predicate)
+                        
+                        for (key, value) in dictionary {
+                          
+                            
+                            self.burgerSortedArray.append(BurgerSort(sectionName: key, sectionObjects: value))
+                        }
+                        
+                    }
+                    
+                    if self.selectedFilterIndex == 2{
+                        
+                        let predicate = { (element: BurgerPreview) in
+                            return element.year
+                        }
+                        
+                        let dictionary = Dictionary(grouping: self.burgers, by: predicate)
+                        
+                        for (key, value) in dictionary {
+                           
+                            self.burgerSortedArray.append(BurgerSort(sectionName: key, sectionObjects: value))
+                        }
+                        
+                    }
+                    
+                    self.tableView.reloadData()
+                    
+                    TableLoader.removeLoaderFrom(self.tableView)
+                    
+                    self.tableView.allowsSelection = true
+                    self.tableView.isScrollEnabled = true
+                    
+                    self.pageIndex  += 1
+                    
+                }else{
+                    
+                    //0 for no matches. 1 for network problems.
+                    self.displayErrorView(errorType: 0)
+                    
+                    self.burgers.removeAll()
+                    
+                    TableLoader.removeLoaderFrom(self.tableView)
+                    
+                    self.tableView.reloadData()
+                    
+                    self.tableView.allowsSelection = true
+                    self.tableView.isScrollEnabled = true
+                    
+                    //Set the collection filter back to previous value if web call fails
+                    print("No Burgers")
+                    
+                }
+                
+            }else{
+                
+                //0 for no matches. 1 for network problems.
+                self.displayErrorView(errorType: 1)
+                
+                self.burgers.removeAll()
+                
+                TableLoader.removeLoaderFrom(self.tableView)
+                
+                self.tableView.reloadData()
+                
+                self.tableView.allowsSelection = true
+                self.tableView.isScrollEnabled = true
+                
+                //Set the collection filter back to previous value if web call fails
+                print("handle web error here")
+                
+            }
             
         })
-            
+  
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -91,28 +301,58 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
     
     func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 1
+        
+        if selectedFilterIndex == 14 || selectedFilterIndex == 13 || selectedFilterIndex == 2{
+            
+            return burgerSortedArray.count
+            
+        }else{
+            
+             return 1
+        }
+       
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return burgers.count
+        if selectedFilterIndex == 14 || selectedFilterIndex == 13 || selectedFilterIndex == 2{
+            
+            return burgerSortedArray[section].sectionObjects.count
+            
+        }else{
+            
+            return burgers.count
+            
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
+        if self.pageIndex > 1 {TableLoader.removeLoaderFrom(self.tableView)}
+    
         let cellIdentifier = "CatalogueTableViewCell"
         
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? CatalogueTableViewCell  else {
-            fatalError("The dequeued cell is not an instance of CatalogueTableViewCell.")
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! CatalogueTableViewCell
+        
+        var burger : BurgerPreview
+        
+        if selectedFilterIndex == 14 || selectedFilterIndex == 13 || selectedFilterIndex == 2{
+            
+            burger = burgerSortedArray[indexPath.section].sectionObjects[indexPath.row]
+            
+        }else{
+            
+            burger = burgers[indexPath.row]
         }
         
-        let burger = burgers[indexPath.row]
+        
+        
+        cell.selectionStyle = .none
         
         cell.burgerName.text = burger.name
         cell.kitchenName.text = burger.kitchen
-        cell.catalogueNumberLabel.text = "No."
-        cell.catalogueNumberNumber.text = String(burger.catalogueNumber)
+        cell.catalogueNumberLabel.text = burger.displayTag
+        cell.catalogueNumberNumber.text = burger.displayText
         cell.burgerID = burger.burgerID
         
         if burger.catalogueNumber != 0{
@@ -128,6 +368,46 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
         return cell
     }
     
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if selectedFilterIndex == 14 || selectedFilterIndex == 13 || selectedFilterIndex == 2{
+            
+            return burgerSortedArray[section].sectionName
+            
+        }
+        
+        return nil
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        
+        let lastElement = burgers.count - 1
+    
+        if indexPath.row == lastElement && !noMoreData && self.pageIndex > 1{
+            
+            BurgerPreview.fetchBurgerPreviews(page: self.pageIndex, filter: self.selectedFilterIndex, session: sharedSession ,completion: { (data) in
+                
+                if (data[1] as AnyObject).count > 0 {
+                    
+                    self.burgers += data[1] as! [BurgerPreview]
+                    
+                    self.pageIndex  += 1
+                
+                    self.tableView.reloadData()
+                    
+                }else{
+                    
+                    self.noMoreData = true
+                    
+                    //Set the collection filter back to previous value if web call fails
+                    print("Pagination Error or no more data")
+                    
+                }
+                
+            })
+           
+        }
+    }
+    
     func updateImageForCell(_ cell: UITableViewCell,
                             inTableView tableView: UITableView,
                             withImageURL: String,
@@ -138,7 +418,16 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
         
         imageView.image = kLazyLoadPlaceholderImage
         
-        let burger = burgers[indexPath.row]
+        var burger : BurgerPreview
+        
+        if selectedFilterIndex == 14 || selectedFilterIndex == 13 || selectedFilterIndex == 2{
+            
+            burger = burgerSortedArray[indexPath.section].sectionObjects[indexPath.row]
+            
+        }else{
+            
+            burger = burgers[indexPath.row]
+        }
         
         let imageURL = burger.photoUrl
         
@@ -149,7 +438,6 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
                 if (tableView.indexPath(for: cell) as NSIndexPath?)?.row == (indexPath as NSIndexPath).row {
                     
                     imageView.image = image
-                    //Convert photo back to UIImage and use this instead
                     burger.photo = imageView.image!
                     
                 }
@@ -157,8 +445,9 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
         }
     }
     
+    //Revisit this method This seems to be causing many issues.
     func loadImagesForOnscreenRows() {
-        
+        /*
         if burgers.count > 0 {
             
             let visiblePaths = tableView.indexPathsForVisibleRows ?? [IndexPath]()
@@ -175,32 +464,61 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
                                    atIndexPath: indexPath)
             }
         }
+ */
     }
     
     // MARK: - When decelerated or ended dragging, we must update visible rows
-    
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        
+    
         if let _ = scrollView as? UITableView {
-            
+                    
             loadImagesForOnscreenRows()
             
         }
     }
-    /*
-     override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-     if !decelerate { loadImagesForOnscreenRows() }
-     }
-     */
+
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        
+          if let _ = scrollView as? UITableView {
+            
+            if !decelerate { loadImagesForOnscreenRows() }
+            
+          }
+        
+    }
+    
+    var lastContentOffset: CGFloat = 0
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        if let _ = scrollView as? UITableView {
+           
+            //Complete hack for now. Get back to this later
+            self.collectionView.frame = CGRect(x:self.collectionView.frame.origin.x,
+                                               y: (self.navigationController?.navigationBar.frame.size.height)! + statusBarCorrect,
+                                               width:self.collectionView.frame.width,
+                                               height:self.collectionView.frame.height
+            )
+            
+            self.lastContentOffset = scrollView.contentOffset.y
+        }
+    }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let burger = burgers[indexPath.row]
+        var burger : BurgerPreview
+        
+        if selectedFilterIndex == 14 || selectedFilterIndex == 13 || selectedFilterIndex == 2{
+            
+            burger = burgerSortedArray[indexPath.section].sectionObjects[indexPath.row]
+            
+        }else{
+            
+            burger = burgers[indexPath.row]
+        }
     
         burgerThumbnail = burger.photo
         selectedBurger = burger
-        
-        print(selectedBurger.name)
         
         self.performSegue(withIdentifier: "burgerSegue", sender: self)
         
@@ -216,14 +534,14 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         let burgerViewController = segue.destination as! BurgerVC
-        
-        if burgerThumbnail != nil {
+    
+        if burgerThumbnail.size.width == 0.0 {
             
-            burgerViewController.burgerThumbnail = burgerThumbnail
+            burgerViewController.burgerThumbnail = UIImage(named:"baconBeast")
             
         }else{
             
-            burgerViewController.burgerThumbnail = UIImage(named:"baconBeast")
+            burgerViewController.burgerThumbnail = burgerThumbnail
         }
         
         burgerViewController.burger = selectedBurger
@@ -251,12 +569,18 @@ extension CatalogueVC: UICollectionViewDelegate, UICollectionViewDataSource, UIC
         cell.filterName.text = filterNames
         
         if selectedFilterIndex == indexPath.row {
+           
+            cell.backgroundColor = UIColor(red: 222/255,
+                                           green: 173/255,
+                                           blue: 107/255,
+                                           alpha: 1)
             
-            cell.backgroundColor = UIColor(red: 249/255, green: 208/255, blue: 93/255, alpha: 1)
+            cell.filterName.textColor = UIColor.white
             
         }else{
             
             cell.backgroundColor = UIColor.clear
+            cell.filterName.textColor = UIColor.gray
         }
     
         return cell
@@ -277,12 +601,72 @@ extension CatalogueVC: UICollectionViewDelegate, UICollectionViewDataSource, UIC
         
         selectedFilterIndex = indexPath.row
         
-        collectionView.scrollToItem(at: IndexPath(row: selectedFilterIndex, section: 0), at: .centeredHorizontally, animated: true)
+        collectionView.scrollToItem(at: IndexPath(row: selectedFilterIndex, section: 0), at: .left, animated: true) //.centeredHorizontally
+        
+        if self.burgers.count == 0{
+            
+            self.burgers = BurgerPreview.generatePlaceholderBurgers() as! [BurgerPreview]
+            
+            self.tableView.reloadData()
+        }
+        
+        if selectedFilterIndex == 14 || selectedFilterIndex == 13 || selectedFilterIndex == 2{
+            
+            self.burgerSortedArray.removeAll()
+            
+            let dictionary = ["": self.burgers]
+            
+            for (key, value) in dictionary {
+                
+                self.burgerSortedArray.append(BurgerSort(sectionName: key, sectionObjects: value))
+            }
+            
+            self.tableView.reloadData()
+        
+        }
         
         collectionView.reloadData()
+    
+        self.hideErrorView()
         
-        requestCatalogueBurgerData(page:1, filter:selectedFilterIndex)
-        
+        UIView.animate(withDuration: 0.1, animations: {
+            
+            self.tableView.alpha = 0
+            
+        }, completion: {
+            (value: Bool) in
+            
+            if self.selectedFilterIndex == 14 || self.selectedFilterIndex == 13 || self.selectedFilterIndex == 2{
+                
+                
+                if  self.burgerSortedArray.count > 0 {
+                    
+                    self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0),
+                                               at: UITableViewScrollPosition.top,
+                                               animated: false)
+                    
+                }
+                
+            }else{
+                
+                if self.burgers.count > 0 {
+                    
+                    self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0),
+                                               at: UITableViewScrollPosition.top,
+                                               animated: false)
+                    
+                }
+                
+            }
+            
+            let when = DispatchTime.now() + 0.1
+            
+            DispatchQueue.main.asyncAfter(deadline: when) {
+                
+                self.requestCatalogueBurgerData(page:1, filter:self.selectedFilterIndex)
+            }
+            
+        })
     }
 }
 

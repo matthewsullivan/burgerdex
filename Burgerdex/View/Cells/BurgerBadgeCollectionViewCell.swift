@@ -13,4 +13,5 @@ class BurgerBadgeCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var ratingLabel: UILabel!
     @IBOutlet weak var badgeImage: UIImageView!
     @IBOutlet weak var badgeTitle: UILabel!
+    @IBOutlet weak var selectionStatus: UIView!
 }

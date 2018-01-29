@@ -44,11 +44,11 @@ class ImageManager: NSObject {
                         if let image = UIImage(data: data) {
                             found = true
                             self.cacheImage(image, forURL: url.absoluteString)
-                            DispatchQueue.main.async(execute: { completion?(true, image) });
+                            DispatchQueue.main.async(execute: { completion?(true, image) })
                         }
                     }
                 }
-                if !found { DispatchQueue.main.async(execute: { completion?(false, nil) }); }
+                if !found { DispatchQueue.main.async(execute: { completion?(false, nil) }) }
             })
             downloadTask.resume()
         } else { completion?(false, nil) }

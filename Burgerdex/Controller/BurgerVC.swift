@@ -16,19 +16,21 @@ class BurgerVC: UITableViewController {
     var badges = [Badge]()
     var fusionBurgers = [BurgerPreview]()
     var burgerThumbnail : UIImage!
-  
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
         // Do any additional setup after loading the view.
- 
-        self.title = burger.name
-        
         layoutBurgerView()
     
     }
     
     func layoutBurgerView(){
+        
+        //Reset these arrays as this method may be called from within this view controller to reset it's content.
+        burgerAttr.removeAll()
+        fusionBurgers.removeAll()
+        badges.removeAll()
         
         let burgerHeaderView = BurgerHeaderView.init(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 200))
         
@@ -81,153 +83,168 @@ class BurgerVC: UITableViewController {
         self.burgerAttr.append([burgerInfo as BurgerObject])
     
         self.tableView.allowsSelection = false
+        self.tableView.isScrollEnabled = false
+        self.tableView.reloadData()
         
         TableLoader.addLoaderTo(self.tableView)
         
-        self.tableView.reloadData()
-        
         Burger.fetchBurgerDetails(burgerID: burger.burgerID,completion: { (data) in
             
-            burgerInfo = data
-            
-            if burgerInfo.fused.count > 0 {
+            if data.count > 0{
                 
-                for burger in burgerInfo.fused {
+                burgerInfo = data[0] as! Burger
+                
+                if burgerInfo.fused.count > 0 {
                     
-                    let name = burger["name"] as? String
-                    let kitchen = burger["kitchen"] as? String
-                    let imagePath = burger["image"] as? String
-                    var catalogueNumber = burger["id"] as? Int
-                    let imageOrigin = "https://burgerdex.ca/"
-                    
-                    let pattyImagePath = imageOrigin + imagePath!
-                    
-                    if catalogueNumber == nil {catalogueNumber = 0}
-                    
-                    
-                    
-                    guard let burgerPreview = BurgerPreview.init(name: name!,
-                                                                 kitchen: kitchen!,
-                                                                 catalogueNumber: catalogueNumber!,
-                                                                 photoUrl: pattyImagePath,
-                                                                 photo: UIImage(),
-                                                                 burgerID: catalogueNumber!)else{
-                                                                    fatalError("Unable to instantiate burgerPreview")
+                    for burger in burgerInfo.fused {
+                        
+                        let displayTag = burger["displayTag"] as? String
+                        let displayText = burger["displayText"] as? String
+                        let name = burger["name"] as? String
+                        let kitchen = burger["kitchen"] as? String
+                        let location = burger["locations"] as? String
+                        let year = burger["year"] as? String
+                        let imagePath = burger["image"] as? String
+                        var catalogueNumber = burger["id"] as? Int
+                        let imageOrigin = "https://burgerdex.ca/"
+                        
+                        let pattyImagePath = imageOrigin + imagePath!
+                        
+                        if catalogueNumber == nil {catalogueNumber = 0}
+                        
+                        guard let burgerPreview = BurgerPreview.init(displayTag: displayTag!,
+                                                                     displayText: displayText!,
+                                                                   name: name!,
+                                                                   kitchen: kitchen!,
+                                                                   location: location!,
+                                                                   year: year!,
+                                                                   catalogueNumber: catalogueNumber!,
+                                                                   photoUrl: pattyImagePath,
+                                                                   photo: UIImage(),
+                                                                   burgerID: catalogueNumber!)else{
+                                                                 fatalError("Unable to instantiate burgerPreview")
+                        }
+                        
+                        self.fusionBurgers += [burgerPreview]
                     }
                     
-                    self.fusionBurgers += [burgerPreview]
                 }
                 
-            }
-            
-            self.tableView.allowsSelection = true
-            TableLoader.removeLoaderFrom(self.tableView)
-            
-            self.burgerAttr[0] = [burgerInfo as BurgerObject]
-            self.burgerAttr.append(self.fusionBurgers)
-            
-            guard let ratingBadge = Badge.init(ratingTitle: burgerInfo.rating,
-                                               badgeTitle: "rating",
-                                               badgeIcon: UIImage(named: "rating")!
-                )else {
+                self.tableView.allowsSelection = true
+                self.tableView.isScrollEnabled = true
+                TableLoader.removeLoaderFrom(self.tableView)
+                
+                self.burgerAttr[0] = [burgerInfo as BurgerObject]
+                self.burgerAttr.append(self.fusionBurgers)
+                
+                guard let ratingBadge = Badge.init(ratingTitle: burgerInfo.rating,
+                                                   badgeTitle: "rating",
+                                                   badgeIcon: UIImage(named: "rating")!
+                    )else {
+                        
+                        fatalError("Unable to instantiate rating badge")
+                }
+                
+                self.badges += [ratingBadge]
+                
+                if burgerInfo.fusion {
                     
-                    fatalError("Unable to instantiate rating badge")
-            }
-            
-            self.badges += [ratingBadge]
-            
-            if burgerInfo.fusion {
-                
-                guard let fusionBadge = Badge.init(ratingTitle: "",
-                                                   badgeTitle: "fusion",
-                                                   badgeIcon: UIImage(named: "fusion")!
-                    )else {
-                        
-                        fatalError("Unable to instantiate fusion badge")
+                    guard let fusionBadge = Badge.init(ratingTitle: "",
+                                                       badgeTitle: "fusion",
+                                                       badgeIcon: UIImage(named: "fusion")!
+                        )else {
+                            
+                            fatalError("Unable to instantiate fusion badge")
+                    }
+                    
+                    self.badges += [fusionBadge]
                 }
                 
-                self.badges += [fusionBadge]
-            }
-            
-            if burgerInfo.veggie {
-                
-                guard let veggieBadge = Badge.init(ratingTitle: "",
-                                                   badgeTitle: "veggie",
-                                                   badgeIcon: UIImage(named: "veggie")!
-                    )else {
-                        
-                        fatalError("Unable to instantiate veggie badge")
+                if burgerInfo.veggie {
+                    
+                    guard let veggieBadge = Badge.init(ratingTitle: "",
+                                                       badgeTitle: "veggie",
+                                                       badgeIcon: UIImage(named: "veggie")!
+                        )else {
+                            
+                            fatalError("Unable to instantiate veggie badge")
+                    }
+                    
+                    self.badges += [veggieBadge]
                 }
                 
-                self.badges += [veggieBadge]
-            }
-            
-            if burgerInfo.spicy {
-                
-                guard let spicyBadge = Badge.init(ratingTitle: "",
-                                                  badgeTitle: "spicy",
-                                                  badgeIcon: UIImage(named: "spicy")!
-                    )else {
-                        
-                        fatalError("Unable to instantiate spicy badge")
+                if burgerInfo.spicy {
+                    
+                    guard let spicyBadge = Badge.init(ratingTitle: "",
+                                                      badgeTitle: "spicy",
+                                                      badgeIcon: UIImage(named: "spicy")!
+                        )else {
+                            
+                            fatalError("Unable to instantiate spicy badge")
+                    }
+                    
+                    self.badges += [spicyBadge]
                 }
                 
-                self.badges += [spicyBadge]
-            }
-            
-            if burgerInfo.extinct {
-                
-                guard let extinctBadge = Badge.init(ratingTitle: "",
-                                                    badgeTitle: "extinct",
-                                                    badgeIcon: UIImage(named: "available")!
-                    )else {
-                        
-                        fatalError("Unable to instantiate extinct badge")
+                if burgerInfo.extinct {
+                    
+                    guard let extinctBadge = Badge.init(ratingTitle: "",
+                                                        badgeTitle: "extinct",
+                                                        badgeIcon: UIImage(named: "available")!
+                        )else {
+                            
+                            fatalError("Unable to instantiate extinct badge")
+                    }
+                    
+                    self.badges += [extinctBadge]
                 }
                 
-                self.badges += [extinctBadge]
-            }
-            
-            if burgerInfo.seasonal {
-                
-                guard let seasonalBadge = Badge.init(ratingTitle: "",
-                                                     badgeTitle: "seasonal",
-                                                     badgeIcon: UIImage(named: "seasonal")!
-                    )else {
-                        
-                        fatalError("Unable to instantiate seasonal badge")
+                if burgerInfo.seasonal {
+                    
+                    guard let seasonalBadge = Badge.init(ratingTitle: "",
+                                                         badgeTitle: "seasonal",
+                                                         badgeIcon: UIImage(named: "seasonal")!
+                        )else {
+                            
+                            fatalError("Unable to instantiate seasonal badge")
+                    }
+                    
+                    self.badges += [seasonalBadge]
                 }
                 
-                self.badges += [seasonalBadge]
-            }
-            
-            if burgerInfo.hasChallenge {
-                
-                guard let hasChallengeBadge = Badge.init(ratingTitle: "",
-                                                         badgeTitle: "challenge",
-                                                         badgeIcon: UIImage(named: "hasChallenge")!
-                    )else {
-                        
-                        fatalError("Unable to instantiate hasChallenge badge")
+                if burgerInfo.hasChallenge {
+                    
+                    guard let hasChallengeBadge = Badge.init(ratingTitle: "",
+                                                             badgeTitle: "challenge",
+                                                             badgeIcon: UIImage(named: "hasChallenge")!
+                        )else {
+                            
+                            fatalError("Unable to instantiate hasChallenge badge")
+                    }
+                    
+                    self.badges += [hasChallengeBadge]
                 }
                 
-                self.badges += [hasChallengeBadge]
-            }
-            
-            if burgerInfo.hasMods {
-                
-                guard let hasModsBadge = Badge.init(ratingTitle: "",
-                                                    badgeTitle: "mods",
-                                                    badgeIcon: UIImage(named: "hasMods")!
-                    )else {
-                        
-                        fatalError("Unable to instantiate hasChallege badge")
+                if burgerInfo.hasMods {
+                    
+                    guard let hasModsBadge = Badge.init(ratingTitle: "",
+                                                        badgeTitle: "mods",
+                                                        badgeIcon: UIImage(named: "hasMods")!
+                        )else {
+                            
+                            fatalError("Unable to instantiate hasChallege badge")
+                    }
+                    
+                    self.badges += [hasModsBadge]
                 }
                 
-                self.badges += [hasModsBadge]
+                self.tableView.reloadData()
+                
+            }else{
+                
+                 print("handle web error here")
+                
             }
-            
-            self.tableView.reloadData()
             
         })
         
@@ -297,18 +314,8 @@ class BurgerVC: UITableViewController {
             
             cell.burgerName.text = burger.name
             cell.kitchenName.text = burger.kitchen
-            cell.catalogueNumberLabel.text = "No."
-            
-            
-            if burger.catalogueNumber == 0 {
-                
-                cell.catalogueNumberNumber.text = "?"
-                
-            }else{
-                
-                cell.catalogueNumberNumber.text = String(burger.catalogueNumber)
-                
-            }
+            cell.catalogueNumberLabel.text = burger.displayTag
+            cell.catalogueNumberNumber.text = burger.displayText
             
             cell.burgerID = burger.burgerID
             
@@ -317,7 +324,6 @@ class BurgerVC: UITableViewController {
                                withImageURL: burger.photoUrl,
                                andImageView: cell.burgerImage!,
                                atIndexPath: indexPath)
-
             
             return cell
            
@@ -325,6 +331,32 @@ class BurgerVC: UITableViewController {
 
         
     }
+
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+         if indexPath.section != 0 {
+            
+            let patty = burgerAttr[indexPath.section][indexPath.row] as! BurgerPreview
+            
+            burgerThumbnail = patty.photo
+            self.burger = patty
+            
+            UIView.animate(withDuration: 0.1, animations: {
+                
+                let desiredOffset = CGPoint(x: 0, y: -self.tableView.contentInset.top)
+                
+                self.tableView.setContentOffset(desiredOffset, animated: false)
+                
+            }, completion: {
+                
+                (value: Bool) in
+              
+                self.layoutBurgerView()
+                
+            })
+        }
+    }
+    
     
     func updateImageForCell(_ cell: UITableViewCell,
                             inTableView tableView: UITableView,
@@ -355,25 +387,26 @@ class BurgerVC: UITableViewController {
         }
     }
     
+    //Revisit this method This seems to be causing many issues.
     func loadImagesForOnscreenRows() {
-        
-            if burgerAttr.count > 0 {
-        
-                let visiblePaths = tableView.indexPathsForVisibleRows ?? [IndexPath]()
-    
-                for indexPath in visiblePaths {
-                    
-                    let burger = burgerAttr[indexPath.section][indexPath.row] as! BurgerPreview
-                    
-                    let cell = tableView(self.tableView, cellForRowAt: indexPath) as! CatalogueTableViewCell
-                    
-                    updateImageForCell(cell, inTableView: tableView,
-                                       withImageURL: burger.photoUrl,
-                                       andImageView: cell.burgerImage!,
-                                       atIndexPath: indexPath)
-                }
-            }
-        
+        /*
+         if burgers.count > 0 {
+         
+         let visiblePaths = tableView.indexPathsForVisibleRows ?? [IndexPath]()
+         
+         for indexPath in visiblePaths {
+         
+         let burger = burgers[indexPath.row]
+         
+         let cell = tableView(self.tableView, cellForRowAt: indexPath) as! CatalogueTableViewCell
+         
+         updateImageForCell(cell, inTableView: tableView,
+         withImageURL: burger.photoUrl,
+         andImageView: cell.burgerImage!,
+         atIndexPath: indexPath)
+         }
+         }
+         */
     }
     
     // MARK: - When decelerated or ended dragging, we must update visible rows
@@ -413,51 +446,86 @@ class BurgerVC: UITableViewController {
         
     }
     
-    
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
         if let _ = scrollView as? UITableView {
+            
+            var offset = scrollView.contentOffset.y / 40
+            
+            if offset > 1 {
+                
+                offset = 1
+                
+                let colour = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: offset)
+                
+                self.navigationController?.navigationBar.tintColor = UIColor(red: 222/255,
+                                                                             green: 173/255,
+                                                                             blue: 107/255,
+                                                                             alpha: 1)
+                self.navigationController?.navigationBar.backgroundColor = colour
+                //UIApplication.shared.statusBarView?.backgroundColor = colour
+                
+                
+            }else{
+                
+                let colour = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: offset)
+                
+                self.navigationController?.navigationBar.tintColor = UIColor.white
+                self.navigationController?.navigationBar.backgroundColor = colour
+                //UIApplication.shared.statusBarView?.backgroundColor = colour
+                
+            }
             
             let headerView = self.tableView.tableHeaderView as! BurgerHeaderView
             
             headerView.scrollViewDidScroll(scrollView: scrollView)
         }
-
+        
     }
     
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
-    {
+    override func viewWillDisappear(_ animated: Bool) {
+        
+        super.viewWillDisappear(animated)
+        
+        self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0),
+                                   at: UITableViewScrollPosition.top,
+                                   animated: false)
+ 
+        
+    }
+        
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
         if indexPath.section == 1 {
             
-            return 80;
+            return 80
             
         }else{
             
-            return tableView.rowHeight;
+            return tableView.rowHeight
         }
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 1 {
             
-            return 0.0;
+            return 0.0
             
         }else{
             
             return 80.0
         }
     }
-    /*
+
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        
+    
     }
-    */
-
+    
 }
 
 
@@ -490,3 +558,4 @@ extension BurgerVC: UICollectionViewDelegate, UICollectionViewDataSource {
         
     }
 }
+

@@ -47,7 +47,7 @@ extension UIColor {
     
     static func gradientSecondStop()->UIColor
     {
-        return UIColor(red: (221.0/255.0), green: (221.0/255.0), blue:(221.0/255.0) , alpha: 1.0);
+        return UIColor(red: (221.0/255.0), green: (221.0/255.0), blue:(221.0/255.0) , alpha: 1.0)
     }
 }
 
@@ -81,6 +81,7 @@ open class TableLoader
     
     open static func addLoaderTo(_ list : ListLoadable )
     {
+        
         self.addLoaderToViews(list.ld_visibleContentViews())
     }
     
@@ -105,9 +106,9 @@ class CutoutView : UIView
         
         for view in (self.superview?.subviews)! {
 
-            if view != self {
+            if view != self && view.tag != 1{
                 
-                context?.setBlendMode(.clear);
+                context?.setBlendMode(.clear)
                 context?.setFillColor(UIColor.clear.cgColor)
                 context?.fill(view.frame)
             }

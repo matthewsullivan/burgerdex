@@ -11,14 +11,24 @@
 		EB3C21422006487A00EAC1CB /* FilterCatalogueCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3C21412006487A00EAC1CB /* FilterCatalogueCollectionViewCell.swift */; };
 		EB66BE06200A762F00921485 /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB66BE05200A762F00921485 /* ImageManager.swift */; };
 		EB77F68420054C0400ECCD1E /* BurgerBadgeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB77F68320054C0400ECCD1E /* BurgerBadgeCollectionViewCell.swift */; };
+		EB838B4A201BB7C900B9C633 /* UploadHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB838B49201BB7C900B9C633 /* UploadHeaderTableViewCell.swift */; };
+		EB838B4D201BBE0900B9C633 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB838B4C201BBE0900B9C633 /* ActivityIndicator.swift */; };
+		EB838B4F201BC15900B9C633 /* UploadTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB838B4E201BC15900B9C633 /* UploadTableViewCell.swift */; };
+		EB838B56201BD7BA00B9C633 /* TweePlaceholderTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB838B51201BD7BA00B9C633 /* TweePlaceholderTextField.swift */; };
+		EB838B57201BD7BA00B9C633 /* TweeActiveTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB838B52201BD7BA00B9C633 /* TweeActiveTextField.swift */; };
+		EB838B58201BD7BA00B9C633 /* TweeBorderedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB838B53201BD7BA00B9C633 /* TweeBorderedTextField.swift */; };
+		EB838B59201BD7BA00B9C633 /* FontAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB838B54201BD7BA00B9C633 /* FontAnimation.swift */; };
+		EB838B5A201BD7BA00B9C633 /* TweeAttributedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB838B55201BD7BA00B9C633 /* TweeAttributedTextField.swift */; };
 		EB857A661FFC0959003E5BF1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB857A651FFC0959003E5BF1 /* AppDelegate.swift */; };
 		EB857A681FFC0959003E5BF1 /* CatalogueVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB857A671FFC0959003E5BF1 /* CatalogueVC.swift */; };
 		EB857A6A1FFC0959003E5BF1 /* PassportVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB857A691FFC0959003E5BF1 /* PassportVC.swift */; };
 		EB857A6D1FFC0959003E5BF1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB857A6B1FFC0959003E5BF1 /* Main.storyboard */; };
 		EB857A6F1FFC0959003E5BF1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EB857A6E1FFC0959003E5BF1 /* Assets.xcassets */; };
 		EB857A721FFC0959003E5BF1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB857A701FFC0959003E5BF1 /* LaunchScreen.storyboard */; };
-		EB857A7A1FFC0D7B003E5BF1 /* AccountVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB857A791FFC0D7B003E5BF1 /* AccountVC.swift */; };
+		EB857A7A1FFC0D7B003E5BF1 /* UploadBurgerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB857A791FFC0D7B003E5BF1 /* UploadBurgerVC.swift */; };
 		EBCAF4A6200CF96100B9407D /* TableLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCAF4A5200CF96100B9407D /* TableLoader.swift */; };
+		EBD41663200FF07B00E33AD6 /* TabBarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD41662200FF07B00E33AD6 /* TabBarVC.swift */; };
+		EBE2D4DD201A6E49003BC9F7 /* UploadBurgerInformationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE2D4DC201A6E49003BC9F7 /* UploadBurgerInformationVC.swift */; };
 		EBE820ED1FFC21C800F5A895 /* CatalogueTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE820EC1FFC21C800F5A895 /* CatalogueTableViewCell.swift */; };
 		EBE820EF1FFD30D500F5A895 /* BurgerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE820EE1FFD30D500F5A895 /* BurgerVC.swift */; };
 		EBE820F11FFD479700F5A895 /* Burger.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE820F01FFD479700F5A895 /* Burger.swift */; };
@@ -32,6 +42,14 @@
 		EB3C21412006487A00EAC1CB /* FilterCatalogueCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCatalogueCollectionViewCell.swift; sourceTree = "<group>"; };
 		EB66BE05200A762F00921485 /* ImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageManager.swift; sourceTree = "<group>"; };
 		EB77F68320054C0400ECCD1E /* BurgerBadgeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurgerBadgeCollectionViewCell.swift; sourceTree = "<group>"; };
+		EB838B49201BB7C900B9C633 /* UploadHeaderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadHeaderTableViewCell.swift; sourceTree = "<group>"; };
+		EB838B4C201BBE0900B9C633 /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
+		EB838B4E201BC15900B9C633 /* UploadTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadTableViewCell.swift; sourceTree = "<group>"; };
+		EB838B51201BD7BA00B9C633 /* TweePlaceholderTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TweePlaceholderTextField.swift; path = "../../../../../../Downloads/TweeTextField-master/Sources/TweePlaceholderTextField.swift"; sourceTree = "<group>"; };
+		EB838B52201BD7BA00B9C633 /* TweeActiveTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TweeActiveTextField.swift; path = "../../../../../../Downloads/TweeTextField-master/Sources/TweeActiveTextField.swift"; sourceTree = "<group>"; };
+		EB838B53201BD7BA00B9C633 /* TweeBorderedTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TweeBorderedTextField.swift; path = "../../../../../../Downloads/TweeTextField-master/Sources/TweeBorderedTextField.swift"; sourceTree = "<group>"; };
+		EB838B54201BD7BA00B9C633 /* FontAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FontAnimation.swift; path = "../../../../../../Downloads/TweeTextField-master/Sources/FontAnimation.swift"; sourceTree = "<group>"; };
+		EB838B55201BD7BA00B9C633 /* TweeAttributedTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TweeAttributedTextField.swift; path = "../../../../../../Downloads/TweeTextField-master/Sources/TweeAttributedTextField.swift"; sourceTree = "<group>"; };
 		EB857A621FFC0959003E5BF1 /* Burgerdex.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Burgerdex.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB857A651FFC0959003E5BF1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EB857A671FFC0959003E5BF1 /* CatalogueVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogueVC.swift; sourceTree = "<group>"; };
@@ -40,8 +58,10 @@
 		EB857A6E1FFC0959003E5BF1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EB857A711FFC0959003E5BF1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		EB857A731FFC0959003E5BF1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		EB857A791FFC0D7B003E5BF1 /* AccountVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountVC.swift; sourceTree = "<group>"; };
+		EB857A791FFC0D7B003E5BF1 /* UploadBurgerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadBurgerVC.swift; sourceTree = "<group>"; };
 		EBCAF4A5200CF96100B9407D /* TableLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableLoader.swift; sourceTree = "<group>"; };
+		EBD41662200FF07B00E33AD6 /* TabBarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarVC.swift; sourceTree = "<group>"; };
+		EBE2D4DC201A6E49003BC9F7 /* UploadBurgerInformationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadBurgerInformationVC.swift; sourceTree = "<group>"; };
 		EBE820EC1FFC21C800F5A895 /* CatalogueTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogueTableViewCell.swift; sourceTree = "<group>"; };
 		EBE820EE1FFD30D500F5A895 /* BurgerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurgerVC.swift; sourceTree = "<group>"; };
 		EBE820F01FFD479700F5A895 /* Burger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Burger.swift; sourceTree = "<group>"; };
@@ -61,6 +81,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		EB838B4B201BBDF100B9C633 /* Loaders */ = {
+			isa = PBXGroup;
+			children = (
+				EB838B4C201BBE0900B9C633 /* ActivityIndicator.swift */,
+				EBCAF4A5200CF96100B9407D /* TableLoader.swift */,
+			);
+			path = Loaders;
+			sourceTree = "<group>";
+		};
+		EB838B50201BD7A600B9C633 /* TextFields */ = {
+			isa = PBXGroup;
+			children = (
+				EB838B54201BD7BA00B9C633 /* FontAnimation.swift */,
+				EB838B52201BD7BA00B9C633 /* TweeActiveTextField.swift */,
+				EB838B55201BD7BA00B9C633 /* TweeAttributedTextField.swift */,
+				EB838B53201BD7BA00B9C633 /* TweeBorderedTextField.swift */,
+				EB838B51201BD7BA00B9C633 /* TweePlaceholderTextField.swift */,
+			);
+			path = TextFields;
+			sourceTree = "<group>";
+		};
 		EB857A591FFC0959003E5BF1 = {
 			isa = PBXGroup;
 			children = (
@@ -107,6 +148,8 @@
 				EB3C21412006487A00EAC1CB /* FilterCatalogueCollectionViewCell.swift */,
 				EBE820F61FFE8B3800F5A895 /* BurgerHeaderTableViewCell.swift */,
 				EB77F68320054C0400ECCD1E /* BurgerBadgeCollectionViewCell.swift */,
+				EB838B49201BB7C900B9C633 /* UploadHeaderTableViewCell.swift */,
+				EB838B4E201BC15900B9C633 /* UploadTableViewCell.swift */,
 				EB3C213F200645D400EAC1CB /* FilterCatalogueCell.swift */,
 			);
 			path = Cells;
@@ -117,8 +160,10 @@
 			children = (
 				EB857A671FFC0959003E5BF1 /* CatalogueVC.swift */,
 				EB857A691FFC0959003E5BF1 /* PassportVC.swift */,
-				EB857A791FFC0D7B003E5BF1 /* AccountVC.swift */,
+				EB857A791FFC0D7B003E5BF1 /* UploadBurgerVC.swift */,
+				EBE2D4DC201A6E49003BC9F7 /* UploadBurgerInformationVC.swift */,
 				EBE820EE1FFD30D500F5A895 /* BurgerVC.swift */,
+				EBD41662200FF07B00E33AD6 /* TabBarVC.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -135,10 +180,11 @@
 		EBE820EB1FFC119500F5A895 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				EB838B50201BD7A600B9C633 /* TextFields */,
+				EB838B4B201BBDF100B9C633 /* Loaders */,
 				EBCAF4A4200CF90900B9407D /* Cells */,
 				EBCAF4A3200CF89600B9407D /* Storyboards&Assets */,
 				EBE820F21FFD88F900F5A895 /* BurgerHeaderView.swift */,
-				EBCAF4A5200CF96100B9407D /* TableLoader.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -221,14 +267,24 @@
 				EB77F68420054C0400ECCD1E /* BurgerBadgeCollectionViewCell.swift in Sources */,
 				EBE820F71FFE8B3800F5A895 /* BurgerHeaderTableViewCell.swift in Sources */,
 				EBE820ED1FFC21C800F5A895 /* CatalogueTableViewCell.swift in Sources */,
+				EB838B4F201BC15900B9C633 /* UploadTableViewCell.swift in Sources */,
+				EB838B5A201BD7BA00B9C633 /* TweeAttributedTextField.swift in Sources */,
 				EBE820F51FFE7EED00F5A895 /* BurgerTableViewCell.swift in Sources */,
 				EBE820F31FFD88F900F5A895 /* BurgerHeaderView.swift in Sources */,
+				EBE2D4DD201A6E49003BC9F7 /* UploadBurgerInformationVC.swift in Sources */,
 				EB3C21422006487A00EAC1CB /* FilterCatalogueCollectionViewCell.swift in Sources */,
+				EB838B56201BD7BA00B9C633 /* TweePlaceholderTextField.swift in Sources */,
 				EB66BE06200A762F00921485 /* ImageManager.swift in Sources */,
-				EB857A7A1FFC0D7B003E5BF1 /* AccountVC.swift in Sources */,
+				EB857A7A1FFC0D7B003E5BF1 /* UploadBurgerVC.swift in Sources */,
 				EB3C2140200645D400EAC1CB /* FilterCatalogueCell.swift in Sources */,
+				EB838B4A201BB7C900B9C633 /* UploadHeaderTableViewCell.swift in Sources */,
 				EB857A661FFC0959003E5BF1 /* AppDelegate.swift in Sources */,
 				EB857A681FFC0959003E5BF1 /* CatalogueVC.swift in Sources */,
+				EB838B57201BD7BA00B9C633 /* TweeActiveTextField.swift in Sources */,
+				EB838B58201BD7BA00B9C633 /* TweeBorderedTextField.swift in Sources */,
+				EB838B4D201BBE0900B9C633 /* ActivityIndicator.swift in Sources */,
+				EB838B59201BD7BA00B9C633 /* FontAnimation.swift in Sources */,
+				EBD41663200FF07B00E33AD6 /* TabBarVC.swift in Sources */,
 				EBCAF4A6200CF96100B9407D /* TableLoader.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

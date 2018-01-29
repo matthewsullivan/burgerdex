@@ -10,12 +10,33 @@ import UIKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
+    
     var window: UIWindow?
-
-
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+
+        UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
+        let barButtonItemAppearance = UIBarButtonItem.appearance()
+        barButtonItemAppearance.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.clear], for: .normal)
+        
+        UINavigationBar.appearance().barTintColor = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1)
+        UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
+        UINavigationBar.appearance().shadowImage = UIImage()
+        let colour = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1)
+        
+        UINavigationBar.appearance().backgroundColor = colour
+        UIApplication.shared.statusBarView?.backgroundColor = colour
+        
+        UINavigationBar.appearance().prefersLargeTitles = true
+        UINavigationBar.appearance().largeTitleTextAttributes = [
+            NSAttributedStringKey.foregroundColor: UIColor.white
+        ]
+        UINavigationBar.appearance().titleTextAttributes = [
+            NSAttributedStringKey.foregroundColor: UIColor.white
+        ]
+        
+        
         return true
     }
 
@@ -44,3 +65,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 }
 
+extension UIApplication {
+    
+    var statusBarView : UIView? {
+        
+        return value(forKey: "statusBar") as? UIView
+    }
+}

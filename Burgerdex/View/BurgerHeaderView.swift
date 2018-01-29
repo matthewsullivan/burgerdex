@@ -83,9 +83,9 @@ class BurgerHeaderView: UIView {
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
         
-        containerLayoutConstraint.constant = scrollView.contentInset.top;
+        containerLayoutConstraint.constant = scrollView.contentInset.top
         
-        let offsetY = -(scrollView.contentOffset.y + scrollView.contentInset.top);
+        let offsetY = -(scrollView.contentOffset.y + scrollView.contentInset.top)
         
         containerView.clipsToBounds = offsetY <= 0
         
