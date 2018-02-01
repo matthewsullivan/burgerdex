@@ -22,6 +22,9 @@ class UploadTableViewCell: UITableViewCell {
     @IBOutlet weak var ratingNumberLabel: UILabel!
     @IBOutlet weak var ratingSlider: UISlider!
     @IBOutlet weak var ingredientCollectionView: UICollectionView!
+    @IBOutlet weak var flowLayout: FlowLayout!
+    @IBOutlet weak var heightConstraint: NSLayoutConstraint!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -41,6 +44,12 @@ class UploadTableViewCell: UITableViewCell {
         self.collectionView.tag = row
         self.collectionView.setContentOffset(collectionView.contentOffset, animated:false) // Stops collection view if it was scrolling.
         self.collectionView.reloadData()
+        
+        self.ingredientCollectionView.delegate = dataSourceDelegate
+        self.ingredientCollectionView.dataSource = dataSourceDelegate
+        self.ingredientCollectionView.tag = row
+        self.ingredientCollectionView.setContentOffset(ingredientCollectionView.contentOffset, animated:false) // Stops collection view if it was scrolling.
+        self.ingredientCollectionView.reloadData()
     }
     
     var collectionViewOffset: CGFloat {

@@ -162,12 +162,6 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
     }
     
     func requestCatalogueBurgerData(page:Int, filter:Int){
-        
-        UIView.animate(withDuration: 0.2, animations: {
-            
-            self.tableView.alpha = 1
-            
-        })
 
         self.tableView.allowsSelection = false
         self.tableView.isScrollEnabled = false
@@ -404,7 +398,6 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
                 }
                 
             })
-           
         }
     }
     
@@ -629,44 +622,31 @@ extension CatalogueVC: UICollectionViewDelegate, UICollectionViewDataSource, UIC
     
         self.hideErrorView()
         
-        UIView.animate(withDuration: 0.1, animations: {
+        if selectedFilterIndex == 14 || selectedFilterIndex == 13 || selectedFilterIndex == 2{
             
-            self.tableView.alpha = 0
             
-        }, completion: {
-            (value: Bool) in
-            
-            if self.selectedFilterIndex == 14 || self.selectedFilterIndex == 13 || self.selectedFilterIndex == 2{
+            if  self.burgerSortedArray.count > 0 {
                 
-                
-                if  self.burgerSortedArray.count > 0 {
-                    
-                    self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0),
-                                               at: UITableViewScrollPosition.top,
-                                               animated: false)
-                    
-                }
-                
-            }else{
-                
-                if self.burgers.count > 0 {
-                    
-                    self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0),
-                                               at: UITableViewScrollPosition.top,
-                                               animated: false)
-                    
-                }
+                self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0),
+                                           at: UITableViewScrollPosition.top,
+                                           animated: false)
                 
             }
             
-            let when = DispatchTime.now() + 0.1
+        }else{
             
-            DispatchQueue.main.asyncAfter(deadline: when) {
+            if self.burgers.count > 0 {
                 
-                self.requestCatalogueBurgerData(page:1, filter:self.selectedFilterIndex)
+                self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0),
+                                           at: UITableViewScrollPosition.top,
+                                           animated: false)
+                
             }
             
-        })
+        }
+        
+        self.requestCatalogueBurgerData(page:1, filter:self.selectedFilterIndex)
+    
     }
 }
 

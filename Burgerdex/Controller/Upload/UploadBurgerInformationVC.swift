@@ -15,6 +15,79 @@ class UploadBurgerInformationVC: UITableViewController, UITextFieldDelegate, UIT
     var badges = [Badge]()
     var fields : [String:AnyObject] = [:]
     var selectedBadgesIndex = Int()
+
+    let TAGS = ["Cheddar Cheese",
+                "Lettuce",
+                "Beef Patty",
+                "Onion",
+                "Ketchup",
+                "Pickle",
+                "Mayo",
+                "Tomato",
+                "Bacon",
+                "Mustard",
+                "Purple Onion",
+                "BBQ Sauce",
+                "Crispy Chicken",
+                "Dill Pickle",
+                "Garlic",
+                "Mushrooms",
+                "Relish",
+                "Secret Sauce",
+                "Black Olives",
+                "Fried Egg",
+                "Jalapenos",
+                "Mozzarella",
+                "Red Onion",
+                "Back Bacon",
+                "Chipotle",
+                "Cucumber",
+                "Guacamole",
+                "Havarti Cheese",
+                "Honey",
+                "Onion Ring",
+                "Pepper Jack Cheese",
+                "Sauteed Onion",
+                "Swiss Cheese",
+                "Tortilla Chips",
+                "Tzatziki",
+                "Arugula",
+                "Avacado",
+                "Banana Peppers",
+                "Blue Cheese",
+                "Buffalo Chicken",
+                "Caramelized Onions",
+                "Coleslaw",
+                "Feta Cheese",
+                "Green Olives",
+                "Grilled Chicken",
+                "Grilled Eggplant",
+                "Grilled Peppers",
+                "Ham",
+                "Honey Mustard",
+                "Hot Sauce",
+                "Monterey Jack Cheese",
+                "Pastrami",
+                "Pesto",
+                "Pineapple",
+                "Provolone Cheese",
+                "Pulled Pork",
+                "Queso",
+                "Quinoa",
+                "Ranch",
+                "Spinach",
+                "Sun-Dried Tomato"]
+    
+    var sizingCell: TagCell?
+    
+    var tags = [Tag]()
+    
+    var heightConstraint: NSLayoutConstraint!
+    
+    weak var ingredientCollectionView: UICollectionView!
+    weak var flowLayout: FlowLayout!
+    
+    var firstLayout = true
     
     override func viewDidLoad() {
         
@@ -112,6 +185,22 @@ class UploadBurgerInformationVC: UITableViewController, UITextFieldDelegate, UIT
         }
         
         self.badges += [hasModsBadge]
+        
+        //let cellNib = UINib(nibName: "TagCell", bundle: nil)
+        //self.sizingCell = (cellNib.instantiate(withOwner: nil, options: nil) as NSArray).firstObject as! TagCell?
+        
+        //self.flowLayout.sectionInset = UIEdgeInsetsMake(8, 8, 8, 8)
+        
+        
+        for name in TAGS {
+            
+            let tag = Tag()
+            
+            tag.name = name
+            
+            self.tags.append(tag)
+            
+        }
 
     }
 
@@ -159,7 +248,7 @@ class UploadBurgerInformationVC: UITableViewController, UITextFieldDelegate, UIT
         let cellIdentifier = "UploadInfoCell"
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? UploadTableViewCell  else{
-            fatalError("The dequeued cell is not an instance of BurgerTableViewCell.")
+            fatalError("The dequeued cell is not an instance of UploadTableViewCell.")
         }
         
         cell.burgerNameTextField.delegate = self
@@ -174,11 +263,22 @@ class UploadBurgerInformationVC: UITableViewController, UITextFieldDelegate, UIT
         cell.priceTextField.resignFirstResponder()
         cell.burgerDescriptionTextView.resignFirstResponder()
         
-        cell.ratingSlider.minimumValue = 0.0;
-        cell.ratingSlider.maximumValue = 10.0;
-        cell.ratingSlider.value = 5.0;
+        flowLayout = cell.flowLayout
+        flowLayout.sectionInset = UIEdgeInsetsMake(8, 8, 8, 8)
+        ingredientCollectionView = cell.ingredientCollectionView
+        heightConstraint = cell.heightConstraint
+        
+        
+        let cellNib = UINib(nibName: "TagCell", bundle: nil)
+        
+        ingredientCollectionView.register(cellNib, forCellWithReuseIdentifier: "TagCell")
+        self.sizingCell = (cellNib.instantiate(withOwner: nil, options: nil) as NSArray).firstObject as! TagCell?
+        
+        cell.ratingSlider.minimumValue = 0.0
+        cell.ratingSlider.maximumValue = 10.0
+        cell.ratingSlider.value = 5.0
         cell.ratingSlider.addTarget(self, action: #selector(updateRatingLabel(sender:)), for: .allEvents)
-       
+        
         cell.burgerDescriptionTextView.delegate = self
         cell.burgerDescriptionTextView.textColor = .lightGray
         
@@ -189,11 +289,11 @@ class UploadBurgerInformationVC: UITableViewController, UITextFieldDelegate, UIT
         fields["region"] = cell.regionNameTextField
         fields["descript"] = cell.burgerDescriptionTextView
         fields["rating"] = cell.ratingNumberLabel
-    
+        
         return cell
         
     }
-
+    
     @objc func updateRatingLabel(sender: UISlider!) {
         let value = sender.value
         
@@ -267,6 +367,7 @@ class UploadBurgerInformationVC: UITableViewController, UITextFieldDelegate, UIT
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        
         if section == 1 {
             
             return 0.0
@@ -296,6 +397,7 @@ class UploadBurgerInformationVC: UITableViewController, UITextFieldDelegate, UIT
         
     }
     
+    
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
         if let _ = scrollView as? UITableView {
@@ -316,7 +418,6 @@ class UploadBurgerInformationVC: UITableViewController, UITextFieldDelegate, UIT
                 self.navigationController?.navigationBar.backgroundColor = colour
  
                 //UIApplication.shared.statusBarView?.backgroundColor = colour
-                
                 
             }else{
                 
@@ -352,66 +453,152 @@ class UploadBurgerInformationVC: UITableViewController, UITextFieldDelegate, UIT
                                                                      alpha: 1)
         self.navigationController?.navigationBar.backgroundColor = colour
         //UIApplication.shared.statusBarView?.backgroundColor = colour
-        
-        
+    
     }
     
 }
 
-extension UploadBurgerInformationVC: UICollectionViewDelegate, UICollectionViewDataSource {
+extension UploadBurgerInformationVC: UICollectionViewDelegate,
+                                  UICollectionViewDataSource,
+                                  UICollectionViewDelegateFlowLayout {
     
+   
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        return badges.count
+         if collectionView == self.ingredientCollectionView {
+        
+             return tags.count
+            
+         }else{
+            
+             return badges.count
+            
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let burgerBadge = badges[indexPath.row]
-        
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BadgeCell", for: indexPath) as? BurgerBadgeCollectionViewCell  else{
+         if collectionView == self.ingredientCollectionView {
             
-            fatalError("The dequeued cell is not an instance of BurgerTableViewCell.")
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TagCell", for: indexPath as IndexPath) as! TagCell
+            
+            self.configureCell(cell: cell, forIndexPath: indexPath as NSIndexPath)
+        
+            return cell
+            
+         }else{
+            
+            let burgerBadge = badges[indexPath.row]
+            
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BadgeCell", for: indexPath) as? BurgerBadgeCollectionViewCell  else{
+                
+                fatalError("The dequeued cell is not an instance of BurgerTableViewCell.")
+            }
+            
+            cell.ratingLabel.text = burgerBadge.ratingTitle
+            cell.badgeTitle.text = burgerBadge.badgeTitle
+            cell.badgeImage.image = burgerBadge.badgeIcon
+            cell.selectionStatus.backgroundColor = .clear
+            cell.selectionStatus.layer.cornerRadius = cell.selectionStatus.frame.size.width / 2
+            cell.selectionStatus.clipsToBounds = true
+            
+            if(firstLayout){
+        
+                firstLayout = false
+                
+                let height = self.ingredientCollectionView.collectionViewLayout.collectionViewContentSize.height
+                heightConstraint.constant = height
+                self.view.layoutIfNeeded()
+                self.tableView.reloadData()
+                
+                
+            }
+            
+            return cell
+            
         }
         
-        cell.ratingLabel.text = burgerBadge.ratingTitle
-        cell.badgeTitle.text = burgerBadge.badgeTitle
-        cell.badgeImage.image = burgerBadge.badgeIcon
-        cell.selectionStatus.backgroundColor = .clear
-        cell.selectionStatus.layer.cornerRadius = cell.selectionStatus.frame.size.width/2
-        cell.selectionStatus.clipsToBounds = true
-        
-        return cell
+    }
+   
+    private func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+        return CGSize(width:view.frame.width , height:64)
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+ 
+    internal func collectionView(_ collectionView: UICollectionView,
+                                 layout collectionViewLayout: UICollectionViewLayout,
+                                 sizeForItemAt indexPath: IndexPath) -> CGSize{
+        
+        if collectionView == self.ingredientCollectionView {
+        
+            self.configureCell(cell: self.sizingCell!, forIndexPath: indexPath as NSIndexPath)
+            
+            return self.sizingCell!.systemLayoutSizeFitting(UILayoutFittingCompressedSize)
+            
+        }else{
+            
+            let cellSize = CGSize(width: 65, height: 85);
+            
+            return cellSize
+            
+        }
+        
+        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath){
         
         print("Collection view at row \(collectionView.tag) selected index path \(indexPath)")
         
-        selectedBadgesIndex = indexPath.row
+        self.tableView.reloadData()
         
-        let colour = UIColor(red: 222/255,
-                           green: 173/255,
-                           blue: 107/255,
-                           alpha: 1.0)
-        
-        if let cell = collectionView.cellForItem(at: indexPath)  as? BurgerBadgeCollectionViewCell {
+        if collectionView == self.ingredientCollectionView {
             
-            if  cell.selectionStatus.backgroundColor != colour{
+            tags[indexPath.row].selected = !tags[indexPath.row].selected
             
-                cell.selectionStatus.backgroundColor = colour
+            self.ingredientCollectionView.reloadData()
             
-             }else{
-             
-                cell.selectionStatus.backgroundColor = UIColor.clear
-                
-             }
-        
+            let height = self.ingredientCollectionView.collectionViewLayout.collectionViewContentSize.height
+            heightConstraint.constant = height
+            self.view.layoutIfNeeded()
+            
         }else{
             
+            selectedBadgesIndex = indexPath.row
             
+            let colour = UIColor(red: 222/255,
+                                 green: 173/255,
+                                 blue: 107/255,
+                                 alpha: 1.0)
+            
+            if let cell = collectionView.cellForItem(at: indexPath)  as? BurgerBadgeCollectionViewCell {
+                
+                if  cell.selectionStatus.backgroundColor != colour{
+                    
+                    cell.selectionStatus.backgroundColor = colour
+                    
+                }else{
+                    
+                    cell.selectionStatus.backgroundColor = UIColor.clear
+                    
+                }
+                
+            }else{
+                
+                
+            }
         }
+    }
+    
+    func configureCell(cell: TagCell, forIndexPath indexPath: NSIndexPath) {
         
+        let tag = tags[indexPath.row]
+        
+        cell.tagName.text = tag.name
+        
+        cell.tagName.textColor = tag.selected ? UIColor.white : UIColor(red: 0.1, green: 0.1, blue: 0.1, alpha: 1)
+        
+        cell.backgroundColor = tag.selected ? UIColor(red: 0, green: 1, blue: 0, alpha: 1) : UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1)
         
     }
 }

@@ -9,6 +9,8 @@
 import UIKit
 
 class FilterCatalogueCollectionViewCell: UICollectionViewCell {
+    
     @IBOutlet weak var filterName: UILabel!
+    
     
 }

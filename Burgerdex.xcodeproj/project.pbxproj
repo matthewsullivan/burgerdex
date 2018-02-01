@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EB0823BC20223EE5002DB6D2 /* TagCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0823BB20223EE5002DB6D2 /* TagCell.swift */; };
+		EB0823BE20223EF4002DB6D2 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0823BD20223EF4002DB6D2 /* Tag.swift */; };
+		EB0823C020223EFB002DB6D2 /* FlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0823BF20223EFB002DB6D2 /* FlowLayout.swift */; };
 		EB3C2140200645D400EAC1CB /* FilterCatalogueCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3C213F200645D400EAC1CB /* FilterCatalogueCell.swift */; };
 		EB3C21422006487A00EAC1CB /* FilterCatalogueCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3C21412006487A00EAC1CB /* FilterCatalogueCollectionViewCell.swift */; };
 		EB66BE06200A762F00921485 /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB66BE05200A762F00921485 /* ImageManager.swift */; };
@@ -27,6 +30,7 @@
 		EB857A721FFC0959003E5BF1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB857A701FFC0959003E5BF1 /* LaunchScreen.storyboard */; };
 		EB857A7A1FFC0D7B003E5BF1 /* UploadBurgerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB857A791FFC0D7B003E5BF1 /* UploadBurgerVC.swift */; };
 		EBCAF4A6200CF96100B9407D /* TableLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCAF4A5200CF96100B9407D /* TableLoader.swift */; };
+		EBD0C4C620226D7800918701 /* TagCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBD0C4C520226D7800918701 /* TagCell.xib */; };
 		EBD41663200FF07B00E33AD6 /* TabBarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD41662200FF07B00E33AD6 /* TabBarVC.swift */; };
 		EBE2D4DD201A6E49003BC9F7 /* UploadBurgerInformationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE2D4DC201A6E49003BC9F7 /* UploadBurgerInformationVC.swift */; };
 		EBE820ED1FFC21C800F5A895 /* CatalogueTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE820EC1FFC21C800F5A895 /* CatalogueTableViewCell.swift */; };
@@ -38,6 +42,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		EB0823BB20223EE5002DB6D2 /* TagCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagCell.swift; sourceTree = "<group>"; };
+		EB0823BD20223EF4002DB6D2 /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
+		EB0823BF20223EFB002DB6D2 /* FlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowLayout.swift; sourceTree = "<group>"; };
 		EB3C213F200645D400EAC1CB /* FilterCatalogueCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCatalogueCell.swift; sourceTree = "<group>"; };
 		EB3C21412006487A00EAC1CB /* FilterCatalogueCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCatalogueCollectionViewCell.swift; sourceTree = "<group>"; };
 		EB66BE05200A762F00921485 /* ImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageManager.swift; sourceTree = "<group>"; };
@@ -45,11 +52,11 @@
 		EB838B49201BB7C900B9C633 /* UploadHeaderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadHeaderTableViewCell.swift; sourceTree = "<group>"; };
 		EB838B4C201BBE0900B9C633 /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		EB838B4E201BC15900B9C633 /* UploadTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadTableViewCell.swift; sourceTree = "<group>"; };
-		EB838B51201BD7BA00B9C633 /* TweePlaceholderTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TweePlaceholderTextField.swift; path = "../../../../../../Downloads/TweeTextField-master/Sources/TweePlaceholderTextField.swift"; sourceTree = "<group>"; };
-		EB838B52201BD7BA00B9C633 /* TweeActiveTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TweeActiveTextField.swift; path = "../../../../../../Downloads/TweeTextField-master/Sources/TweeActiveTextField.swift"; sourceTree = "<group>"; };
-		EB838B53201BD7BA00B9C633 /* TweeBorderedTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TweeBorderedTextField.swift; path = "../../../../../../Downloads/TweeTextField-master/Sources/TweeBorderedTextField.swift"; sourceTree = "<group>"; };
-		EB838B54201BD7BA00B9C633 /* FontAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FontAnimation.swift; path = "../../../../../../Downloads/TweeTextField-master/Sources/FontAnimation.swift"; sourceTree = "<group>"; };
-		EB838B55201BD7BA00B9C633 /* TweeAttributedTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TweeAttributedTextField.swift; path = "../../../../../../Downloads/TweeTextField-master/Sources/TweeAttributedTextField.swift"; sourceTree = "<group>"; };
+		EB838B51201BD7BA00B9C633 /* TweePlaceholderTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TweePlaceholderTextField.swift; sourceTree = "<group>"; };
+		EB838B52201BD7BA00B9C633 /* TweeActiveTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TweeActiveTextField.swift; sourceTree = "<group>"; };
+		EB838B53201BD7BA00B9C633 /* TweeBorderedTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TweeBorderedTextField.swift; sourceTree = "<group>"; };
+		EB838B54201BD7BA00B9C633 /* FontAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FontAnimation.swift; sourceTree = "<group>"; };
+		EB838B55201BD7BA00B9C633 /* TweeAttributedTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TweeAttributedTextField.swift; sourceTree = "<group>"; };
 		EB857A621FFC0959003E5BF1 /* Burgerdex.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Burgerdex.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB857A651FFC0959003E5BF1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EB857A671FFC0959003E5BF1 /* CatalogueVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogueVC.swift; sourceTree = "<group>"; };
@@ -60,6 +67,7 @@
 		EB857A731FFC0959003E5BF1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EB857A791FFC0D7B003E5BF1 /* UploadBurgerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadBurgerVC.swift; sourceTree = "<group>"; };
 		EBCAF4A5200CF96100B9407D /* TableLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableLoader.swift; sourceTree = "<group>"; };
+		EBD0C4C520226D7800918701 /* TagCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TagCell.xib; sourceTree = "<group>"; };
 		EBD41662200FF07B00E33AD6 /* TabBarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarVC.swift; sourceTree = "<group>"; };
 		EBE2D4DC201A6E49003BC9F7 /* UploadBurgerInformationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadBurgerInformationVC.swift; sourceTree = "<group>"; };
 		EBE820EC1FFC21C800F5A895 /* CatalogueTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogueTableViewCell.swift; sourceTree = "<group>"; };
@@ -81,6 +89,56 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		EB0823B620223D1D002DB6D2 /* Table Cells */ = {
+			isa = PBXGroup;
+			children = (
+				EB838B49201BB7C900B9C633 /* UploadHeaderTableViewCell.swift */,
+				EB838B4E201BC15900B9C633 /* UploadTableViewCell.swift */,
+				EBE820F41FFE7EED00F5A895 /* BurgerTableViewCell.swift */,
+				EBE820EC1FFC21C800F5A895 /* CatalogueTableViewCell.swift */,
+				EBE820F61FFE8B3800F5A895 /* BurgerHeaderTableViewCell.swift */,
+			);
+			path = "Table Cells";
+			sourceTree = "<group>";
+		};
+		EB0823B720223D49002DB6D2 /* Catalogue */ = {
+			isa = PBXGroup;
+			children = (
+				EBE820EE1FFD30D500F5A895 /* BurgerVC.swift */,
+				EB857A671FFC0959003E5BF1 /* CatalogueVC.swift */,
+			);
+			path = Catalogue;
+			sourceTree = "<group>";
+		};
+		EB0823B820223D50002DB6D2 /* Upload */ = {
+			isa = PBXGroup;
+			children = (
+				EB857A791FFC0D7B003E5BF1 /* UploadBurgerVC.swift */,
+				EBE2D4DC201A6E49003BC9F7 /* UploadBurgerInformationVC.swift */,
+			);
+			path = Upload;
+			sourceTree = "<group>";
+		};
+		EB0823B920223D56002DB6D2 /* Passport */ = {
+			isa = PBXGroup;
+			children = (
+				EB857A691FFC0959003E5BF1 /* PassportVC.swift */,
+			);
+			path = Passport;
+			sourceTree = "<group>";
+		};
+		EB0823BA20223DCF002DB6D2 /* Collection Cells */ = {
+			isa = PBXGroup;
+			children = (
+				EB0823BF20223EFB002DB6D2 /* FlowLayout.swift */,
+				EB0823BB20223EE5002DB6D2 /* TagCell.swift */,
+				EB3C21412006487A00EAC1CB /* FilterCatalogueCollectionViewCell.swift */,
+				EB77F68320054C0400ECCD1E /* BurgerBadgeCollectionViewCell.swift */,
+				EB3C213F200645D400EAC1CB /* FilterCatalogueCell.swift */,
+			);
+			path = "Collection Cells";
+			sourceTree = "<group>";
+		};
 		EB838B4B201BBDF100B9C633 /* Loaders */ = {
 			isa = PBXGroup;
 			children = (
@@ -143,26 +201,27 @@
 		EBCAF4A4200CF90900B9407D /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				EBE820EC1FFC21C800F5A895 /* CatalogueTableViewCell.swift */,
-				EBE820F41FFE7EED00F5A895 /* BurgerTableViewCell.swift */,
-				EB3C21412006487A00EAC1CB /* FilterCatalogueCollectionViewCell.swift */,
-				EBE820F61FFE8B3800F5A895 /* BurgerHeaderTableViewCell.swift */,
-				EB77F68320054C0400ECCD1E /* BurgerBadgeCollectionViewCell.swift */,
-				EB838B49201BB7C900B9C633 /* UploadHeaderTableViewCell.swift */,
-				EB838B4E201BC15900B9C633 /* UploadTableViewCell.swift */,
-				EB3C213F200645D400EAC1CB /* FilterCatalogueCell.swift */,
+				EBD0C4C420226D5400918701 /* xibs */,
+				EB0823BA20223DCF002DB6D2 /* Collection Cells */,
+				EB0823B620223D1D002DB6D2 /* Table Cells */,
 			);
 			path = Cells;
+			sourceTree = "<group>";
+		};
+		EBD0C4C420226D5400918701 /* xibs */ = {
+			isa = PBXGroup;
+			children = (
+				EBD0C4C520226D7800918701 /* TagCell.xib */,
+			);
+			path = xibs;
 			sourceTree = "<group>";
 		};
 		EBE820E91FFC118600F5A895 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				EB857A671FFC0959003E5BF1 /* CatalogueVC.swift */,
-				EB857A691FFC0959003E5BF1 /* PassportVC.swift */,
-				EB857A791FFC0D7B003E5BF1 /* UploadBurgerVC.swift */,
-				EBE2D4DC201A6E49003BC9F7 /* UploadBurgerInformationVC.swift */,
-				EBE820EE1FFD30D500F5A895 /* BurgerVC.swift */,
+				EB0823B920223D56002DB6D2 /* Passport */,
+				EB0823B820223D50002DB6D2 /* Upload */,
+				EB0823B720223D49002DB6D2 /* Catalogue */,
 				EBD41662200FF07B00E33AD6 /* TabBarVC.swift */,
 			);
 			path = Controller;
@@ -171,6 +230,7 @@
 		EBE820EA1FFC119000F5A895 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				EB0823BD20223EF4002DB6D2 /* Tag.swift */,
 				EB66BE05200A762F00921485 /* ImageManager.swift */,
 				EBE820F01FFD479700F5A895 /* Burger.swift */,
 			);
@@ -248,6 +308,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EBD0C4C620226D7800918701 /* TagCell.xib in Resources */,
 				EB857A721FFC0959003E5BF1 /* LaunchScreen.storyboard in Resources */,
 				EB857A6F1FFC0959003E5BF1 /* Assets.xcassets in Resources */,
 				EB857A6D1FFC0959003E5BF1 /* Main.storyboard in Resources */,
@@ -266,9 +327,11 @@
 				EB857A6A1FFC0959003E5BF1 /* PassportVC.swift in Sources */,
 				EB77F68420054C0400ECCD1E /* BurgerBadgeCollectionViewCell.swift in Sources */,
 				EBE820F71FFE8B3800F5A895 /* BurgerHeaderTableViewCell.swift in Sources */,
+				EB0823C020223EFB002DB6D2 /* FlowLayout.swift in Sources */,
 				EBE820ED1FFC21C800F5A895 /* CatalogueTableViewCell.swift in Sources */,
 				EB838B4F201BC15900B9C633 /* UploadTableViewCell.swift in Sources */,
 				EB838B5A201BD7BA00B9C633 /* TweeAttributedTextField.swift in Sources */,
+				EB0823BC20223EE5002DB6D2 /* TagCell.swift in Sources */,
 				EBE820F51FFE7EED00F5A895 /* BurgerTableViewCell.swift in Sources */,
 				EBE820F31FFD88F900F5A895 /* BurgerHeaderView.swift in Sources */,
 				EBE2D4DD201A6E49003BC9F7 /* UploadBurgerInformationVC.swift in Sources */,
@@ -284,6 +347,7 @@
 				EB838B58201BD7BA00B9C633 /* TweeBorderedTextField.swift in Sources */,
 				EB838B4D201BBE0900B9C633 /* ActivityIndicator.swift in Sources */,
 				EB838B59201BD7BA00B9C633 /* FontAnimation.swift in Sources */,
+				EB0823BE20223EF4002DB6D2 /* Tag.swift in Sources */,
 				EBD41663200FF07B00E33AD6 /* TabBarVC.swift in Sources */,
 				EBCAF4A6200CF96100B9407D /* TableLoader.swift in Sources */,
 			);

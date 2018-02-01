@@ -39,6 +39,7 @@ class ImageManager: NSObject {
             let downloadTask = session.downloadTask(with: url, completionHandler: { (retrievedURL, response, error) -> Void in
                 var found = false
                 if error != nil { print("Error downloading image \(url.absoluteString): \(error!.localizedDescription)") }
+                    
                 else if retrievedURL != nil {
                     if let data = try? Data(contentsOf: retrievedURL!) {
                         if let image = UIImage(data: data) {
@@ -48,8 +49,10 @@ class ImageManager: NSObject {
                         }
                     }
                 }
+                
                 if !found { DispatchQueue.main.async(execute: { completion?(false, nil) }) }
             })
+            
             downloadTask.resume()
         } else { completion?(false, nil) }
     }
