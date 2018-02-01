@@ -25,6 +25,9 @@ class UploadTableViewCell: UITableViewCell {
     @IBOutlet weak var flowLayout: FlowLayout!
     @IBOutlet weak var heightConstraint: NSLayoutConstraint!
     
+    @IBOutlet weak var addIngredientButton: UIButton!
+    @IBOutlet weak var newIngredientTextField: TweeBorderedTextField!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

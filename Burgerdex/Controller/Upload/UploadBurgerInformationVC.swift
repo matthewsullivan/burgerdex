@@ -9,14 +9,16 @@
 import UIKit
 import Photos
 
-class UploadBurgerInformationVC: UITableViewController, UITextFieldDelegate, UITextViewDelegate{
+class UploadBurgerInformationVC: UITableViewController,
+                                UITextFieldDelegate,
+                                UITextViewDelegate{
     
     var photo : PHAsset!
     var badges = [Badge]()
     var fields : [String:AnyObject] = [:]
     var selectedBadgesIndex = Int()
 
-    let TAGS = ["Cheddar Cheese",
+    var TAGS = ["Cheddar Cheese",
                 "Lettuce",
                 "Beef Patty",
                 "Onion",
@@ -88,6 +90,8 @@ class UploadBurgerInformationVC: UITableViewController, UITextFieldDelegate, UIT
     weak var flowLayout: FlowLayout!
     
     var firstLayout = true
+    
+    var addIngredientButton: UIButton!
     
     override func viewDidLoad() {
         
@@ -202,6 +206,42 @@ class UploadBurgerInformationVC: UITableViewController, UITextFieldDelegate, UIT
             
         }
 
+        //Looks for single or multiple taps.
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        
+        view.addGestureRecognizer(tap)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(UploadBurgerInformationVC.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(UploadBurgerInformationVC.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+   
+    @objc func keyboardWillShow(notification: NSNotification){
+        var userInfo = notification.userInfo!
+        var keyboardFrame:CGRect = (userInfo[UIKeyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
+        keyboardFrame = self.view.convert(keyboardFrame, from: nil)
+        
+        var contentInset:UIEdgeInsets = self.tableView.contentInset
+        contentInset.bottom = keyboardFrame.size.height
+        self.tableView.contentInset = contentInset
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        let contentInset:UIEdgeInsets = UIEdgeInsets.zero
+        self.tableView.contentInset = contentInset
+    }
+
+    
+
+
+    
+    //HACK - works to stop scrollign tableview when the view is being edited
+    override func viewWillAppear(_ animated: Bool) {}
+    
+    //Calls this function when the tap is recognized.
+    @objc func dismissKeyboard() {
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
     }
 
     func getAssetThumbnail(asset: PHAsset) -> UIImage {
@@ -256,18 +296,19 @@ class UploadBurgerInformationVC: UITableViewController, UITextFieldDelegate, UIT
         cell.regionNameTextField.delegate = self
         cell.priceTextField.delegate = self
         cell.burgerDescriptionTextView.delegate = self
+        cell.newIngredientTextField.delegate = self
         
         cell.burgerNameTextField.resignFirstResponder()
         cell.kitchenNameTextField.resignFirstResponder()
         cell.regionNameTextField.resignFirstResponder()
         cell.priceTextField.resignFirstResponder()
         cell.burgerDescriptionTextView.resignFirstResponder()
+        cell.newIngredientTextField.resignFirstResponder()
         
         flowLayout = cell.flowLayout
         flowLayout.sectionInset = UIEdgeInsetsMake(8, 8, 8, 8)
         ingredientCollectionView = cell.ingredientCollectionView
         heightConstraint = cell.heightConstraint
-        
         
         let cellNib = UINib(nibName: "TagCell", bundle: nil)
         
@@ -279,6 +320,10 @@ class UploadBurgerInformationVC: UITableViewController, UITextFieldDelegate, UIT
         cell.ratingSlider.value = 5.0
         cell.ratingSlider.addTarget(self, action: #selector(updateRatingLabel(sender:)), for: .allEvents)
         
+        addIngredientButton = cell.addIngredientButton
+        
+        addIngredientButton.addTarget(self, action: #selector(sayAction(_:)), for: .touchUpInside)
+        
         cell.burgerDescriptionTextView.delegate = self
         cell.burgerDescriptionTextView.textColor = .lightGray
         
@@ -289,8 +334,43 @@ class UploadBurgerInformationVC: UITableViewController, UITextFieldDelegate, UIT
         fields["region"] = cell.regionNameTextField
         fields["descript"] = cell.burgerDescriptionTextView
         fields["rating"] = cell.ratingNumberLabel
+        fields["addIngredientLabel"] = cell.newIngredientTextField
         
         return cell
+        
+    }
+    
+    @objc private func sayAction(_ sender: UIButton?) {
+        
+        let ingredientLabel = self.fields["addIngredientLabel"] as! UITextField
+        
+         if (!(ingredientLabel.text ?? "").isEmpty) {
+            
+            if !TAGS.contains(ingredientLabel.text!) {
+                
+                let tag = Tag()
+                
+                tag.name = ingredientLabel.text
+                
+                self.tags.append(tag)
+                
+                ingredientCollectionView.reloadData()
+                
+                redrawIngredientHeight()
+                
+            
+            }
+         }
+    }
+    
+    
+    
+    func redrawIngredientHeight(){
+        
+        let height = self.ingredientCollectionView.collectionViewLayout.collectionViewContentSize.height
+        heightConstraint.constant = height
+        self.view.layoutIfNeeded()
+        self.tableView.reloadData()
         
     }
     
@@ -314,7 +394,6 @@ class UploadBurgerInformationVC: UITableViewController, UITextFieldDelegate, UIT
             textView.textColor = .gray
             
         }
-        
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
@@ -440,6 +519,8 @@ class UploadBurgerInformationVC: UITableViewController, UITextFieldDelegate, UIT
         
         super.viewWillDisappear(animated)
         
+        NotificationCenter.default.removeObserver(self)
+        
         self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0),
                                    at: UITableViewScrollPosition.top,
                                    animated: false)
@@ -506,10 +587,7 @@ extension UploadBurgerInformationVC: UICollectionViewDelegate,
         
                 firstLayout = false
                 
-                let height = self.ingredientCollectionView.collectionViewLayout.collectionViewContentSize.height
-                heightConstraint.constant = height
-                self.view.layoutIfNeeded()
-                self.tableView.reloadData()
+                redrawIngredientHeight()
                 
                 
             }
@@ -550,17 +628,11 @@ extension UploadBurgerInformationVC: UICollectionViewDelegate,
         
         print("Collection view at row \(collectionView.tag) selected index path \(indexPath)")
         
-        self.tableView.reloadData()
-        
         if collectionView == self.ingredientCollectionView {
             
             tags[indexPath.row].selected = !tags[indexPath.row].selected
             
             self.ingredientCollectionView.reloadData()
-            
-            let height = self.ingredientCollectionView.collectionViewLayout.collectionViewContentSize.height
-            heightConstraint.constant = height
-            self.view.layoutIfNeeded()
             
         }else{
             
