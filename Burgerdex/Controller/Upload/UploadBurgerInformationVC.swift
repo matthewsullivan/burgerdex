@@ -13,7 +13,7 @@ class UploadBurgerInformationVC: UITableViewController,
                                 UITextFieldDelegate,
                                 UITextViewDelegate{
     
-    var photo : PHAsset!
+    var photo : UIImage!
     var badges = [Badge]()
     var fields : [String:AnyObject] = [:]
     var selectedBadgesIndex = Int()
@@ -115,7 +115,7 @@ class UploadBurgerInformationVC: UITableViewController,
         
         self.tableView.tableHeaderView  = burgerHeaderView
         
-        burgerHeaderView.burgerImage.image =   getAssetThumbnail(asset: photo)
+        burgerHeaderView.burgerImage.image =   photo
         
         tableView.estimatedRowHeight = 405.0
         tableView.rowHeight = UITableViewAutomaticDimension
@@ -190,12 +190,6 @@ class UploadBurgerInformationVC: UITableViewController,
         
         self.badges += [hasModsBadge]
         
-        //let cellNib = UINib(nibName: "TagCell", bundle: nil)
-        //self.sizingCell = (cellNib.instantiate(withOwner: nil, options: nil) as NSArray).firstObject as! TagCell?
-        
-        //self.flowLayout.sectionInset = UIEdgeInsetsMake(8, 8, 8, 8)
-        
-        
         for name in TAGS {
             
             let tag = Tag()
@@ -230,10 +224,6 @@ class UploadBurgerInformationVC: UITableViewController,
         let contentInset:UIEdgeInsets = UIEdgeInsets.zero
         self.tableView.contentInset = contentInset
     }
-
-    
-
-
     
     //HACK - works to stop scrollign tableview when the view is being edited
     override func viewWillAppear(_ animated: Bool) {}
@@ -244,20 +234,6 @@ class UploadBurgerInformationVC: UITableViewController,
         view.endEditing(true)
     }
 
-    func getAssetThumbnail(asset: PHAsset) -> UIImage {
-        let manager = PHImageManager.default()
-        let option = PHImageRequestOptions()
-        var thumbnail = UIImage()
-        option.isSynchronous = true
-        manager.requestImage(for: asset, targetSize: CGSize(width: self.view.bounds.width, height: 200), contentMode: .aspectFill, options: option, resultHandler: {(result, info)->Void in
-            thumbnail = result!
-        })
-        
-        
-        return thumbnail
-    }
-    
-    
     override func didReceiveMemoryWarning() {
         
         super.didReceiveMemoryWarning()
@@ -394,6 +370,7 @@ class UploadBurgerInformationVC: UITableViewController,
             textView.textColor = .gray
             
         }
+    
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
@@ -412,21 +389,36 @@ class UploadBurgerInformationVC: UITableViewController,
         return true;
     }
     
+    func tableView(_: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension
+    }
+    
+    // MARK: UITextViewDelegate
     func textViewDidChange(_ textView: UITextView) {
         
-        //This will do for now.
-        /*
-        textView.translatesAutoresizingMaskIntoConstraints = true
-        textView.sizeToFit()
-        textView.isScrollEnabled = false
-        */
-        /*
-        let contentSize = textView.sizeThatFits(textView.bounds.size)
-        var frame = textView.frame
-        frame.size.height = contentSize.height
-        textView.frame = frame
-        */
+        // Calculate if the text view will change height, then only force
+        // the table to update if it does.  Also disable animations to
+        // prevent "jankiness".
         
+        let startHeight = textView.frame.size.height
+        let calcHeight = textView.sizeThatFits(textView.frame.size).height  //iOS 8+ only
+        
+        if startHeight != calcHeight {
+            
+            UIView.setAnimationsEnabled(false) // Disable animations
+            self.tableView.beginUpdates()
+            self.tableView.endUpdates()
+            
+            // Might need to insert additional stuff here if scrolls
+            // table in an unexpected way.  This scrolls to the bottom
+            // of the table. (Though you might need something more
+            // complicated if editing in the middle.)
+            
+            let scrollTo = self.tableView.contentSize.height - self.tableView.frame.size.height
+            self.tableView.setContentOffset(CGPoint(x:0, y:scrollTo), animated: false)
+            
+            UIView.setAnimationsEnabled(true)  // Re-enable animations.
+        }
         
     }
 
@@ -444,6 +436,7 @@ class UploadBurgerInformationVC: UITableViewController,
             return tableView.rowHeight
         }
     }
+    
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
@@ -466,7 +459,8 @@ class UploadBurgerInformationVC: UITableViewController,
             cell.burgerName.text = "Name will go here"
             cell.kitchenName.text = "Kitchen will go here"
         
-            return cell
+            //Without returning contentView the header ell disapears on any tetView edits due to our table.beginUpdate() code
+            return cell.contentView
             
         }else{
             

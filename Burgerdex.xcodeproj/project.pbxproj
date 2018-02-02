@@ -32,6 +32,8 @@
 		EBCAF4A6200CF96100B9407D /* TableLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCAF4A5200CF96100B9407D /* TableLoader.swift */; };
 		EBD0C4C620226D7800918701 /* TagCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBD0C4C520226D7800918701 /* TagCell.xib */; };
 		EBD41663200FF07B00E33AD6 /* TabBarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD41662200FF07B00E33AD6 /* TabBarVC.swift */; };
+		EBDAF6A72024DEB30053FAC3 /* BurgerCameraVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDAF6A62024DEB30053FAC3 /* BurgerCameraVC.swift */; };
+		EBDAF6A82024EF220053FAC3 /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDAF6A52024DE480053FAC3 /* CameraController.swift */; };
 		EBE2D4DD201A6E49003BC9F7 /* UploadBurgerInformationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE2D4DC201A6E49003BC9F7 /* UploadBurgerInformationVC.swift */; };
 		EBE820ED1FFC21C800F5A895 /* CatalogueTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE820EC1FFC21C800F5A895 /* CatalogueTableViewCell.swift */; };
 		EBE820EF1FFD30D500F5A895 /* BurgerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE820EE1FFD30D500F5A895 /* BurgerVC.swift */; };
@@ -69,6 +71,8 @@
 		EBCAF4A5200CF96100B9407D /* TableLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableLoader.swift; sourceTree = "<group>"; };
 		EBD0C4C520226D7800918701 /* TagCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TagCell.xib; sourceTree = "<group>"; };
 		EBD41662200FF07B00E33AD6 /* TabBarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarVC.swift; sourceTree = "<group>"; };
+		EBDAF6A52024DE480053FAC3 /* CameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
+		EBDAF6A62024DEB30053FAC3 /* BurgerCameraVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurgerCameraVC.swift; sourceTree = "<group>"; };
 		EBE2D4DC201A6E49003BC9F7 /* UploadBurgerInformationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadBurgerInformationVC.swift; sourceTree = "<group>"; };
 		EBE820EC1FFC21C800F5A895 /* CatalogueTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogueTableViewCell.swift; sourceTree = "<group>"; };
 		EBE820EE1FFD30D500F5A895 /* BurgerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurgerVC.swift; sourceTree = "<group>"; };
@@ -113,7 +117,9 @@
 		EB0823B820223D50002DB6D2 /* Upload */ = {
 			isa = PBXGroup;
 			children = (
+				EBDAF6A52024DE480053FAC3 /* CameraController.swift */,
 				EB857A791FFC0D7B003E5BF1 /* UploadBurgerVC.swift */,
+				EBDAF6A62024DEB30053FAC3 /* BurgerCameraVC.swift */,
 				EBE2D4DC201A6E49003BC9F7 /* UploadBurgerInformationVC.swift */,
 			);
 			path = Upload;
@@ -345,6 +351,8 @@
 				EB857A681FFC0959003E5BF1 /* CatalogueVC.swift in Sources */,
 				EB838B57201BD7BA00B9C633 /* TweeActiveTextField.swift in Sources */,
 				EB838B58201BD7BA00B9C633 /* TweeBorderedTextField.swift in Sources */,
+				EBDAF6A72024DEB30053FAC3 /* BurgerCameraVC.swift in Sources */,
+				EBDAF6A82024EF220053FAC3 /* CameraController.swift in Sources */,
 				EB838B4D201BBE0900B9C633 /* ActivityIndicator.swift in Sources */,
 				EB838B59201BD7BA00B9C633 /* FontAnimation.swift in Sources */,
 				EB0823BE20223EF4002DB6D2 /* Tag.swift in Sources */,

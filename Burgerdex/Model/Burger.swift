@@ -38,11 +38,19 @@ class BurgerPreview : BurgerObject {
           photo: UIImage,
           burgerID: Int) {
         
-        if displayTag.isEmpty || displayText.isEmpty || name.isEmpty || kitchen.isEmpty || catalogueNumber < 0 || burgerID < 0 || location.isEmpty  || year.isEmpty{
+        if displayTag.isEmpty ||
+           displayText.isEmpty ||
+           name.isEmpty ||
+           kitchen.isEmpty ||
+           catalogueNumber < 0 ||
+           burgerID < 0 ||
+           location.isEmpty  ||
+           year.isEmpty{
+            
             return nil
         }
         
-        // Initialize stored properties.
+        //Initialize stored properties.
         self.displayTag = displayTag
         self.displayText = displayText
         self.name = name
