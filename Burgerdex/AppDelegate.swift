@@ -36,6 +36,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             NSAttributedStringKey.foregroundColor: UIColor.white
         ]
         
+        //UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        
         
         return true
     }

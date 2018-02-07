@@ -16,16 +16,14 @@ class UploadBurgerVC: UIViewController, UploadBurgerDelegate {
     @IBOutlet weak var errorHeaderLabel: UILabel!
     @IBOutlet weak var errorBodyLabel: UILabel!
     @IBOutlet weak var errorImageContainer: UIImageView!
+    
     @IBAction func cameraButtonTouch(_ sender: Any) {
-        
         self.performSegue(withIdentifier: "burgerCameraSegue", sender: self)
-        
     }
     
     var selectedPhoto : UIImage!
     
     @IBAction func errorButtonLabel(_ sender: Any) {
-        
         
         if let url = URL(string:UIApplicationOpenSettingsURLString) {
             if UIApplication.shared.canOpenURL(url) {
@@ -34,7 +32,6 @@ class UploadBurgerVC: UIViewController, UploadBurgerDelegate {
                 })
             }
         }
-    
     }
     
     @IBOutlet fileprivate weak var collectionView: UICollectionView!
@@ -48,9 +45,10 @@ class UploadBurgerVC: UIViewController, UploadBurgerDelegate {
     var photoAsset : PHAsset!
     
     override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         
+        super.viewDidLoad()
+        
+        // Do any additional setup after loading the view, typically from a nib.
         self.title = "New Discovery"
         
         setupCollectionViewOfCameraRollPhotos()
@@ -66,13 +64,14 @@ class UploadBurgerVC: UIViewController, UploadBurgerDelegate {
         case PHAuthorizationStatus.notDetermined:
             PHPhotoLibrary.requestAuthorization { (status) -> Void in
                 if status == PHAuthorizationStatus.authorized {
-                    //self.openImagePickerButton.isEnabled = true
+                   
                     self.errorContainerView.isHidden = true
                     
                     self.initView()
                     self.loadPhotos()
                 }
             }
+            
         case PHAuthorizationStatus.authorized:
             
             self.errorContainerView.isHidden = true
@@ -102,7 +101,6 @@ class UploadBurgerVC: UIViewController, UploadBurgerDelegate {
         self.errorContainerView.isHidden = false
         //Error Type 0 = Filter match
         //Error Type 1 = Network Connection
-        
         if errorType == 0 {
             
             self.errorImageContainer.image = UIImage(named: "noFood")
@@ -120,35 +118,25 @@ class UploadBurgerVC: UIViewController, UploadBurgerDelegate {
     
     func performBurgerInformationSegue(photo : UIImage){
         
-        print("GOT HERE DELEGATE CALL")
-        
-        self.collectionView.reloadData()
-        
         selectedPhoto = photo
         
         self.performSegue(withIdentifier: "uploadBurgerInfoSegue", sender: self)
         
     }
-    
-    // This function is called before the segue
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == "uploadBurgerInfoSegue" {
-            
+                        
             let burgerInformationViewController = segue.destination as! UploadBurgerInformationVC
             
             burgerInformationViewController.photo = selectedPhoto
             
         }else{
             
-            //burgerCameraSegue
+            let burgerCameraView = segue.destination as! BurgerCameraVC
             
-            let burgerCameraVC = BurgerCameraVC()
-            
-            burgerCameraVC.delegate = self
-            
-            
-            print("camera screen")
+            burgerCameraView.delegate = self
             
         }
     
@@ -158,8 +146,7 @@ class UploadBurgerVC: UIViewController, UploadBurgerDelegate {
 
 fileprivate extension UploadBurgerVC {
     fileprivate func initView() {
-        
-        print("got here init")
+    
         let imgWidth = (collectionView.frame.width - (kCellSpacing * (CGFloat(kColumnCnt) - 1))) / CGFloat(kColumnCnt)
         targetSize = CGSize(width: imgWidth, height: imgWidth)
         
@@ -173,10 +160,7 @@ fileprivate extension UploadBurgerVC {
     }
     
     fileprivate func loadPhotos() {
-        
-        fetchResult = nil
-        
-        print("got here loadPhotos")
+    
         let options = PHFetchOptions()
         options.sortDescriptors = [
             NSSortDescriptor(key: "creationDate", ascending: false)
@@ -230,13 +214,11 @@ extension UploadBurgerVC: UICollectionViewDelegate {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
         photoAsset = fetchResult.object(at: indexPath.item)
         
-        print(photoAsset.description)
-        
         self.selectedPhoto = getAssetThumbnail(asset: photoAsset)
-        
-
+    
         self.performSegue(withIdentifier: "uploadBurgerInfoSegue", sender: self)
         
     }
@@ -249,8 +231,7 @@ extension UploadBurgerVC: UICollectionViewDelegate {
         manager.requestImage(for: asset, targetSize: CGSize(width: self.view.bounds.width, height: 200), contentMode: .aspectFill, options: option, resultHandler: {(result, info)->Void in
             thumbnail = result!
         })
-        
-        
+    
         return thumbnail
     }
     

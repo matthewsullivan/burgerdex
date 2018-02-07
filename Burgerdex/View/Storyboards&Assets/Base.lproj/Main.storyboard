@@ -157,7 +157,7 @@
                         <outlet property="errorHeaderLabel" destination="yaL-ll-1Dd" id="Wzz-bg-J8T"/>
                         <outlet property="errorImageContainer" destination="k74-Sc-Fvq" id="756-Qf-Kb6"/>
                         <segue destination="qLj-j3-hFB" kind="show" identifier="uploadBurgerInfoSegue" id="yvb-6o-ZBs"/>
-                        <segue destination="eiy-pn-GRI" kind="presentation" identifier="burgerCameraSegue" id="X6L-yS-Qk3"/>
+                        <segue destination="DEv-bj-w5e" kind="presentation" identifier="burgerCameraSegue" id="yt6-OM-ogz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lkW-Ni-aGH" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -568,6 +568,9 @@
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kzb-Kg-eQm">
                                             <rect key="frame" x="20" y="833" width="340" height="30"/>
                                             <state key="normal" title="Submit"/>
+                                            <connections>
+                                                <action selector="submitBtn:" destination="qLj-j3-hFB" eventType="touchUpInside" id="IWX-R4-Wf8"/>
+                                            </connections>
                                         </button>
                                     </subviews>
                                     <constraints>
@@ -666,7 +669,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="k3I-3D-7Zn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2716" y="1108"/>
+            <point key="canvasLocation" x="3102" y="715"/>
         </scene>
         <!--Burger CameraVC-->
         <scene sceneID="Das-29-IhO">
@@ -677,10 +680,32 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7oR-Cq-cxE">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                                <rect key="frame" x="0.0" y="-2" width="375" height="814"/>
                                 <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="JPS-Fp-w4y">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="814"/>
+                                    </imageView>
+                                    <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g33-gn-Qae">
+                                        <rect key="frame" x="0.0" y="45" width="375" height="44"/>
+                                        <items>
+                                            <navigationItem id="yBD-NO-7xh">
+                                                <barButtonItem key="leftBarButtonItem" title="Cancel" id="85m-y1-ziv">
+                                                    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <connections>
+                                                        <action selector="cancelBurgerCapture:" destination="DEv-bj-w5e" id="F4V-MR-g9y"/>
+                                                    </connections>
+                                                </barButtonItem>
+                                                <barButtonItem key="rightBarButtonItem" title="Save" id="Mw4-ei-hGa">
+                                                    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <connections>
+                                                        <action selector="saveBurgerPhoto:" destination="DEv-bj-w5e" id="rUH-lD-Hx6"/>
+                                                    </connections>
+                                                </barButtonItem>
+                                            </navigationItem>
+                                        </items>
+                                    </navigationBar>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hbj-tT-O7Z">
-                                        <rect key="frame" x="160" y="580" width="55" height="55"/>
+                                        <rect key="frame" x="168" y="717" width="55" height="55"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="55" id="1cc-iB-rQ9"/>
@@ -690,14 +715,10 @@
                                             <action selector="captureImage:" destination="DEv-bj-w5e" eventType="touchUpInside" id="Qde-bh-vNA"/>
                                         </connections>
                                     </button>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="JPS-Fp-w4y">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
-                                    </imageView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6ZF-wN-UHS">
-                                        <rect key="frame" x="34" y="591" width="44" height="44"/>
+                                        <rect key="frame" x="42" y="728" width="44" height="44"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="44" id="MPm-Bd-53E"/>
-                                            <constraint firstAttribute="height" constant="44" id="PM3-zZ-8kQ"/>
+                                            <constraint firstAttribute="height" constant="44" id="QDx-Fi-x6i"/>
                                         </constraints>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <state key="normal" image="Flash Off Icon"/>
@@ -708,43 +729,33 @@
                                 </subviews>
                                 <color key="backgroundColor" red="0.21960784310000001" green="0.19215686269999999" blue="0.15686274510000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
+                                    <constraint firstItem="hbj-tT-O7Z" firstAttribute="leading" secondItem="6ZF-wN-UHS" secondAttribute="trailing" constant="82" id="2LW-vF-4AL"/>
                                     <constraint firstAttribute="bottom" secondItem="JPS-Fp-w4y" secondAttribute="bottom" id="2ae-86-wtY"/>
                                     <constraint firstAttribute="trailing" secondItem="JPS-Fp-w4y" secondAttribute="trailing" id="3gm-JD-VKa"/>
-                                    <constraint firstAttribute="bottom" secondItem="hbj-tT-O7Z" secondAttribute="bottom" priority="750" constant="177" id="PE7-Es-kf5"/>
-                                    <constraint firstItem="6ZF-wN-UHS" firstAttribute="leading" secondItem="7oR-Cq-cxE" secondAttribute="leading" constant="34" id="SRe-tt-IaM"/>
+                                    <constraint firstItem="6ZF-wN-UHS" firstAttribute="bottom" secondItem="hbj-tT-O7Z" secondAttribute="bottom" id="Ia3-qF-yAz"/>
+                                    <constraint firstItem="6ZF-wN-UHS" firstAttribute="leading" secondItem="7oR-Cq-cxE" secondAttribute="leading" constant="42" id="LVA-fV-La1"/>
+                                    <constraint firstItem="g33-gn-Qae" firstAttribute="trailing" secondItem="JPS-Fp-w4y" secondAttribute="trailing" id="MNc-AR-Tql"/>
+                                    <constraint firstAttribute="bottom" secondItem="hbj-tT-O7Z" secondAttribute="bottom" priority="750" constant="42" id="PE7-Es-kf5"/>
                                     <constraint firstItem="JPS-Fp-w4y" firstAttribute="leading" secondItem="7oR-Cq-cxE" secondAttribute="leading" id="TSc-LC-Aro"/>
-                                    <constraint firstItem="6ZF-wN-UHS" firstAttribute="top" secondItem="7oR-Cq-cxE" secondAttribute="top" constant="591" id="UEa-cj-sCu"/>
-                                    <constraint firstItem="hbj-tT-O7Z" firstAttribute="top" secondItem="7oR-Cq-cxE" secondAttribute="top" priority="750" constant="580" id="a2C-p5-wKz"/>
-                                    <constraint firstAttribute="bottom" secondItem="6ZF-wN-UHS" secondAttribute="bottom" constant="177" id="aXx-98-rHn"/>
+                                    <constraint firstItem="g33-gn-Qae" firstAttribute="leading" secondItem="JPS-Fp-w4y" secondAttribute="leading" id="Y1r-zY-blu"/>
+                                    <constraint firstItem="hbj-tT-O7Z" firstAttribute="top" secondItem="7oR-Cq-cxE" secondAttribute="top" priority="750" constant="717" id="a2C-p5-wKz"/>
+                                    <constraint firstAttribute="bottom" secondItem="6ZF-wN-UHS" secondAttribute="bottom" constant="42" id="bsk-Pc-uVi"/>
                                     <constraint firstItem="JPS-Fp-w4y" firstAttribute="top" secondItem="7oR-Cq-cxE" secondAttribute="top" id="iPx-LY-lDO"/>
-                                    <constraint firstItem="hbj-tT-O7Z" firstAttribute="centerX" secondItem="7oR-Cq-cxE" secondAttribute="centerX" id="myR-dd-AkZ"/>
-                                    <constraint firstAttribute="trailing" secondItem="6ZF-wN-UHS" secondAttribute="trailing" constant="297" id="yPr-0N-WG8"/>
+                                    <constraint firstItem="g33-gn-Qae" firstAttribute="top" secondItem="7oR-Cq-cxE" secondAttribute="top" constant="45" id="mug-pc-gMn"/>
+                                    <constraint firstItem="hbj-tT-O7Z" firstAttribute="centerX" secondItem="7oR-Cq-cxE" secondAttribute="centerX" constant="8" id="myR-dd-AkZ"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.21960784310000001" green="0.19215686269999999" blue="0.15686274510000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="7oR-Cq-cxE" firstAttribute="top" secondItem="uLe-5a-6c8" secondAttribute="top" constant="-88" id="RwX-al-gas"/>
+                            <constraint firstItem="7oR-Cq-cxE" firstAttribute="top" secondItem="uLe-5a-6c8" secondAttribute="top" constant="-46" id="RwX-al-gas"/>
                             <constraint firstItem="uLe-5a-6c8" firstAttribute="bottom" secondItem="7oR-Cq-cxE" secondAttribute="bottom" constant="-34" id="XLJ-Sk-Dm4"/>
                             <constraint firstAttribute="trailing" secondItem="7oR-Cq-cxE" secondAttribute="trailing" id="akO-kJ-PCW"/>
                             <constraint firstItem="7oR-Cq-cxE" firstAttribute="leading" secondItem="IZI-bN-iYa" secondAttribute="leading" id="vJB-88-s0f"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="uLe-5a-6c8"/>
                     </view>
-                    <navigationItem key="navigationItem" id="l2z-hx-Pfz">
-                        <barButtonItem key="leftBarButtonItem" title="Cancel" id="85m-y1-ziv">
-                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <connections>
-                                <action selector="cancelBurgerCapture:" destination="DEv-bj-w5e" id="F4V-MR-g9y"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="Save" id="Mw4-ei-hGa">
-                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <connections>
-                                <action selector="saveBurgerPhoto:" destination="DEv-bj-w5e" id="rUH-lD-Hx6"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="l2z-hx-Pfz"/>
                     <connections>
                         <outlet property="burgerImage" destination="JPS-Fp-w4y" id="vAE-9N-MZJ"/>
                         <outlet property="cancelBurgerPhotoBtn" destination="85m-y1-ziv" id="XPm-r3-2de"/>
@@ -756,7 +767,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ydN-oA-Fnz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4194.3999999999996" y="571.92118226600985"/>
+            <point key="canvasLocation" x="2392.8000000000002" y="571.92118226600985"/>
         </scene>
         <!--Tab BarVC-->
         <scene sceneID="yl2-sM-qoP">
@@ -1474,24 +1485,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7sD-43-JnD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="844" y="-304"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="Uoi-e1-WlS">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="eiy-pn-GRI" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Ecg-ai-t9B">
-                        <rect key="frame" x="0.0" y="44" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="DEv-bj-w5e" kind="relationship" relationship="rootViewController" id="g43-Ho-yNo"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="2ev-iy-7eA" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3410" y="572"/>
         </scene>
     </scenes>
     <resources>

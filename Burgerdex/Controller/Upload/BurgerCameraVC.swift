@@ -10,10 +10,8 @@ import UIKit
 import Photos
 
 protocol UploadBurgerDelegate {
-    
     func performBurgerInformationSegue(photo : UIImage)
 }
-
 
 class BurgerCameraVC: UIViewController {
     
@@ -65,11 +63,7 @@ class BurgerCameraVC: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         
         super.viewWillDisappear(animated)
-        
-        //Why not calling?
-        
-        self.delegate?.performBurgerInformationSegue(photo : self.burgerImage.image!)
-        
+    
         UINavigationBar.appearance().prefersLargeTitles = true
         let barButtonItemAppearance = UIBarButtonItem.appearance()
         barButtonItemAppearance.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.clear], for: .normal)
@@ -80,15 +74,19 @@ class BurgerCameraVC: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
     @IBAction func saveBurgerPhoto(_ sender: Any) {
         
         try? PHPhotoLibrary.shared().performChangesAndWait {
             PHAssetChangeRequest.creationRequestForAsset(from: self.burgerImage.image!)
         }
         
+        delegate?.performBurgerInformationSegue(photo : self.burgerImage.image!)
+        
         dismiss(animated: true, completion: nil)
         
     }
+    
     @IBAction func cancelBurgerCapture(_ sender: Any) {
         
         if self.cancelBurgerPhotoBtn.tag == 1{

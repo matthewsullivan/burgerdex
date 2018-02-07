@@ -101,31 +101,26 @@ class BurgerPreview : BurgerObject {
         var patties = [BurgerPreview]()
         
         var burgerPreviewSuccess = [0,patties] as [Any]
-        
-        //let postURL = URL(string: "https://www.app.burgerdex.ca/services/allBurgers.php")!
-        
-        let url = "https://www.app.burgerdex.ca/services/allBurgers.php?page="
-        
-        let path = url + String(page)
-        let pathTwo = path + "&filter=" + String(filter)
-        
-        let postURL = URL(string: pathTwo)!
-        
-        print(postURL)
-        
-        var postRequest = URLRequest(url: postURL, cachePolicy: .reloadIgnoringCacheData, timeoutInterval: 60.0)
-        
-        postRequest.httpMethod = "POST"
-        postRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        postRequest.setValue("application/json", forHTTPHeaderField: "Accept")
+
+        let url = "https://www.app.burgerdex.ca/services/allBurgers.php"
+        var postRequest = URLRequest(url: URL(string:url)!,
+                            cachePolicy: .reloadIgnoringCacheData,
+                        timeoutInterval: 60.0)
         
         let parameters: [String: Any] = ["page": String(page), "filter": String(filter)]
         
         do {
-            let jsonParams = try JSONSerialization.data(withJSONObject: parameters, options: [])
+            
+            let jsonParams = try JSONSerialization.data(withJSONObject: parameters, options:[])
+            
             postRequest.httpBody = jsonParams
+    
             
         } catch { print("Error: unable to add parameters to POST request.")}
+        
+        postRequest.httpMethod = "POST"
+        postRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        postRequest.setValue("application/json", forHTTPHeaderField: "Accept")
         
         session.dataTask(with: postRequest, completionHandler: { (data, response, error) -> Void in
             
@@ -303,26 +298,26 @@ class Burger : BurgerObject{
     
     class func fetchBurgerDetails(burgerID: Int, completion:@escaping (_ pattyInformation:Array<Any>)->Void){
         
-        let url = "https://www.app.burgerdex.ca/services/burgerDetail.php?id="
-
-        let path = url + String(burgerID)
-       
-        let postURL = URL(string: path)!
+        let url = "https://www.app.burgerdex.ca/services/burgerDetail.php"
         
-        var postRequest = URLRequest(url: postURL, cachePolicy: .reloadIgnoringCacheData, timeoutInterval: 60.0)
-        
-        postRequest.httpMethod = "POST"
-        postRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        postRequest.setValue("application/json", forHTTPHeaderField: "Accept")
+        var postRequest = URLRequest(url: URL(string:url)!,
+                                     cachePolicy: .reloadIgnoringCacheData,
+                                     timeoutInterval: 60.0)
         
         let parameters: [String: Any] = ["id": String(burgerID)]
         
         do {
-            let jsonParams = try JSONSerialization.data(withJSONObject: parameters, options: [])
+            
+            let jsonParams = try JSONSerialization.data(withJSONObject: parameters, options:[])
             
             postRequest.httpBody = jsonParams
             
+            
         } catch { print("Error: unable to add parameters to POST request.")}
+        
+        postRequest.httpMethod = "POST"
+        postRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        postRequest.setValue("application/json", forHTTPHeaderField: "Accept")
         
         URLSession.shared.dataTask(with: postRequest, completionHandler: { (data, response, error) -> Void in
             
@@ -413,8 +408,123 @@ class Burger : BurgerObject{
         }).resume()
         
     }
-    
 }
+
+class BurgerSubmit{
+    
+    func submitBurger(details: Dictionary<String, Any>, image: UIImage, completion:@escaping (_ requestResponse:Array<Any>)->Void){
+        
+        var message = [Any]()
+        
+        var responseCode = [0,message] as [Any]
+        
+        var r  = URLRequest(url: URL(string: "https://www.burgerdex.ca/services/submitBurger.php")!)
+        r.httpMethod = "POST"
+        let boundary = "Boundary-\(UUID().uuidString)"
+        r.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        
+        r.httpBody = createBody(parameters: details  as! [String : String],
+                                boundary: boundary,
+                                data: UIImageJPEGRepresentation(image, 0.7)!,
+                                mimeType: "image/jpg",
+                                filename: "burger.jpg")
+        
+        URLSession.shared.dataTask(with: r as URLRequest, completionHandler: { (data, response, error) -> Void in
+            
+            if error != nil { print("POST Request: Comsmunication error: \(error!)") }
+            
+            if data != nil {
+                
+                do {
+                    
+                    if let response = try JSONSerialization.jsonObject(with: data!, options: [.allowFragments, .mutableContainers] ) as? NSDictionary {
+                        
+                        DispatchQueue.main.async(execute: {
+                            
+                            if let response = response["error"] as? [[String: String]] {
+                                
+                                print(response)
+                                
+                                for msg in response {
+                                    
+                                    message.append(msg["code"]! as String)
+                                    message.append(msg["message"]! as String)
+                                    
+                                }
+                                
+                                responseCode[0] = 1
+                                responseCode[1] = message
+                                
+                                completion(responseCode)
+                            }
+                            
+                            } as @convention(block) () -> Void)
+                    }
+                    
+                } catch {
+                    
+                    print("Error deserializing JSON: \(error)")
+                    
+                    responseCode[0] = 0
+                    responseCode[1] = message
+                    DispatchQueue.main.async(execute: {
+                        completion(responseCode)
+                        
+                    })
+                    
+                }
+                
+            } else {
+                
+                DispatchQueue.main.async(execute: {
+                    print("Received empty response.")
+                    
+                    responseCode[0] = 0
+                    responseCode[1] = message
+                    
+                    completion(responseCode)
+                    
+                })
+            }
+            
+        }).resume()
+
+    }
+    
+    func createBody(parameters: [String: String],
+                    boundary: String,
+                    data: Data,
+                    mimeType: String,
+                    filename: String) -> Data {
+        
+        let body = NSMutableData()
+        
+        let boundaryPrefix = "--\(boundary)\r\n"
+        
+        for (key, value) in parameters {
+            body.appendString(boundaryPrefix)
+            body.appendString("Content-Disposition: form-data; name=\"\(key)\"\r\n\r\n")
+            body.appendString("\(value)\r\n")
+        }
+        
+        body.appendString(boundaryPrefix)
+        body.appendString("Content-Disposition: form-data; name=\"user_image\"; filename=\"\(filename)\"\r\n")
+        body.appendString("Content-Type: \(mimeType)\r\n\r\n")
+        body.append(data)
+        body.appendString("\r\n")
+        body.appendString("--".appending(boundary.appending("--")))
+        
+        return body as Data
+    }
+}
+
+extension NSMutableData {
+    func appendString(_ string: String) {
+        let data = string.data(using: String.Encoding.utf8, allowLossyConversion: false)
+        append(data!)
+    }
+}
+
 
 class Badge : BurgerObject{
     

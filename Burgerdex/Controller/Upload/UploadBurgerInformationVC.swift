@@ -16,8 +16,66 @@ class UploadBurgerInformationVC: UITableViewController,
     var photo : UIImage!
     var badges = [Badge]()
     var fields : [String:AnyObject] = [:]
+    var details : [String:AnyObject] = [:]
     var selectedBadgesIndex = Int()
+    weak var submitBtn: UIButton!
+    var ingredients = [String]()
+    
+    @IBAction func submitBtn(_ sender: Any) {
+        
+        
+        details["name"] =  fields["name"]?.text as AnyObject
+        details["kitchen"] =  fields["kitchen"]?.text as AnyObject
+        details["locations"] =  fields["locations"]?.text as AnyObject
+        details["price"] =  fields["price"]?.text as AnyObject
+        details["descript"] =  fields["descript"]?.text as AnyObject
+        details["rating"] =  fields["rating"]?.text as AnyObject
+        details["ingredients"] = ingredients.joined(separator: ", ") as AnyObject
+        
+        /*
+         
+             print("FUSION", details["fusion"] as Any)
+             print("VEGGIE", details["veggie"] as Any)
+             print("SPICY", details["spicy"] as Any)
+             print("EXTINCT", details["extinct"] as Any)
+             print("SEASONAL", details["seasonal"] as Any)
+             print("CHALLENGE", details["challenge"] as Any)
+             print("hasMODS", details["hasMods"] as Any)
+ 
+        */
+    
+        let submit = BurgerSubmit()
+        
+        submit.submitBurger(details: details, image:photo, completion: { (data) in
+            
+            print(data)
+            
+            
+            /*
+            if data.count > 0{
+                
+                burgerInfo = data[0] as! Burger
+                
+                if burgerInfo.fused.count > 0 {
+                    
+                    for burger in burgerInfo.fused {
+                        
+                        
+                        
+                        self.fusionBurgers += [burgerPreview]
+                    }
+                    
+                }
+                
 
+                self.burgerAttr[0] = [burgerInfo as BurgerObject]
+                self.burgerAttr.append(self.fusionBurgers)
+                
+           */
+        })
+ 
+    }
+    
     var TAGS = ["Cheddar Cheese",
                 "Lettuce",
                 "Beef Patty",
@@ -190,6 +248,15 @@ class UploadBurgerInformationVC: UITableViewController,
         
         self.badges += [hasModsBadge]
         
+        details["fusion"] = "0" as AnyObject
+        details["veggie"] = "0" as AnyObject
+        details["spicy"] = "0" as AnyObject
+        details["extinct"] = "0" as AnyObject
+        details["seasonal"] = "0" as AnyObject
+        details["hasChallenge"] = "0" as AnyObject
+        details["hasMods"] = "0" as AnyObject
+        
+        
         for name in TAGS {
             
             let tag = Tag()
@@ -298,7 +365,7 @@ class UploadBurgerInformationVC: UITableViewController,
         
         addIngredientButton = cell.addIngredientButton
         
-        addIngredientButton.addTarget(self, action: #selector(sayAction(_:)), for: .touchUpInside)
+        addIngredientButton.addTarget(self, action: #selector(addIngredient(_:)), for: .touchUpInside)
         
         cell.burgerDescriptionTextView.delegate = self
         cell.burgerDescriptionTextView.textColor = .lightGray
@@ -307,16 +374,19 @@ class UploadBurgerInformationVC: UITableViewController,
         
         fields["name"] = cell.burgerNameTextField
         fields["kitchen"] = cell.kitchenNameTextField
-        fields["region"] = cell.regionNameTextField
+        fields["locations"] = cell.regionNameTextField
+        fields["price"] =  cell.priceTextField
         fields["descript"] = cell.burgerDescriptionTextView
         fields["rating"] = cell.ratingNumberLabel
         fields["addIngredientLabel"] = cell.newIngredientTextField
+        
+        self.submitBtn = cell.submitBtn
         
         return cell
         
     }
     
-    @objc private func sayAction(_ sender: UIButton?) {
+    @objc private func addIngredient(_ sender: UIButton?) {
         
         let ingredientLabel = self.fields["addIngredientLabel"] as! UITextField
         
@@ -338,9 +408,7 @@ class UploadBurgerInformationVC: UITableViewController,
             }
          }
     }
-    
-    
-    
+
     func redrawIngredientHeight(){
         
         let height = self.ingredientCollectionView.collectionViewLayout.collectionViewContentSize.height
@@ -469,7 +537,6 @@ class UploadBurgerInformationVC: UITableViewController,
         }
         
     }
-    
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
@@ -636,14 +703,30 @@ extension UploadBurgerInformationVC: UICollectionViewDelegate,
                                  green: 173/255,
                                  blue: 107/255,
                                  alpha: 1.0)
-            
+        
             if let cell = collectionView.cellForItem(at: indexPath)  as? BurgerBadgeCollectionViewCell {
                 
                 if  cell.selectionStatus.backgroundColor != colour{
                     
+                    if indexPath.row == 0 {details["fusion"] = "1" as AnyObject}
+                    if indexPath.row == 1 {details["veggie"] = "1" as AnyObject}
+                    if indexPath.row == 2 {details["spicy"] = "1" as AnyObject}
+                    if indexPath.row == 3 {details["extinct"] = "1" as AnyObject}
+                    if indexPath.row == 4 {details["seasonal"] = "1" as AnyObject}
+                    if indexPath.row == 5 {details["hasChallenge"] = "1" as AnyObject}
+                    if indexPath.row == 6 {details["hasMods"] = "1" as AnyObject}
+                    
                     cell.selectionStatus.backgroundColor = colour
                     
                 }else{
+                    
+                    if indexPath.row == 0 {details["fusion"] = "0" as AnyObject}
+                    if indexPath.row == 1 {details["veggie"] = "0" as AnyObject}
+                    if indexPath.row == 2 {details["spicy"] = "0" as AnyObject}
+                    if indexPath.row == 3 {details["extinct"] = "0" as AnyObject}
+                    if indexPath.row == 4 {details["seasonal"] = "0" as AnyObject}
+                    if indexPath.row == 5 {details["hasChallenge"] = "0" as AnyObject}
+                    if indexPath.row == 6 {details["hasMods"] = "0" as AnyObject}
                     
                     cell.selectionStatus.backgroundColor = UIColor.clear
                     
@@ -661,6 +744,24 @@ extension UploadBurgerInformationVC: UICollectionViewDelegate,
         let tag = tags[indexPath.row]
         
         cell.tagName.text = tag.name
+        
+        if tag.selected {
+            
+            if !ingredients.contains(tag.name!) {
+                
+                ingredients.append(tag.name!)
+              
+            }
+        
+        }else{
+            
+            if let index = ingredients.index(of: tag.name!) {
+                
+                ingredients.remove(at: index)
+                
+            }
+            
+        }
         
         cell.tagName.textColor = tag.selected ? UIColor.white : UIColor(red: 0.1, green: 0.1, blue: 0.1, alpha: 1)
         
