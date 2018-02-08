@@ -131,7 +131,7 @@ class BurgerPreview : BurgerObject {
                 do {
                    
                     if let burgerResults = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers) as? NSDictionary {
-        
+                    
                         DispatchQueue.main.async(execute: {
                         
                             if let burgers = burgerResults["burgers"] as? [[String: Any]] {
@@ -437,28 +437,34 @@ class BurgerSubmit{
                 
                 do {
                     
-                    if let response = try JSONSerialization.jsonObject(with: data!, options: [.allowFragments, .mutableContainers] ) as? NSDictionary {
+                    if let response = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers) as? NSDictionary {
+                        
+                        print(response)
                         
                         DispatchQueue.main.async(execute: {
                             
-                            if let response = response["error"] as? [[String: String]] {
+                            if let response = response["error"] as? [[String: Any]] {
                                 
-                                print(response)
+                                print("Balls")
+                                
+                                var serverMsg : String = "Success"
                                 
                                 for msg in response {
                                     
-                                    message.append(msg["code"]! as String)
-                                    message.append(msg["message"]! as String)
+                                    message.append(msg["code"]! as! Int)
+                                    message.append(msg["message"]! as! String)
+                                    
+                                    serverMsg = message[1] as! String
                                     
                                 }
                                 
                                 responseCode[0] = 1
-                                responseCode[1] = message
+                                responseCode[1] = serverMsg
                                 
                                 completion(responseCode)
                             }
                             
-                            } as @convention(block) () -> Void)
+                        } as @convention(block) () -> Void)
                     }
                     
                 } catch {

@@ -32,23 +32,49 @@ class UploadBurgerInformationVC: UITableViewController,
         details["rating"] =  fields["rating"]?.text as AnyObject
         details["ingredients"] = ingredients.joined(separator: ", ") as AnyObject
         
+        SwiftSpinner.show(delay: 0.5, title: "Uploading Burger" , animated: true)
+        
         /*
-         
-             print("FUSION", details["fusion"] as Any)
-             print("VEGGIE", details["veggie"] as Any)
-             print("SPICY", details["spicy"] as Any)
-             print("EXTINCT", details["extinct"] as Any)
-             print("SEASONAL", details["seasonal"] as Any)
-             print("CHALLENGE", details["challenge"] as Any)
-             print("hasMODS", details["hasMods"] as Any)
- 
+        delay(seconds: 2.0, completion: {
+            SwiftSpinner.show("Uploading New Burger").addTapHandler({
+                print("tapped")
+                SwiftSpinner.hide()
+            }, subtitle: "Tap to hide loader during upload")
+        })
         */
     
         let submit = BurgerSubmit()
         
         submit.submitBurger(details: details, image:photo, completion: { (data) in
             
-            print(data)
+            if (data[0] as! Int) == 0{
+                
+                SwiftSpinner.show("Success..",animated: false).addTapHandler({
+                    
+                   SwiftSpinner.hide()
+                    
+                }, subtitle: "Tap to dismiss")
+                
+                 self.delay(seconds: 1.5, completion: {
+                    
+                     SwiftSpinner.hide()
+                    
+                })
+                
+            }else{
+                
+                let response = data[1]
+                
+                SwiftSpinner.show("Oops..",animated: false).addTapHandler({
+                    
+                    SwiftSpinner.hide()
+                    
+                }, subtitle: (response as! String) + "\n\n Tap anywhere and try again.")
+                
+            }
+            
+            //Only show if there is an error. Use subtitle to display the error.
+            
             
             
             /*
@@ -150,6 +176,14 @@ class UploadBurgerInformationVC: UITableViewController,
     var firstLayout = true
     
     var addIngredientButton: UIButton!
+    
+    func delay(seconds: Double, completion: @escaping () -> ()) {
+        let popTime = DispatchTime.now() + Double(Int64( Double(NSEC_PER_SEC) * seconds )) / Double(NSEC_PER_SEC)
+        
+        DispatchQueue.main.asyncAfter(deadline: popTime) {
+            completion()
+        }
+    }
     
     override func viewDidLoad() {
         

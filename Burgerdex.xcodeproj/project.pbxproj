@@ -29,6 +29,7 @@
 		EB857A6F1FFC0959003E5BF1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EB857A6E1FFC0959003E5BF1 /* Assets.xcassets */; };
 		EB857A721FFC0959003E5BF1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB857A701FFC0959003E5BF1 /* LaunchScreen.storyboard */; };
 		EB857A7A1FFC0D7B003E5BF1 /* UploadBurgerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB857A791FFC0D7B003E5BF1 /* UploadBurgerVC.swift */; };
+		EBA3F50F202C9C6000660419 /* SwiftSpinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA3F50E202C9C6000660419 /* SwiftSpinner.swift */; };
 		EBCAF4A6200CF96100B9407D /* TableLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCAF4A5200CF96100B9407D /* TableLoader.swift */; };
 		EBD0C4C620226D7800918701 /* TagCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBD0C4C520226D7800918701 /* TagCell.xib */; };
 		EBD41663200FF07B00E33AD6 /* TabBarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD41662200FF07B00E33AD6 /* TabBarVC.swift */; };
@@ -68,6 +69,7 @@
 		EB857A711FFC0959003E5BF1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		EB857A731FFC0959003E5BF1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EB857A791FFC0D7B003E5BF1 /* UploadBurgerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadBurgerVC.swift; sourceTree = "<group>"; };
+		EBA3F50E202C9C6000660419 /* SwiftSpinner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftSpinner.swift; sourceTree = "<group>"; };
 		EBCAF4A5200CF96100B9407D /* TableLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableLoader.swift; sourceTree = "<group>"; };
 		EBD0C4C520226D7800918701 /* TagCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TagCell.xib; sourceTree = "<group>"; };
 		EBD41662200FF07B00E33AD6 /* TabBarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarVC.swift; sourceTree = "<group>"; };
@@ -148,6 +150,7 @@
 		EB838B4B201BBDF100B9C633 /* Loaders */ = {
 			isa = PBXGroup;
 			children = (
+				EBA3F50E202C9C6000660419 /* SwiftSpinner.swift */,
 				EB838B4C201BBE0900B9C633 /* ActivityIndicator.swift */,
 				EBCAF4A5200CF96100B9407D /* TableLoader.swift */,
 			);
@@ -334,6 +337,7 @@
 				EB77F68420054C0400ECCD1E /* BurgerBadgeCollectionViewCell.swift in Sources */,
 				EBE820F71FFE8B3800F5A895 /* BurgerHeaderTableViewCell.swift in Sources */,
 				EB0823C020223EFB002DB6D2 /* FlowLayout.swift in Sources */,
+				EBA3F50F202C9C6000660419 /* SwiftSpinner.swift in Sources */,
 				EBE820ED1FFC21C800F5A895 /* CatalogueTableViewCell.swift in Sources */,
 				EB838B4F201BC15900B9C633 /* UploadTableViewCell.swift in Sources */,
 				EB838B5A201BD7BA00B9C633 /* TweeAttributedTextField.swift in Sources */,
