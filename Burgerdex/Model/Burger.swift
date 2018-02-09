@@ -422,7 +422,7 @@ class BurgerSubmit{
         r.httpMethod = "POST"
         let boundary = "Boundary-\(UUID().uuidString)"
         r.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-        
+
         r.httpBody = createBody(parameters: details  as! [String : String],
                                 boundary: boundary,
                                 data: UIImageJPEGRepresentation(image, 0.7)!,

@@ -33,6 +33,8 @@ class UploadBurgerInformationVC: UITableViewController,
         
         setInputValueFields()
         
+        details["ratingLbl"] = "" as AnyObject
+        
         SwiftSpinner.show(delay: 0.5, title: "Uploading Burger" , animated: true)
     
         let submit = BurgerSubmit()
