@@ -76,6 +76,10 @@ class UploadBurgerInformationVC: UITableViewController,
             }
         
         })
+        
+        let tmpLbl = UILabel()
+        tmpLbl.text = "5.0"
+        details["ratingLbl"] = tmpLbl
  
     }
     
