@@ -9,6 +9,7 @@
 import UIKit
 import Photos
 
+
 class UploadBurgerInformationVC: UITableViewController,
                                 UITextFieldDelegate,
                                 UITextViewDelegate{
@@ -21,33 +22,28 @@ class UploadBurgerInformationVC: UITableViewController,
     weak var submitBtn: UIButton!
     var ingredients = [String]()
     
+    var headerBurgerNameLabel : UILabel!
+    var headerKitchenLabel : UILabel!
+    let headerBurgerNamePlaceholder  = "Mystery Burger"
+    let headerBurgerKitchenPlaceholder  = "Mystery Kitchen"
+    
+    let tvPlaceHolder = "Describe your first few bites."
+    
     @IBAction func submitBtn(_ sender: Any) {
         
-        
-        details["name"] =  fields["name"]?.text as AnyObject
-        details["kitchen"] =  fields["kitchen"]?.text as AnyObject
-        details["locations"] =  fields["locations"]?.text as AnyObject
-        details["price"] =  fields["price"]?.text as AnyObject
-        details["descript"] =  fields["descript"]?.text as AnyObject
-        details["rating"] =  fields["rating"]?.text as AnyObject
-        details["ingredients"] = ingredients.joined(separator: ", ") as AnyObject
+        setInputValueFields()
         
         SwiftSpinner.show(delay: 0.5, title: "Uploading Burger" , animated: true)
-        
-        /*
-        delay(seconds: 2.0, completion: {
-            SwiftSpinner.show("Uploading New Burger").addTapHandler({
-                print("tapped")
-                SwiftSpinner.hide()
-            }, subtitle: "Tap to hide loader during upload")
-        })
-        */
     
         let submit = BurgerSubmit()
         
         submit.submitBurger(details: details, image:photo, completion: { (data) in
             
             if (data[0] as! Int) == 0{
+                
+                self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0),
+                                           at: UITableViewScrollPosition.top,
+                                           animated: false)
                 
                 SwiftSpinner.show("Success..",animated: false).addTapHandler({
                     
@@ -57,11 +53,15 @@ class UploadBurgerInformationVC: UITableViewController,
                 
                  self.delay(seconds: 1.5, completion: {
                     
-                     SwiftSpinner.hide()
+                    SwiftSpinner.hide()
                     
                 })
                 
             }else{
+                
+                self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0),
+                                           at: UITableViewScrollPosition.top,
+                                           animated: false)
                 
                 let response = data[1]
                 
@@ -72,32 +72,7 @@ class UploadBurgerInformationVC: UITableViewController,
                 }, subtitle: (response as! String) + "\n\n Tap anywhere and try again.")
                 
             }
-            
-            //Only show if there is an error. Use subtitle to display the error.
-            
-            
-            
-            /*
-            if data.count > 0{
-                
-                burgerInfo = data[0] as! Burger
-                
-                if burgerInfo.fused.count > 0 {
-                    
-                    for burger in burgerInfo.fused {
-                        
-                        
-                        
-                        self.fusionBurgers += [burgerPreview]
-                    }
-                    
-                }
-                
-
-                self.burgerAttr[0] = [burgerInfo as BurgerObject]
-                self.burgerAttr.append(self.fusionBurgers)
-                
-           */
+        
         })
  
     }
@@ -177,6 +152,21 @@ class UploadBurgerInformationVC: UITableViewController,
     
     var addIngredientButton: UIButton!
     
+    var imgView:UIImageView!
+    var progress:Float =  0.0
+
+    @objc func reset() {
+        self.imgView.uploadImage(image:photo, progress: progress)
+        
+        print(self.imgView)
+        
+        if(progress <= 1.0) {
+            self.perform(#selector(self.reset), with: nil, afterDelay: 0.3)
+        }
+        progress += 0.1
+        
+    }
+    
     func delay(seconds: Double, completion: @escaping () -> ()) {
         let popTime = DispatchTime.now() + Double(Int64( Double(NSEC_PER_SEC) * seconds )) / Double(NSEC_PER_SEC)
         
@@ -185,11 +175,30 @@ class UploadBurgerInformationVC: UITableViewController,
         }
     }
     
+    func setInputValueFields(){
+        
+        details["name"] =  fields["name"]?.text as AnyObject
+        details["kitchen"] =  fields["kitchen"]?.text as AnyObject
+        details["locations"] =  fields["locations"]?.text as AnyObject
+        details["price"] =  fields["price"]?.text as AnyObject
+        details["descript"] =  fields["descript"]?.text as AnyObject
+        details["rating"] =  fields["rating"]?.text as AnyObject
+        details["ingredients"] = ingredients.joined(separator: ", ") as AnyObject
+        
+    }
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
+        details["name"] =  headerBurgerNamePlaceholder as AnyObject
+        details["kitchen"] =  headerBurgerKitchenPlaceholder as AnyObject
+        details["locations"] = "" as AnyObject
+        details["price"] =  "" as AnyObject
+        details["descript"] =  tvPlaceHolder as AnyObject
+       
         
         self.view.endEditing(true)
         
@@ -200,8 +209,6 @@ class UploadBurgerInformationVC: UITableViewController,
                                                                      green: 173/255,
                                                                      blue: 107/255,
                                                                      alpha: 1)
-        
-        
         
         let burgerHeaderView = BurgerHeaderView.init(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 200))
         
@@ -290,7 +297,10 @@ class UploadBurgerInformationVC: UITableViewController,
         details["hasChallenge"] = "0" as AnyObject
         details["hasMods"] = "0" as AnyObject
         
-        
+        let tmpLbl = UILabel()
+        tmpLbl.text = "5.0"
+        details["ratingLbl"] = tmpLbl
+    
         for name in TAGS {
             
             let tag = Tag()
@@ -300,7 +310,7 @@ class UploadBurgerInformationVC: UITableViewController,
             self.tags.append(tag)
             
         }
-
+        
         //Looks for single or multiple taps.
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tap.cancelsTouchesInView = false
@@ -309,6 +319,78 @@ class UploadBurgerInformationVC: UITableViewController,
         
         NotificationCenter.default.addObserver(self, selector: #selector(UploadBurgerInformationVC.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(UploadBurgerInformationVC.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+    
+    func determineDetailProgress(){
+        
+        progress = 0.15
+        
+        if !(fields["name"]?.text ?? "").isEmpty{
+            
+            progress = (progress + 0.15 <= 1.0) ? progress + 0.15 : 1.0
+            
+            headerBurgerNameLabel.text = fields["name"]?.text
+          
+            
+        }else{
+            
+            headerBurgerNameLabel.text = headerBurgerNamePlaceholder
+            
+        }
+        
+        if !(fields["kitchen"]?.text ?? "").isEmpty{
+            
+            progress = (progress + 0.15 <= 1.0) ? progress + 0.15 : 1.0
+            
+            headerKitchenLabel.text = fields["kitchen"]?.text
+            
+        }else{
+            
+            headerKitchenLabel.text = headerBurgerKitchenPlaceholder
+        }
+        
+        
+        var atLeastOneIngredient = false
+        for tags in self.tags {
+            
+            if tags.selected{
+                
+                atLeastOneIngredient = true
+                
+                break
+                
+            }else{
+                
+                atLeastOneIngredient = false
+                
+            }
+            
+        }
+        
+        if !(fields["locations"]?.text ?? "").isEmpty{progress = (progress + 0.15 <= 1.0) ? progress + 0.15 : 1.0}
+        if !(fields["price"]?.text ?? "").isEmpty{progress = (progress + 0.15 <= 1.0) ? progress + 0.15 : 1.0}
+        if (fields["descript"]?.text != tvPlaceHolder){progress = (progress + 0.15 <= 1.0) ? progress + 0.15 : 1.0}
+        if atLeastOneIngredient{progress = (progress + 0.15 <= 1.0) ? progress + 0.15 : 1.0}
+        
+        if !(fields["name"]?.text ?? "").isEmpty &&
+           !(fields["kitchen"]?.text ?? "").isEmpty &&
+           !(fields["locations"]?.text ?? "").isEmpty &&
+           !(fields["price"]?.text ?? "").isEmpty &&
+           !(fields["descript"]?.text ?? "").isEmpty &&
+           (fields["descript"]?.text != tvPlaceHolder) &&
+            atLeastOneIngredient{
+            
+            self.submitBtn.isEnabled = true
+            self.submitBtn.alpha = 1.0;
+            
+        }else{
+            
+            self.submitBtn.isEnabled = false
+            self.submitBtn.alpha = 0.5;
+        }
+        
+        self.imgView.uploadImage(image:photo, progress: progress)
+        
     }
    
     @objc func keyboardWillShow(notification: NSNotification){
@@ -319,11 +401,15 @@ class UploadBurgerInformationVC: UITableViewController,
         var contentInset:UIEdgeInsets = self.tableView.contentInset
         contentInset.bottom = keyboardFrame.size.height
         self.tableView.contentInset = contentInset
+        
+        determineDetailProgress()
     }
     
     @objc func keyboardWillHide(notification: NSNotification) {
         let contentInset:UIEdgeInsets = UIEdgeInsets.zero
         self.tableView.contentInset = contentInset
+        
+        determineDetailProgress()
     }
     
     //HACK - works to stop scrollign tableview when the view is being edited
@@ -382,6 +468,7 @@ class UploadBurgerInformationVC: UITableViewController,
         cell.burgerDescriptionTextView.resignFirstResponder()
         cell.newIngredientTextField.resignFirstResponder()
         
+
         flowLayout = cell.flowLayout
         flowLayout.sectionInset = UIEdgeInsetsMake(8, 8, 8, 8)
         ingredientCollectionView = cell.ingredientCollectionView
@@ -404,7 +491,7 @@ class UploadBurgerInformationVC: UITableViewController,
         cell.burgerDescriptionTextView.delegate = self
         cell.burgerDescriptionTextView.textColor = .lightGray
         
-        cell.burgerDescriptionTextView.text = "Type your thoughts here..."
+        cell.burgerDescriptionTextView.text = tvPlaceHolder
         
         fields["name"] = cell.burgerNameTextField
         fields["kitchen"] = cell.kitchenNameTextField
@@ -414,7 +501,31 @@ class UploadBurgerInformationVC: UITableViewController,
         fields["rating"] = cell.ratingNumberLabel
         fields["addIngredientLabel"] = cell.newIngredientTextField
         
+        //redrawIngredientHeight()
+        
+        if details["name"] as! String != headerBurgerNamePlaceholder {
+            cell.burgerNameTextField.text = (details["name"] as! String)
+        }else{
+            cell.burgerNameTextField.text = ""
+        }
+        
+        if details["kitchen"] as! String != headerBurgerKitchenPlaceholder {
+            cell.kitchenNameTextField.text = (details["kitchen"] as! String)
+        }else{
+            cell.kitchenNameTextField.text = ""
+        }
+        
+        cell.regionNameTextField.text = (details["locations"] as! String)
+        cell.priceTextField.text = (details["price"] as! String)
+        cell.burgerDescriptionTextView.text = (details["descript"] as! String)
+        
         self.submitBtn = cell.submitBtn
+        
+        self.submitBtn.isEnabled = false
+        self.submitBtn.alpha = 0.5;
+        
+        let ratingLbl = Float((details["ratingLbl"]?.text as AnyObject) as! String)
+        if ratingLbl != 5.0 {cell.ratingSlider.value = ratingLbl!}
         
         return cell
         
@@ -445,28 +556,34 @@ class UploadBurgerInformationVC: UITableViewController,
 
     func redrawIngredientHeight(){
         
+        setInputValueFields()
+        
         let height = self.ingredientCollectionView.collectionViewLayout.collectionViewContentSize.height
         heightConstraint.constant = height
         self.view.layoutIfNeeded()
+    
         self.tableView.reloadData()
-        
+    
     }
     
     @objc func updateRatingLabel(sender: UISlider!) {
+        
         let value = sender.value
         
         DispatchQueue.main.async {
             
             let ratingLabel = self.fields["rating"] as! UILabel
             
+            self.details["ratingLbl"] = self.fields["rating"]
+            
             ratingLabel.text = String(format:"%.1f", value)
-
+            
         }
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         
-        if textView.textColor == UIColor.lightGray && textView.isFirstResponder {
+        if textView.textColor == UIColor.lightGray && textView.isFirstResponder && textView.text == tvPlaceHolder{
             
             textView.text = nil
             textView.textColor = .gray
@@ -477,16 +594,27 @@ class UploadBurgerInformationVC: UITableViewController,
     
     func textViewDidEndEditing(_ textView: UITextView) {
         
-        if textView.text.isEmpty || textView.text == "" {
+        if textView.text.isEmpty || textView.text == ""{
             textView.textColor = .lightGray
-            textView.text = "Type your thoughts here..."
+            textView.text = tvPlaceHolder
         }
+        
+        determineDetailProgress()
+        
+    
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        
+        determineDetailProgress()
         
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
         self.view.endEditing(true)
+        
+        determineDetailProgress()
         
         return true;
     }
@@ -557,11 +685,31 @@ class UploadBurgerInformationVC: UITableViewController,
         if section == 0 {
             
             let  cell = tableView.dequeueReusableCell(withIdentifier: "UploadHeaderCell") as! UploadHeaderTableViewCell
-            
-            cell.burgerName.text = "Name will go here"
-            cell.kitchenName.text = "Kitchen will go here"
         
-            //Without returning contentView the header ell disapears on any tetView edits due to our table.beginUpdate() code
+            if (details["name"] as! String) != headerBurgerNamePlaceholder && (details["name"] as! String) != "" {
+                cell.burgerName.text = (details["name"] as! String)
+            }else{
+                cell.burgerName.text = headerBurgerNamePlaceholder
+            }
+            
+            if (details["kitchen"] as! String) != headerBurgerKitchenPlaceholder && (details["kitchen"] as! String) != ""{
+                 cell.kitchenName.text = (details["kitchen"] as! String)
+            }else{
+                cell.kitchenName.text = headerBurgerKitchenPlaceholder
+            }
+        
+            headerBurgerNameLabel = cell.burgerName
+            headerKitchenLabel = cell.kitchenName
+            
+            progress = 0.15
+            self.imgView = cell.progressContainerView
+            self.imgView.style = .sector
+            
+            self.imgView.uploadImage(image:photo, progress: progress)
+            
+            determineDetailProgress()
+            
+            //Without returning contentView the header will disapear on any tetView edits due to our table.beginUpdate() code
             return cell.contentView
             
         }else{
@@ -678,13 +826,24 @@ extension UploadBurgerInformationVC: UICollectionViewDelegate,
             cell.selectionStatus.layer.cornerRadius = cell.selectionStatus.frame.size.width / 2
             cell.selectionStatus.clipsToBounds = true
             
+            let colour = UIColor(red: 222/255,
+                                 green: 173/255,
+                                 blue: 107/255,
+                                 alpha: 1.0)
+            
+            var detailsKey = burgerBadge.badgeTitle
+            
+            if burgerBadge.badgeTitle == "challenge" {detailsKey = "hasChallenge"}
+            if burgerBadge.badgeTitle == "mods" {detailsKey = "hasMods"}
+            
+            if (details[detailsKey] as AnyObject) as! String == "1"{cell.selectionStatus.backgroundColor = colour}
+            
             if(firstLayout){
         
                 firstLayout = false
                 
                 redrawIngredientHeight()
-                
-                
+        
             }
             
             return cell
@@ -708,6 +867,7 @@ extension UploadBurgerInformationVC: UICollectionViewDelegate,
             
             return self.sizingCell!.systemLayoutSizeFitting(UILayoutFittingCompressedSize)
             
+            
         }else{
             
             let cellSize = CGSize(width: 65, height: 85);
@@ -721,11 +881,11 @@ extension UploadBurgerInformationVC: UICollectionViewDelegate,
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath){
         
-        print("Collection view at row \(collectionView.tag) selected index path \(indexPath)")
-        
         if collectionView == self.ingredientCollectionView {
             
             tags[indexPath.row].selected = !tags[indexPath.row].selected
+            
+            determineDetailProgress()
             
             self.ingredientCollectionView.reloadData()
             
@@ -784,8 +944,9 @@ extension UploadBurgerInformationVC: UICollectionViewDelegate,
             if !ingredients.contains(tag.name!) {
                 
                 ingredients.append(tag.name!)
-              
+                
             }
+        
         
         }else{
             
@@ -797,9 +958,11 @@ extension UploadBurgerInformationVC: UICollectionViewDelegate,
             
         }
         
-        cell.tagName.textColor = tag.selected ? UIColor.white : UIColor(red: 0.1, green: 0.1, blue: 0.1, alpha: 1)
         
-        cell.backgroundColor = tag.selected ? UIColor(red: 0, green: 1, blue: 0, alpha: 1) : UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1)
+        
+        cell.tagName.textColor = tag.selected ? UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1) : UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1)
+     
+        cell.backgroundColor = tag.selected ? UIColor(red: 222/255,green: 173/255,blue: 107/255,alpha: 1):  UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1)
         
     }
 }

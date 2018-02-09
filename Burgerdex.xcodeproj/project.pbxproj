@@ -10,6 +10,8 @@
 		EB0823BC20223EE5002DB6D2 /* TagCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0823BB20223EE5002DB6D2 /* TagCell.swift */; };
 		EB0823BE20223EF4002DB6D2 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0823BD20223EF4002DB6D2 /* Tag.swift */; };
 		EB0823C020223EFB002DB6D2 /* FlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0823BF20223EFB002DB6D2 /* FlowLayout.swift */; };
+		EB1F4C87202DF31A0041E44C /* WaveObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1F4C85202DF31A0041E44C /* WaveObject.swift */; };
+		EB1F4C88202DF31A0041E44C /* MMImageUpload.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1F4C86202DF31A0041E44C /* MMImageUpload.swift */; };
 		EB3C2140200645D400EAC1CB /* FilterCatalogueCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3C213F200645D400EAC1CB /* FilterCatalogueCell.swift */; };
 		EB3C21422006487A00EAC1CB /* FilterCatalogueCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3C21412006487A00EAC1CB /* FilterCatalogueCollectionViewCell.swift */; };
 		EB66BE06200A762F00921485 /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB66BE05200A762F00921485 /* ImageManager.swift */; };
@@ -48,6 +50,8 @@
 		EB0823BB20223EE5002DB6D2 /* TagCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagCell.swift; sourceTree = "<group>"; };
 		EB0823BD20223EF4002DB6D2 /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
 		EB0823BF20223EFB002DB6D2 /* FlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowLayout.swift; sourceTree = "<group>"; };
+		EB1F4C85202DF31A0041E44C /* WaveObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WaveObject.swift; sourceTree = "<group>"; };
+		EB1F4C86202DF31A0041E44C /* MMImageUpload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MMImageUpload.swift; sourceTree = "<group>"; };
 		EB3C213F200645D400EAC1CB /* FilterCatalogueCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCatalogueCell.swift; sourceTree = "<group>"; };
 		EB3C21412006487A00EAC1CB /* FilterCatalogueCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCatalogueCollectionViewCell.swift; sourceTree = "<group>"; };
 		EB66BE05200A762F00921485 /* ImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageManager.swift; sourceTree = "<group>"; };
@@ -145,6 +149,15 @@
 				EB3C213F200645D400EAC1CB /* FilterCatalogueCell.swift */,
 			);
 			path = "Collection Cells";
+			sourceTree = "<group>";
+		};
+		EB1F4C71202DE6A60041E44C /* Progress Views */ = {
+			isa = PBXGroup;
+			children = (
+				EB1F4C86202DF31A0041E44C /* MMImageUpload.swift */,
+				EB1F4C85202DF31A0041E44C /* WaveObject.swift */,
+			);
+			path = "Progress Views";
 			sourceTree = "<group>";
 		};
 		EB838B4B201BBDF100B9C633 /* Loaders */ = {
@@ -249,6 +262,7 @@
 		EBE820EB1FFC119500F5A895 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				EB1F4C71202DE6A60041E44C /* Progress Views */,
 				EB838B50201BD7A600B9C633 /* TextFields */,
 				EB838B4B201BBDF100B9C633 /* Loaders */,
 				EBCAF4A4200CF90900B9407D /* Cells */,
@@ -352,12 +366,14 @@
 				EB3C2140200645D400EAC1CB /* FilterCatalogueCell.swift in Sources */,
 				EB838B4A201BB7C900B9C633 /* UploadHeaderTableViewCell.swift in Sources */,
 				EB857A661FFC0959003E5BF1 /* AppDelegate.swift in Sources */,
+				EB1F4C87202DF31A0041E44C /* WaveObject.swift in Sources */,
 				EB857A681FFC0959003E5BF1 /* CatalogueVC.swift in Sources */,
 				EB838B57201BD7BA00B9C633 /* TweeActiveTextField.swift in Sources */,
 				EB838B58201BD7BA00B9C633 /* TweeBorderedTextField.swift in Sources */,
 				EBDAF6A72024DEB30053FAC3 /* BurgerCameraVC.swift in Sources */,
 				EBDAF6A82024EF220053FAC3 /* CameraController.swift in Sources */,
 				EB838B4D201BBE0900B9C633 /* ActivityIndicator.swift in Sources */,
+				EB1F4C88202DF31A0041E44C /* MMImageUpload.swift in Sources */,
 				EB838B59201BD7BA00B9C633 /* FontAnimation.swift in Sources */,
 				EB0823BE20223EF4002DB6D2 /* Tag.swift in Sources */,
 				EBD41663200FF07B00E33AD6 /* TabBarVC.swift in Sources */,

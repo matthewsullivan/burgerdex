@@ -17,7 +17,7 @@ class TagCell: UICollectionViewCell {
         
         self.backgroundColor = UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1)
         
-        self.tagName.textColor = UIColor(red: 0.1, green: 0.1, blue: 0.1, alpha: 1)
+        self.tagName.textColor = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1)
         
         self.layer.cornerRadius = 4
     
