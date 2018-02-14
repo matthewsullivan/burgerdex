@@ -445,8 +445,6 @@ class BurgerSubmit{
                             
                             if let response = response["error"] as? [[String: Any]] {
                                 
-                                print("Balls")
-                                
                                 var serverMsg : String = "Success"
                                 
                                 for msg in response {
