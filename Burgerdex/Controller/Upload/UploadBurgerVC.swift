@@ -17,6 +17,7 @@ class UploadBurgerVC: UIViewController, UploadBurgerDelegate {
     @IBOutlet weak var errorBodyLabel: UILabel!
     @IBOutlet weak var errorImageContainer: UIImageView!
     
+    @IBOutlet weak var cameraBtn: UIBarButtonItem!
     @IBAction func cameraButtonTouch(_ sender: Any) {
         self.performSegue(withIdentifier: "burgerCameraSegue", sender: self)
     }
@@ -76,6 +77,7 @@ class UploadBurgerVC: UIViewController, UploadBurgerDelegate {
             
             self.errorContainerView.isHidden = true
             
+            
             initView()
             loadPhotos()
             
@@ -85,6 +87,8 @@ class UploadBurgerVC: UIViewController, UploadBurgerDelegate {
             
             self.errorContainerView.isHidden = false
             self.displayErrorView(errorType: 0)
+            
+            cameraBtn.isEnabled = false
             
             break
         }
@@ -105,7 +109,7 @@ class UploadBurgerVC: UIViewController, UploadBurgerDelegate {
             
             self.errorImageContainer.image = UIImage(named: "noFood")
             self.errorHeaderLabel.text = "SORRY"
-            self.errorBodyLabel.text = "Burgerdex requires access to your photo's to upload a burger. Please go to your settings and allow access to your Camera Roll or Camera to begin the burger creation process."
+            self.errorBodyLabel.text = "Burgerdex requires access to your photos to upload a burger. Please go to your settings and allow access to your Camera Roll or Camera to begin the burger creation process."
             self.errorButton.isHidden = false
         }
         
@@ -146,6 +150,13 @@ class UploadBurgerVC: UIViewController, UploadBurgerDelegate {
 
 fileprivate extension UploadBurgerVC {
     fileprivate func initView() {
+        
+        cameraBtn.isEnabled = true
+        
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        
+        self.collectionView.reloadData()
     
         let imgWidth = (collectionView.frame.width - (kCellSpacing * (CGFloat(kColumnCnt) - 1))) / CGFloat(kColumnCnt)
         targetSize = CGSize(width: imgWidth, height: imgWidth)
@@ -186,7 +197,9 @@ extension UploadBurgerVC: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        
         return fetchResult.count
+        
     }
 }
     

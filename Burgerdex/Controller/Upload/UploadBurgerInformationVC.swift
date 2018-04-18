@@ -34,6 +34,7 @@ class UploadBurgerInformationVC: UITableViewController,
         setInputValueFields()
         
         details["ratingLbl"] = "" as AnyObject
+        details["iphone"] = "1" as AnyObject
         
         SwiftSpinner.show(delay: 0.5, title: "Uploading Burger" , animated: true)
     
@@ -41,6 +42,8 @@ class UploadBurgerInformationVC: UITableViewController,
         
         submit.submitBurger(details: details, image:photo, completion: { (data) in
             
+            print("Response ", data)
+        
             if (data[0] as! Int) == 0{
                 
                 self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0),
@@ -205,7 +208,6 @@ class UploadBurgerInformationVC: UITableViewController,
         details["price"] =  "" as AnyObject
         details["descript"] =  tvPlaceHolder as AnyObject
        
-        
         self.view.endEditing(true)
         
         self.tableView.allowsSelection = false
@@ -963,9 +965,7 @@ extension UploadBurgerInformationVC: UICollectionViewDelegate,
             }
             
         }
-        
-        
-        
+    
         cell.tagName.textColor = tag.selected ? UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1) : UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1)
      
         cell.backgroundColor = tag.selected ? UIColor(red: 222/255,green: 173/255,blue: 107/255,alpha: 1):  UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1)

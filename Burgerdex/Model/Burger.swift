@@ -422,7 +422,7 @@ class BurgerSubmit{
         r.httpMethod = "POST"
         let boundary = "Boundary-\(UUID().uuidString)"
         r.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-
+    
         r.httpBody = createBody(parameters: details  as! [String : String],
                                 boundary: boundary,
                                 data: UIImageJPEGRepresentation(image, 0.7)!,
@@ -456,7 +456,7 @@ class BurgerSubmit{
                                     
                                 }
                                 
-                                responseCode[0] = 1
+                                responseCode[0] = 0
                                 responseCode[1] = serverMsg
                                 
                                 completion(responseCode)
@@ -469,7 +469,7 @@ class BurgerSubmit{
                     
                     print("Error deserializing JSON: \(error)")
                     
-                    responseCode[0] = 0
+                    responseCode[0] = 1
                     responseCode[1] = message
                     DispatchQueue.main.async(execute: {
                         completion(responseCode)

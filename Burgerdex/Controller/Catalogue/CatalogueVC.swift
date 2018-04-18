@@ -162,7 +162,7 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
     }
     
     func requestCatalogueBurgerData(page:Int, filter:Int){
-
+    
         self.tableView.allowsSelection = false
         self.tableView.isScrollEnabled = false
         
@@ -198,7 +198,9 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
                         
                         let dictionary = Dictionary(grouping: self.burgers, by: predicate)
                         
-                        for (key, value) in dictionary {
+                        let sortedByKeyDictionary = dictionary.sorted { $0.0 < $1.0 }
+                        
+                        for (key, value) in sortedByKeyDictionary {
                             
                             
                             self.burgerSortedArray.append(BurgerSort(sectionName: key, sectionObjects: value))
@@ -214,9 +216,10 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
                         
                         let dictionary = Dictionary(grouping: self.burgers, by: predicate)
                         
-                        for (key, value) in dictionary {
+                        let sortedByKeyDictionary = dictionary.sorted { $0.0 < $1.0 }
+                        
+                        for (key, value) in sortedByKeyDictionary {
                           
-                            
                             self.burgerSortedArray.append(BurgerSort(sectionName: key, sectionObjects: value))
                         }
                         
@@ -230,7 +233,9 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
                         
                         let dictionary = Dictionary(grouping: self.burgers, by: predicate)
                         
-                        for (key, value) in dictionary {
+                        let sortedByKeyDictionary = dictionary.sorted { $0.0 < $1.0 }
+                        
+                        for (key, value) in sortedByKeyDictionary {
                            
                             self.burgerSortedArray.append(BurgerSort(sectionName: key, sectionObjects: value))
                         }
@@ -308,7 +313,7 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
+        
         if selectedFilterIndex == 14 || selectedFilterIndex == 13 || selectedFilterIndex == 2{
             
             return burgerSortedArray[section].sectionObjects.count
@@ -323,7 +328,7 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         if self.pageIndex > 1 {TableLoader.removeLoaderFrom(self.tableView)}
-    
+        
         let cellIdentifier = "CatalogueTableViewCell"
         
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! CatalogueTableViewCell
@@ -338,8 +343,6 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
             
             burger = burgers[indexPath.row]
         }
-        
-        
         
         cell.selectionStyle = .none
         
@@ -363,6 +366,7 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        
         if selectedFilterIndex == 14 || selectedFilterIndex == 13 || selectedFilterIndex == 2{
             
             return burgerSortedArray[section].sectionName
@@ -375,8 +379,8 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
         let lastElement = burgers.count - 1
-    
-        if indexPath.row == lastElement && !noMoreData && self.pageIndex > 1{
+        
+        if (indexPath.row == lastElement && !noMoreData && self.pageIndex > 1){
             
             BurgerPreview.fetchBurgerPreviews(page: self.pageIndex, filter: self.selectedFilterIndex, session: sharedSession ,completion: { (data) in
                 
@@ -385,7 +389,7 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
                     self.burgers += data[1] as! [BurgerPreview]
                     
                     self.pageIndex  += 1
-                
+                    
                     self.tableView.reloadData()
                     
                 }else{
@@ -468,6 +472,105 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
             loadImagesForOnscreenRows()
             
         }
+        
+        //if scrolled to bottom on section filter make call for more data
+        //print(self.tableView.scrolledToBottom)
+        
+        /*
+            Massive hack to allow the table view with sections to have pagination calls done correctly.
+         
+            First we check to make sure we have a filter that contains section headers.
+            Then we check to see if the tableview scroll view has reached the bottom.
+            Call until self.noMoreData is true. Ignore the rest
+         
+            WE DO THIS BECAUSE WE CANNOT COMPARE THE LAST INDEXPATH[ROW] TO THE LAST BURGER ARRAY INDEX COUNT -1.
+         
+            We are in a section here so the last index row is always changing and will always be less than the overall burger array count.
+        */
+        
+        if selectedFilterIndex == 14 || selectedFilterIndex == 13 || selectedFilterIndex == 2{
+            
+            if self.tableView.scrolledToBottom == true{
+            
+                if(self.noMoreData != true){
+        
+                    BurgerPreview.fetchBurgerPreviews(page: self.pageIndex, filter: self.selectedFilterIndex, session: sharedSession ,completion: { (data) in
+                        
+                        if (data[1] as AnyObject).count > 0 {
+                            
+                            self.burgers += data[1] as! [BurgerPreview]
+                            
+                            self.pageIndex  += 1
+                            
+                            self.burgerSortedArray.removeAll()
+                            
+                            if self.selectedFilterIndex == 14{
+                                
+                                let predicate = { (element: BurgerPreview) in
+                                    return element.kitchen
+                                }
+                                
+                                let dictionary = Dictionary(grouping: self.burgers, by: predicate)
+                                
+                                let sortedByKeyDictionary = dictionary.sorted { $0.0 < $1.0 }
+                                
+                                for (key, value) in sortedByKeyDictionary {
+                                
+                                    self.burgerSortedArray.append(BurgerSort(sectionName: key, sectionObjects: value))
+                                }
+                                
+                            }
+                            
+                            if self.selectedFilterIndex == 13{
+                                
+                                let predicate = { (element: BurgerPreview) in
+                                    return element.location
+                                }
+                                
+                                let dictionary = Dictionary(grouping: self.burgers, by: predicate)
+                                
+                                let sortedByKeyDictionary = dictionary.sorted { $0.0 < $1.0 }
+                                
+                                for (key, value) in sortedByKeyDictionary {
+                                    
+                                    
+                                    self.burgerSortedArray.append(BurgerSort(sectionName: key, sectionObjects: value))
+                                }
+                                
+                            }
+                            
+                            if self.selectedFilterIndex == 2{
+                                
+                                let predicate = { (element: BurgerPreview) in
+                                    return element.year
+                                }
+                                
+                                let dictionary = Dictionary(grouping: self.burgers, by: predicate)
+                                
+                                let sortedByKeyDictionary = dictionary.sorted { $0.0 < $1.0 }
+                                
+                                for (key, value) in sortedByKeyDictionary {
+                                    
+                                    self.burgerSortedArray.append(BurgerSort(sectionName: key, sectionObjects: value))
+                                }
+                                
+                            }
+                            
+                            self.tableView.reloadData()
+                        
+                        }else{
+                            
+                            self.noMoreData = true
+                            
+                            //Set the collection filter back to previous value if web call fails
+                            print("Pagination Error or no more data")
+                            
+                        }
+                        
+                    })
+                }
+            }
+        }
     }
 
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
@@ -495,6 +598,7 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
             
             self.lastContentOffset = scrollView.contentOffset.y
         }
+        
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -554,6 +658,7 @@ extension CatalogueVC: UICollectionViewDelegate, UICollectionViewDataSource, UIC
         
         let filterNames = filters[indexPath.row]
         
+        
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FilterCatalogueCell", for: indexPath) as? FilterCatalogueCollectionViewCell  else{
             
             fatalError("The dequeued cell is not an instance of FilterCatalogueCell.")
@@ -599,7 +704,7 @@ extension CatalogueVC: UICollectionViewDelegate, UICollectionViewDataSource, UIC
         if self.burgers.count == 0{
             
             self.burgers = BurgerPreview.generatePlaceholderBurgers() as! [BurgerPreview]
-            
+        
             self.tableView.reloadData()
         }
         
@@ -609,11 +714,15 @@ extension CatalogueVC: UICollectionViewDelegate, UICollectionViewDataSource, UIC
             
             let dictionary = ["": self.burgers]
             
-            for (key, value) in dictionary {
+            let sortedByKeyDictionary = dictionary.sorted { $0.0 < $1.0 }
+        
+            for (key, value) in sortedByKeyDictionary {
+                
+                print(value[0].kitchen)
                 
                 self.burgerSortedArray.append(BurgerSort(sectionName: key, sectionObjects: value))
             }
-            
+        
             self.tableView.reloadData()
         
         }
@@ -626,7 +735,7 @@ extension CatalogueVC: UICollectionViewDelegate, UICollectionViewDataSource, UIC
             
             
             if  self.burgerSortedArray.count > 0 {
-                
+            
                 self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0),
                                            at: UITableViewScrollPosition.top,
                                            animated: false)
@@ -650,5 +759,16 @@ extension CatalogueVC: UICollectionViewDelegate, UICollectionViewDataSource, UIC
     }
 }
 
-
-
+extension UIScrollView {
+    
+    var scrolledToTop: Bool {
+        let topEdge = 0 - contentInset.top
+        return contentOffset.y <= topEdge
+    }
+    
+    var scrolledToBottom: Bool {
+        let bottomEdge = contentSize.height + contentInset.bottom - bounds.height
+        return contentOffset.y >= bottomEdge
+    }
+    
+}

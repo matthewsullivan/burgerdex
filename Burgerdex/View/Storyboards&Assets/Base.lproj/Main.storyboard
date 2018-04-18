@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="49e-Tb-3d3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="49e-Tb-3d3">
     <device id="retina5_9" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -76,8 +76,6 @@
                                     </collectionViewCell>
                                 </cells>
                                 <connections>
-                                    <outlet property="dataSource" destination="MUx-aQ-De2" id="VYd-R6-K7E"/>
-                                    <outlet property="delegate" destination="MUx-aQ-De2" id="AOy-Sk-CXC"/>
                                     <outlet property="prefetchDataSource" destination="MUx-aQ-De2" id="x3D-YY-SxK"/>
                                 </connections>
                             </collectionView>
@@ -88,7 +86,7 @@
                                         <rect key="frame" x="137" y="134" width="100" height="100"/>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Burger Matches.." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qnM-2p-cXH">
-                                        <rect key="frame" x="16" y="268" width="351" height="14"/>
+                                        <rect key="frame" x="16" y="268" width="351" height="14.333333333333314"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -100,7 +98,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5uN-vN-jSZ">
-                                        <rect key="frame" x="8" y="285" width="359" height="30"/>
+                                        <rect key="frame" x="8" y="285.33333333333331" width="359" height="30"/>
                                         <state key="normal" title="Settings">
                                             <color key="titleColor" red="0.58823529409999997" green="0.39984840939999999" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
@@ -150,6 +148,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="cameraBtn" destination="4JZ-em-Mom" id="bRp-LU-MNm"/>
                         <outlet property="collectionView" destination="REh-GS-7Ff" id="HiI-pM-zoB"/>
                         <outlet property="errorBodyLabel" destination="qnM-2p-cXH" id="iUz-nD-dbz"/>
                         <outlet property="errorButton" destination="5uN-vN-jSZ" id="wu5-Aa-7s5"/>
@@ -407,7 +406,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="5.0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LX0-Pu-Hxo">
-                                            <rect key="frame" x="299" y="384" width="60" height="20"/>
+                                            <rect key="frame" x="200" y="384" width="159" height="20"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="60" id="PQ0-ju-ybg"/>
                                             </constraints>
@@ -454,7 +453,7 @@
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <subviews>
                                                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="rating" translatesAutoresizingMaskIntoConstraints="NO" id="sgQ-Ki-zqD">
-                                                                <rect key="frame" x="7" y="0.0" width="50" height="50"/>
+                                                                <rect key="frame" x="7" y="0.0" width="58" height="50"/>
                                                             </imageView>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Rating" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s6D-Op-s3K">
                                                                 <rect key="frame" x="7" y="53" width="50" height="12"/>
@@ -463,7 +462,7 @@
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="9.2" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mO8-nV-NJZ">
-                                                                <rect key="frame" x="14" y="12" width="35" height="27"/>
+                                                                <rect key="frame" x="22" y="12" width="27" height="27"/>
                                                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
                                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <nil key="highlightedColor"/>
@@ -633,7 +632,7 @@
                                         <constraint firstItem="uY0-yX-6B4" firstAttribute="top" secondItem="RU7-et-Jor" secondAttribute="bottom" priority="750" constant="8" id="g6R-kG-Nig"/>
                                         <constraint firstItem="dqd-ig-aKB" firstAttribute="leading" secondItem="b7v-ZM-B5j" secondAttribute="leading" constant="12" id="gfj-zo-CKQ"/>
                                         <constraint firstItem="kzb-Kg-eQm" firstAttribute="top" secondItem="BYa-7d-PXs" secondAttribute="bottom" constant="36" id="h77-wC-dds"/>
-                                        <constraint firstItem="LX0-Pu-Hxo" firstAttribute="leading" secondItem="b7v-ZM-B5j" secondAttribute="leading" constant="299" id="hbY-ml-dho"/>
+                                        <constraint firstItem="LX0-Pu-Hxo" firstAttribute="leading" secondItem="b7v-ZM-B5j" secondAttribute="leading" constant="200" id="hbY-ml-dho"/>
                                         <constraint firstItem="kzb-Kg-eQm" firstAttribute="leading" secondItem="b7v-ZM-B5j" secondAttribute="leading" constant="12" id="j6q-VQ-uln"/>
                                         <constraint firstItem="Zyv-xx-JUy" firstAttribute="top" secondItem="uY0-yX-6B4" secondAttribute="bottom" constant="11" id="jnK-48-oIp"/>
                                         <constraint firstItem="8e8-lI-d7Y" firstAttribute="top" secondItem="rYC-t6-l57" secondAttribute="bottom" constant="5" id="kYc-uY-kPK"/>
@@ -793,7 +792,6 @@
                     <connections>
                         <segue destination="P1E-QN-dwL" kind="relationship" relationship="viewControllers" id="2ga-5F-lLB"/>
                         <segue destination="0zQ-gV-XVM" kind="relationship" relationship="viewControllers" id="tcX-eG-U6o"/>
-                        <segue destination="lg5-ad-DGV" kind="relationship" relationship="viewControllers" id="lzU-1b-eKA"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HuB-VB-40B" sceneMemberID="firstResponder"/>
@@ -910,7 +908,7 @@
                                         <rect key="frame" x="137" y="167" width="100" height="100"/>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Burger Matches.." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uva-x8-jnY">
-                                        <rect key="frame" x="16" y="301" width="351" height="14"/>
+                                        <rect key="frame" x="16" y="301" width="351" height="14.333333333333314"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -922,7 +920,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pac-9m-pvF">
-                                        <rect key="frame" x="8" y="318" width="359" height="30"/>
+                                        <rect key="frame" x="8" y="318.33333333333331" width="359" height="30"/>
                                         <state key="normal" title="Reload">
                                             <color key="titleColor" red="0.58823529409999997" green="0.39984840944722222" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
@@ -947,7 +945,7 @@
                                     <constraint firstItem="iww-l9-JnX" firstAttribute="top" secondItem="QwC-fL-m4W" secondAttribute="top" constant="167" id="wBw-cE-Ac9"/>
                                 </constraints>
                             </view>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="xti-WE-IID">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="xti-WE-IID">
                                 <rect key="frame" x="0.0" y="88" width="375" height="58"/>
                                 <color key="backgroundColor" white="0.94862196180555558" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>

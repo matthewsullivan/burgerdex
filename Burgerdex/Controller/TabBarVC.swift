@@ -16,7 +16,9 @@ class TabBarVC: UITabBarController {
         var paddingHeight = 0.0
         //Hack
         if UIDevice.current.modelName == "iPhone10,3" || UIDevice.current.modelName == "iPhone10,6" {paddingHeight = 34.0}
-
+    
+        let width = CGFloat(tabBar.frame.width) / CGFloat((self.tabBar.items?.count)!)
+       
         UITabBarItem.appearance().setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.clear], for: .normal)
         
         UITabBar.appearance().shadowImage = nil
@@ -28,14 +30,11 @@ class TabBarVC: UITabBarController {
                                                                                                            green: 173/255,
                                                                                                            blue: 107/255,
                                                                                                            alpha: 1),
-                                                                                            size: CGSize(width:tabBar.frame.width/3,
+                                                                                            size: CGSize(width: width,
                                                                                                          height:self.tabBar.frame.size.height + CGFloat(paddingHeight)))
         
+        
     }
-    
-   
-    
-    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
