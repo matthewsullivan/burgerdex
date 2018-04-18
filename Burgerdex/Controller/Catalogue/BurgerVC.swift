@@ -105,10 +105,12 @@ class BurgerVC: UITableViewController {
                         let location = burger["locations"] as? String
                         let year = burger["year"] as? String
                         let imagePath = burger["image"] as? String
+                        let thumbPath = burger["thumb"] as? String
                         var catalogueNumber = burger["id"] as? Int
                         let imageOrigin = "https://burgerdex.ca/"
-                        
+                       
                         let pattyImagePath = imageOrigin + imagePath!
+                        let thumbPattyPath = imageOrigin + thumbPath!
                         
                         if catalogueNumber == nil {catalogueNumber = 0}
                         
@@ -120,6 +122,7 @@ class BurgerVC: UITableViewController {
                                                                    year: year!,
                                                                    catalogueNumber: catalogueNumber!,
                                                                    photoUrl: pattyImagePath,
+                                                                   thumbUrl: thumbPattyPath,
                                                                    photo: UIImage(),
                                                                    burgerID: catalogueNumber!)else{
                                                                  fatalError("Unable to instantiate burgerPreview")

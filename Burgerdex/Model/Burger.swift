@@ -7,6 +7,14 @@
 //
 
 import UIKit
+/*
+    If the version number directory is different than the current version of the app, this indicates that the old service folder is fine to use with the current app version we are on. This stops us from having to create multiple directories on the server for any small bug fix or enhancement. As well as if we didn't update the service code.
+ */
+private let versionNumber = "1.1.0"
+private let kBurgerPreview = "https://www.app.burgerdex.ca/services/ios/" + versionNumber + "/allBurgers.php"
+private let kBurgerDetail = "https://www.app.burgerdex.ca/services/ios/" + versionNumber + "/burgerDetail.php"
+private let kSubmitBurger = "https://www.burgerdex.ca/services/submitBurger.php"
+private let kBaseImagePath = "https://burgerdex.ca/"
 
 //Only using protocol and : BurgerObject on multiple classes due to using multiple different object types in a table view.
 //Instead of class BurgerPreview : BurgerObject { syntax, use class BurgerPreview { elsewhere
@@ -25,6 +33,7 @@ class BurgerPreview : BurgerObject {
     var catalogueNumber: Int
     var burgerID: Int
     var photoUrl: String
+    var thumbUrl: String
     var photo: UIImage
     
     init?(displayTag: String,
@@ -35,6 +44,7 @@ class BurgerPreview : BurgerObject {
           year: String,
           catalogueNumber: Int,
           photoUrl: String,
+          thumbUrl: String,
           photo: UIImage,
           burgerID: Int) {
         
@@ -60,7 +70,9 @@ class BurgerPreview : BurgerObject {
         self.catalogueNumber = catalogueNumber
         self.burgerID = burgerID
         self.photoUrl = photoUrl
+        self.thumbUrl = thumbUrl
         self.photo = photo
+        
         
     }
     
@@ -78,6 +90,7 @@ class BurgerPreview : BurgerObject {
                                                         year: "2017",
                                                 catalogueNumber: 0,
                                                        photoUrl: "baconBeast",
+                                                       thumbUrl: "baconBeast",
                                                           photo:UIImage(),
                                                        burgerID: 0)else{
                                                     
@@ -98,11 +111,14 @@ class BurgerPreview : BurgerObject {
         //Start by invalidating on going long tasks
         session.invalidateAndCancel()
         
+        print(kBurgerPreview)
+        
         var patties = [BurgerPreview]()
+        
         
         var burgerPreviewSuccess = [0,patties] as [Any]
 
-        let url = "https://www.app.burgerdex.ca/services/allBurgers.php"
+        let url = kBurgerPreview
         var postRequest = URLRequest(url: URL(string:url)!,
                             cachePolicy: .reloadIgnoringCacheData,
                         timeoutInterval: 60.0)
@@ -145,10 +161,13 @@ class BurgerPreview : BurgerObject {
                                     let location = burger["locations"] as? String
                                     let year = burger["year"] as? String
                                     let imagePath = burger["image"] as? String
+                                    let thumbPath = burger["thumb"] as? String
                                     let catalogueNumber = burger["id"] as? Int
-                                    let imageOrigin = "https://burgerdex.ca/"
-                                    
+                                    let imageOrigin = kBaseImagePath
                                     let pattyImagePath = imageOrigin + imagePath!
+                                    let pattyThumbImagePath = imageOrigin + thumbPath!
+                                    
+                                    print(pattyImagePath);
                                     
                                     guard let burgerPreview = BurgerPreview.init(displayTag: displayTag!,
                                                                                  displayText: displayText!,
@@ -158,6 +177,7 @@ class BurgerPreview : BurgerObject {
                                                                                  year: year!,
                                                                                  catalogueNumber: catalogueNumber!,
                                                                                  photoUrl: pattyImagePath,
+                                                                                 thumbUrl : pattyThumbImagePath,
                                                                                  photo:UIImage(),
                                                                                  burgerID: catalogueNumber!)else{
                                         fatalError("Unable to instantiate burgerPreview")
@@ -298,7 +318,7 @@ class Burger : BurgerObject{
     
     class func fetchBurgerDetails(burgerID: Int, completion:@escaping (_ pattyInformation:Array<Any>)->Void){
         
-        let url = "https://www.app.burgerdex.ca/services/burgerDetail.php"
+        let url = kBurgerDetail
         
         var postRequest = URLRequest(url: URL(string:url)!,
                                      cachePolicy: .reloadIgnoringCacheData,
@@ -418,7 +438,7 @@ class BurgerSubmit{
         
         var responseCode = [0,message] as [Any]
         
-        var r  = URLRequest(url: URL(string: "https://www.burgerdex.ca/services/submitBurger.php")!)
+        var r  = URLRequest(url: URL(string: kSubmitBurger)!)
         r.httpMethod = "POST"
         let boundary = "Boundary-\(UUID().uuidString)"
         r.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")

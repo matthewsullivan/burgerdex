@@ -547,7 +547,7 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
                                 
                                 let dictionary = Dictionary(grouping: self.burgers, by: predicate)
                                 
-                                let sortedByKeyDictionary = dictionary.sorted { $0.0 < $1.0 }
+                                let sortedByKeyDictionary = dictionary.sorted { $0.0 > $1.0 }
                                 
                                 for (key, value) in sortedByKeyDictionary {
                                     
@@ -698,6 +698,8 @@ extension CatalogueVC: UICollectionViewDelegate, UICollectionViewDataSource, UIC
         print("Collection view at row \(collectionView.tag) selected index path \(indexPath)")
         
         selectedFilterIndex = indexPath.row
+        
+        ImageManager.sharedInstance.clearCache();
         
         collectionView.scrollToItem(at: IndexPath(row: selectedFilterIndex, section: 0), at: .left, animated: true) //.centeredHorizontally
         
