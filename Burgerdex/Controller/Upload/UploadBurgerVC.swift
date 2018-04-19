@@ -53,7 +53,22 @@ class UploadBurgerVC: UIViewController, UploadBurgerDelegate {
         self.title = "New Discovery"
         
         setupCollectionViewOfCameraRollPhotos()
-            
+        
+
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        
+        
+        /*
+            Used to reload the view if the user saves a new photo. This doesn't seem to crash when photo access is denied.
+         
+            If crashes happen in the future we will wrap the load and collection data reload in a boolen set in the etupCollectionViewOfCameraRollPhotos method.
+        */
+        loadPhotos()
+        self.collectionView.reloadData()
+        
     }
     
     func setupCollectionViewOfCameraRollPhotos(){
@@ -62,42 +77,41 @@ class UploadBurgerVC: UIViewController, UploadBurgerDelegate {
         
         switch (status) {
             
-        case PHAuthorizationStatus.notDetermined:
-            PHPhotoLibrary.requestAuthorization { (status) -> Void in
-                if status == PHAuthorizationStatus.authorized {
-                   
-                    self.errorContainerView.isHidden = true
-                    
-                    self.initView()
-                    self.loadPhotos()
+            case PHAuthorizationStatus.notDetermined:
+                PHPhotoLibrary.requestAuthorization { (status) -> Void in
+                    if status == PHAuthorizationStatus.authorized {
+                       
+                        self.errorContainerView.isHidden = true
+                        
+                        self.initView()
+                        self.loadPhotos()
+                        
+                    }
                 }
-            }
             
-        case PHAuthorizationStatus.authorized:
-            
-            self.errorContainerView.isHidden = true
-            
-            
-            initView()
-            loadPhotos()
-            
-            break // remove this maybe?
-        //openImagePickerButton.isEnabled = true
-        case PHAuthorizationStatus.restricted, PHAuthorizationStatus.denied:
-            
-            self.errorContainerView.isHidden = false
-            self.displayErrorView(errorType: 0)
-            
-            cameraBtn.isEnabled = false
-            
-            break
+            case PHAuthorizationStatus.authorized:
+                
+                self.errorContainerView.isHidden = true
+                
+                
+                initView()
+                loadPhotos()
+        
+
+                break // remove this maybe?
+            //openImagePickerButton.isEnabled = true
+            case PHAuthorizationStatus.restricted, PHAuthorizationStatus.denied:
+                
+                self.errorContainerView.isHidden = false
+                self.displayErrorView(errorType: 0)
+                
+                cameraBtn.isEnabled = false
+                
+                break
         }
         
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    
+        self.collectionView.reloadData()
+        
     }
     
     func displayErrorView(errorType: Int){

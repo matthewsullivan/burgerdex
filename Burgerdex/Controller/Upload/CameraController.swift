@@ -196,7 +196,7 @@ extension CameraController: AVCapturePhotoCaptureDelegate {
             let image = UIImage(data: data)
                 
             self.photoCaptureCompletionBlock?(image, nil)
-        
+                    
         } else {
             
             self.photoCaptureCompletionBlock?(nil, CameraControllerError.unknown)

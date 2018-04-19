@@ -80,7 +80,7 @@ class BurgerCameraVC: UIViewController {
         try? PHPhotoLibrary.shared().performChangesAndWait {
             PHAssetChangeRequest.creationRequestForAsset(from: self.burgerImage.image!)
         }
-        
+                
         delegate?.performBurgerInformationSegue(photo : self.burgerImage.image!)
         
         dismiss(animated: true, completion: nil)
