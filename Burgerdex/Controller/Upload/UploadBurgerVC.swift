@@ -24,6 +24,8 @@ class UploadBurgerVC: UIViewController, UploadBurgerDelegate {
     
     var selectedPhoto : UIImage!
     
+    var firstLoad = 0
+    
     @IBAction func errorButtonLabel(_ sender: Any) {
         
         if let url = URL(string:UIApplicationOpenSettingsURLString) {
@@ -66,8 +68,17 @@ class UploadBurgerVC: UIViewController, UploadBurgerDelegate {
          
             If crashes happen in the future we will wrap the load and collection data reload in a boolen set in the etupCollectionViewOfCameraRollPhotos method.
         */
-        loadPhotos()
-        self.collectionView.reloadData()
+        
+        if(firstLoad > 0) {
+            
+            loadPhotos()
+            self.collectionView.reloadData()
+            
+        }
+        
+        firstLoad = 1
+        
+        
         
     }
     

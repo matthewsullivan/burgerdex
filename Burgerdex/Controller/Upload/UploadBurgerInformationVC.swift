@@ -40,6 +40,9 @@ class UploadBurgerInformationVC: UITableViewController,
     
         let submit = BurgerSubmit()
         
+        // silly hack for server.
+        details["seasonal"] = details["limited"] as AnyObject
+      
         submit.submitBurger(details: details, image:photo, completion: { (data) in
             
             print("Response ", data)
@@ -301,7 +304,7 @@ class UploadBurgerInformationVC: UITableViewController,
         details["veggie"] = "0" as AnyObject
         details["spicy"] = "0" as AnyObject
         details["extinct"] = "0" as AnyObject
-        details["seasonal"] = "0" as AnyObject
+        details["limited"] = "0" as AnyObject
         details["hasChallenge"] = "0" as AnyObject
         details["hasMods"] = "0" as AnyObject
         
@@ -914,7 +917,7 @@ extension UploadBurgerInformationVC: UICollectionViewDelegate,
                     if indexPath.row == 1 {details["veggie"] = "1" as AnyObject}
                     if indexPath.row == 2 {details["spicy"] = "1" as AnyObject}
                     if indexPath.row == 3 {details["extinct"] = "1" as AnyObject}
-                    if indexPath.row == 4 {details["seasonal"] = "1" as AnyObject}
+                    if indexPath.row == 4 {details["limited"] = "1" as AnyObject}
                     if indexPath.row == 5 {details["hasChallenge"] = "1" as AnyObject}
                     if indexPath.row == 6 {details["hasMods"] = "1" as AnyObject}
                     
@@ -926,7 +929,7 @@ extension UploadBurgerInformationVC: UICollectionViewDelegate,
                     if indexPath.row == 1 {details["veggie"] = "0" as AnyObject}
                     if indexPath.row == 2 {details["spicy"] = "0" as AnyObject}
                     if indexPath.row == 3 {details["extinct"] = "0" as AnyObject}
-                    if indexPath.row == 4 {details["seasonal"] = "0" as AnyObject}
+                    if indexPath.row == 4 {details["limited"] = "0" as AnyObject}
                     if indexPath.row == 5 {details["hasChallenge"] = "0" as AnyObject}
                     if indexPath.row == 6 {details["hasMods"] = "0" as AnyObject}
                     
