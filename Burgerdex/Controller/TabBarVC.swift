@@ -14,18 +14,43 @@ class TabBarVC: UITabBarController {
         super.viewDidLoad()
         
         var paddingHeight = 0.0
-        //Hack
-        if UIDevice.current.modelName == "iPhone10,3" || UIDevice.current.modelName == "iPhone10,6" {paddingHeight = 34.0}
+
     
         let width = CGFloat(tabBar.frame.width) / CGFloat((self.tabBar.items?.count)!)
        
-        UITabBarItem.appearance().setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.clear], for: .normal)
+        
+        if(UIDevice.current.userInterfaceIdiom != .pad){
+            
+            //Hack
+            if UIDevice.current.modelName == "iPhone10,3" || UIDevice.current.modelName == "iPhone10,6" {
+                
+                paddingHeight = 34.0
+                
+                UITabBarItem.appearance().titlePositionAdjustment = UIOffsetMake(0.0, 10.0)
+                
+                tabBar.items?[0].title = "Catalogue"
+                tabBar.items?[1].title = "New Discovery"
+                
+            }else{
+                
+                 UITabBarItem.appearance().setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.clear], for: .normal)
+                
+            }
+            
+        }else{
+            
+            tabBar.items?[0].title = "Catalogue"
+            tabBar.items?[1].title = "New Discovery"
+            
+        }
+        
         
         UITabBar.appearance().shadowImage = nil
         UITabBar.appearance().isTranslucent = false
         UITabBar.appearance().tintColor = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1)
         UITabBar.appearance().unselectedItemTintColor = UIColor.white
         UITabBar.appearance().barTintColor = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1)
+  
         UITabBar.appearance().selectionIndicatorImage = UIImage().makeImageWithColorAndSize(color: UIColor(red: 222/255,
                                                                                                            green: 173/255,
                                                                                                            blue: 107/255,
