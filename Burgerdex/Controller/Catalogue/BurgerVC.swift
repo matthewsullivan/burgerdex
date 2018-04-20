@@ -205,7 +205,7 @@ class BurgerVC: UITableViewController {
                 if burgerInfo.seasonal {
                     
                     guard let seasonalBadge = Badge.init(ratingTitle: "",
-                                                         badgeTitle: "seasonal",
+                                                         badgeTitle: "limited",
                                                          badgeIcon: UIImage(named: "seasonal")!
                         )else {
                             

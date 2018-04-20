@@ -268,7 +268,7 @@ class UploadBurgerInformationVC: UITableViewController,
         self.badges += [extinctBadge]
 
         guard let seasonalBadge = Badge.init(ratingTitle: "",
-                                             badgeTitle: "seasonal",
+                                             badgeTitle: "limited",
                                              badgeIcon: UIImage(named: "seasonal")!
             )else {
                 
