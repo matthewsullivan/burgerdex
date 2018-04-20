@@ -143,7 +143,7 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
                     "Rating",
                     "Vegetarian",
                     "Spicy",
-                    "Seasonal",
+                    "Limited Time",
                     "Extinct",
                     "Challenge",
                     "Price-Hi",
@@ -356,7 +356,7 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
             
             updateImageForCell(cell,
                                inTableView: tableView,
-                               withImageURL: burger.photoUrl,
+                               withImageURL: burger.thumbUrl,
                                andImageView: cell.burgerImage!,
                                atIndexPath: indexPath)
             
@@ -426,7 +426,7 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
             burger = burgers[indexPath.row]
         }
         
-        let imageURL = burger.photoUrl
+        let imageURL = burger.thumbUrl
         
         ImageManager.sharedInstance.downloadImageFromURL(imageURL) { (success, image) -> Void in
             
@@ -456,7 +456,7 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
                 let cell = tableView(self.tableView, cellForRowAt: indexPath) as! CatalogueTableViewCell
                 
                 updateImageForCell(cell, inTableView: tableView,
-                                   withImageURL: burger.photoUrl,
+                                   withImageURL: burger.thumbUrl,
                                    andImageView: cell.burgerImage!,
                                    atIndexPath: indexPath)
             }

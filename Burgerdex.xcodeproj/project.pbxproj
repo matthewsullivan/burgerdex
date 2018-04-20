@@ -73,6 +73,7 @@
 		EB857A711FFC0959003E5BF1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		EB857A731FFC0959003E5BF1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EB857A791FFC0D7B003E5BF1 /* UploadBurgerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadBurgerVC.swift; sourceTree = "<group>"; };
+		EB99F64D20892EBB008A9289 /* Burgerdex.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Burgerdex.entitlements; sourceTree = "<group>"; };
 		EBA3F50E202C9C6000660419 /* SwiftSpinner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftSpinner.swift; sourceTree = "<group>"; };
 		EBCAF4A5200CF96100B9407D /* TableLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableLoader.swift; sourceTree = "<group>"; };
 		EBD0C4C520226D7800918701 /* TagCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TagCell.xib; sourceTree = "<group>"; };
@@ -201,6 +202,7 @@
 		EB857A641FFC0959003E5BF1 /* Burgerdex */ = {
 			isa = PBXGroup;
 			children = (
+				EB99F64D20892EBB008A9289 /* Burgerdex.entitlements */,
 				EBE820EB1FFC119500F5A895 /* View */,
 				EBE820EA1FFC119000F5A895 /* Model */,
 				EBE820E91FFC118600F5A895 /* Controller */,
@@ -305,6 +307,11 @@
 					EB857A611FFC0959003E5BF1 = {
 						CreatedOnToolsVersion = 9.2;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -518,6 +525,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Burgerdex/Burgerdex.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = RSD3QQHZ2M;
@@ -535,6 +543,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Burgerdex/Burgerdex.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = RSD3QQHZ2M;

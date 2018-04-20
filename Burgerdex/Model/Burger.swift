@@ -111,8 +111,6 @@ class BurgerPreview : BurgerObject {
         //Start by invalidating on going long tasks
         session.invalidateAndCancel()
         
-        print(kBurgerPreview)
-        
         var patties = [BurgerPreview]()
         
         
@@ -166,8 +164,6 @@ class BurgerPreview : BurgerObject {
                                     let imageOrigin = kBaseImagePath
                                     let pattyImagePath = imageOrigin + imagePath!
                                     let pattyThumbImagePath = imageOrigin + thumbPath!
-                                    
-                                    print(pattyImagePath);
                                     
                                     guard let burgerPreview = BurgerPreview.init(displayTag: displayTag!,
                                                                                  displayText: displayText!,
