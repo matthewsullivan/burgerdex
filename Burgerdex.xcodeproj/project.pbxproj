@@ -14,6 +14,7 @@
 		EB1F4C88202DF31A0041E44C /* MMImageUpload.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1F4C86202DF31A0041E44C /* MMImageUpload.swift */; };
 		EB3C2140200645D400EAC1CB /* FilterCatalogueCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3C213F200645D400EAC1CB /* FilterCatalogueCell.swift */; };
 		EB3C21422006487A00EAC1CB /* FilterCatalogueCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3C21412006487A00EAC1CB /* FilterCatalogueCollectionViewCell.swift */; };
+		EB483DB4208A329000E9125A /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB483DB3208A328F00E9125A /* Account.swift */; };
 		EB66BE06200A762F00921485 /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB66BE05200A762F00921485 /* ImageManager.swift */; };
 		EB77F68420054C0400ECCD1E /* BurgerBadgeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB77F68320054C0400ECCD1E /* BurgerBadgeCollectionViewCell.swift */; };
 		EB838B4A201BB7C900B9C633 /* UploadHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB838B49201BB7C900B9C633 /* UploadHeaderTableViewCell.swift */; };
@@ -54,6 +55,7 @@
 		EB1F4C86202DF31A0041E44C /* MMImageUpload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MMImageUpload.swift; sourceTree = "<group>"; };
 		EB3C213F200645D400EAC1CB /* FilterCatalogueCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCatalogueCell.swift; sourceTree = "<group>"; };
 		EB3C21412006487A00EAC1CB /* FilterCatalogueCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCatalogueCollectionViewCell.swift; sourceTree = "<group>"; };
+		EB483DB3208A328F00E9125A /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
 		EB66BE05200A762F00921485 /* ImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageManager.swift; sourceTree = "<group>"; };
 		EB77F68320054C0400ECCD1E /* BurgerBadgeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurgerBadgeCollectionViewCell.swift; sourceTree = "<group>"; };
 		EB838B49201BB7C900B9C633 /* UploadHeaderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadHeaderTableViewCell.swift; sourceTree = "<group>"; };
@@ -256,6 +258,7 @@
 			children = (
 				EB0823BD20223EF4002DB6D2 /* Tag.swift */,
 				EB66BE05200A762F00921485 /* ImageManager.swift */,
+				EB483DB3208A328F00E9125A /* Account.swift */,
 				EBE820F01FFD479700F5A895 /* Burger.swift */,
 			);
 			path = Model;
@@ -380,6 +383,7 @@
 				EBDAF6A72024DEB30053FAC3 /* BurgerCameraVC.swift in Sources */,
 				EBDAF6A82024EF220053FAC3 /* CameraController.swift in Sources */,
 				EB838B4D201BBE0900B9C633 /* ActivityIndicator.swift in Sources */,
+				EB483DB4208A329000E9125A /* Account.swift in Sources */,
 				EB1F4C88202DF31A0041E44C /* MMImageUpload.swift in Sources */,
 				EB838B59201BD7BA00B9C633 /* FontAnimation.swift in Sources */,
 				EB0823BE20223EF4002DB6D2 /* Tag.swift in Sources */,

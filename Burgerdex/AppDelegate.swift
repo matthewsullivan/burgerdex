@@ -62,7 +62,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         let token = tokenParts.joined()
-        print("Device Token: \(token)")
+        
+        var fetchedToken = ""
+        
+        if((UserDefaults.standard.object(forKey: "deviceToken")) != nil){
+            
+            fetchedToken = UserDefaults.standard.object(forKey: "deviceToken") as! String
+        }
+    
+        if(fetchedToken != token){
+            
+            let sharedSession = URLSession.shared
+            
+            Account.insertToken(token: token, session: sharedSession , completion: { (data) in
+                
+                if (data[0] as! Int) == 1{
+                    
+                    print("Save to defaults");
+                    
+                    let defaults = UserDefaults.standard
+                    
+                    defaults.set(token, forKey: "deviceToken")
+                    
+                    
+                }
+                
+            })
+            
+        }else{
+            
+            print("Token is the same as what is in the database, on the device, and what has been generated");
+            
+        }
+    
     }
     
     func application(_ application: UIApplication,

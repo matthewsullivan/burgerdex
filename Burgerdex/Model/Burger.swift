@@ -113,7 +113,6 @@ class BurgerPreview : BurgerObject {
         
         var patties = [BurgerPreview]()
         
-        
         var burgerPreviewSuccess = [0,patties] as [Any]
 
         let url = kBurgerPreview
