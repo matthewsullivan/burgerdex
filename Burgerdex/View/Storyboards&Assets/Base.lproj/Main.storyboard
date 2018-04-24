@@ -818,7 +818,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No." textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="7" translatesAutoresizingMaskIntoConstraints="NO" id="WPg-Nj-Ejj">
-                                                    <rect key="frame" x="14.999999999999998" y="28" width="30.333333333333329" height="24"/>
+                                                    <rect key="frame" x="15" y="28" width="24" height="24"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="23" id="oS2-aZ-Ljy"/>
                                                     </constraints>
@@ -827,20 +827,20 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="23" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="iN9-Bu-qW9">
-                                                    <rect key="frame" x="47" y="6" width="36.333333333333343" height="67"/>
+                                                    <rect key="frame" x="47" y="6" width="30" height="67"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="28"/>
                                                     <color key="textColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.25882352939999997" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="seC-ao-A6s">
-                                                    <rect key="frame" x="86.333333333333329" y="6" width="5" height="67"/>
+                                                    <rect key="frame" x="80" y="6" width="5" height="67"/>
                                                     <color key="backgroundColor" red="0.8901960784313725" green="0.67843137254901964" blue="0.41960784313725491" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="5" id="WfI-fx-a5Q"/>
                                                     </constraints>
                                                 </view>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bacon Beast" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g0B-X9-eBE">
-                                                    <rect key="frame" x="99.333333333333314" y="20" width="157" height="23"/>
+                                                    <rect key="frame" x="93" y="20" width="157" height="23"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="157" id="wd4-bn-PJa"/>
                                                     </constraints>
@@ -849,14 +849,14 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="baconBeast" translatesAutoresizingMaskIntoConstraints="NO" id="SUV-FD-1lD">
-                                                    <rect key="frame" x="718" y="0.0" width="116" height="80"/>
+                                                    <rect key="frame" x="259" y="0.0" width="116" height="80"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="116" id="Lwd-N1-VCu"/>
                                                         <constraint firstAttribute="height" constant="80" id="h0V-oZ-S0S"/>
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Burger Delight" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jDi-2T-eWi">
-                                                    <rect key="frame" x="99.333333333333314" y="39" width="610.66666666666674" height="21"/>
+                                                    <rect key="frame" x="93" y="39" width="158" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="21" id="cZd-o4-MJy"/>
                                                     </constraints>
@@ -1007,7 +1007,15 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="xL6-4b-G4O"/>
                     </view>
-                    <navigationItem key="navigationItem" id="JSH-Ta-98R"/>
+                    <navigationItem key="navigationItem" id="JSH-Ta-98R">
+                        <barButtonItem key="rightBarButtonItem" image="searchIcon" id="sBU-Cg-bmp">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="searchBurgerBtn:" destination="gmP-ZW-nYU" id="XE0-hQ-S1I"/>
+                                <segue destination="YRQ-l5-TpI" kind="presentation" identifier="searchBurgersSegue" id="YxV-yx-ycL"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="collectionView" destination="xti-WE-IID" id="8ZZ-Fx-ZmX"/>
                         <outlet property="errorBodyLabel" destination="uva-x8-jnY" id="ZFd-Q8-XPw"/>
@@ -1497,6 +1505,164 @@
             </objects>
             <point key="canvasLocation" x="844" y="-304"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="j4a-3q-VJI">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="YRQ-l5-TpI" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="RSF-6s-jmQ">
+                        <rect key="frame" x="0.0" y="44" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="nsv-HF-F0J" kind="relationship" relationship="rootViewController" id="nPZ-IL-UFe"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6Bt-GT-3ea" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1680.8" y="-1005.6650246305419"/>
+        </scene>
+        <!--Search BurgerVC-->
+        <scene sceneID="YKz-JO-9mN">
+            <objects>
+                <tableViewController id="nsv-HF-F0J" customClass="SearchBurgerVC" customModule="Burgerdex" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="2WG-IA-IMV">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <searchBar key="tableHeaderView" contentMode="redraw" placeholder="Search the entire burger catalogue" id="Uxj-K8-VcH">
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <textInputTraits key="textInputTraits"/>
+                            <connections>
+                                <outlet property="delegate" destination="nsv-HF-F0J" id="2AU-dF-gCh"/>
+                            </connections>
+                        </searchBar>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CatalogueTableViewCell" rowHeight="80" id="vIx-Id-Vts" customClass="CatalogueTableViewCell" customModule="Burgerdex" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="72" width="375" height="80"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="vIx-Id-Vts" id="hug-bU-Yue">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="79.666666666666671"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No." textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="7" translatesAutoresizingMaskIntoConstraints="NO" id="5RW-FK-Hx2">
+                                            <rect key="frame" x="16" y="28" width="23" height="24"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="23" id="hqe-DA-k77"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                            <color key="textColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.25882352939999997" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="23" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="ZBo-Cj-KPG">
+                                            <rect key="frame" x="48" y="6" width="29" height="67"/>
+                                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="28"/>
+                                            <color key="textColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.25882352939999997" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6cG-8Z-yOr">
+                                            <rect key="frame" x="80" y="6" width="5" height="67"/>
+                                            <color key="backgroundColor" red="0.89019607840000003" green="0.67843137249999996" blue="0.41960784309999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="5" id="N1S-I7-vep"/>
+                                            </constraints>
+                                        </view>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bacon Beast" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OPE-zD-YRZ">
+                                            <rect key="frame" x="93" y="20" width="157" height="23"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="157" id="pTY-Kg-6uz"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                            <color key="textColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.25882352939999997" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="baconBeast" translatesAutoresizingMaskIntoConstraints="NO" id="3uV-bs-feO">
+                                            <rect key="frame" x="259" y="0.0" width="116" height="80"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="80" id="468-tU-QG2"/>
+                                                <constraint firstAttribute="width" constant="116" id="ThF-o1-56v"/>
+                                            </constraints>
+                                        </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Burger Delight" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tFX-eJ-Gde">
+                                            <rect key="frame" x="93" y="39" width="158" height="21"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="21" id="DHT-Od-zVh"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                            <color key="textColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.25882352939999997" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="5RW-FK-Hx2" firstAttribute="centerY" secondItem="ZBo-Cj-KPG" secondAttribute="centerY" id="0jq-QP-Chw"/>
+                                        <constraint firstItem="tFX-eJ-Gde" firstAttribute="top" secondItem="hug-bU-Yue" secondAttribute="topMargin" constant="28" id="0oN-kc-CYg"/>
+                                        <constraint firstAttribute="trailing" secondItem="3uV-bs-feO" secondAttribute="trailing" id="2JW-ff-DqJ"/>
+                                        <constraint firstItem="3uV-bs-feO" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="OPE-zD-YRZ" secondAttribute="trailing" constant="9" id="75Z-Bd-ORV"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="ZBo-Cj-KPG" secondAttribute="bottom" constant="-4" id="8MC-9m-KWn"/>
+                                        <constraint firstItem="OPE-zD-YRZ" firstAttribute="top" secondItem="hug-bU-Yue" secondAttribute="topMargin" constant="9" id="B8d-c6-eH2"/>
+                                        <constraint firstItem="ZBo-Cj-KPG" firstAttribute="bottom" secondItem="6cG-8Z-yOr" secondAttribute="bottom" id="N9b-eK-ovE"/>
+                                        <constraint firstItem="6cG-8Z-yOr" firstAttribute="leading" secondItem="5RW-FK-Hx2" secondAttribute="trailing" constant="41" id="P4C-74-bqK"/>
+                                        <constraint firstItem="5RW-FK-Hx2" firstAttribute="leading" secondItem="hug-bU-Yue" secondAttribute="leadingMargin" id="X0Y-rd-f1Z"/>
+                                        <constraint firstItem="ZBo-Cj-KPG" firstAttribute="leading" secondItem="hug-bU-Yue" secondAttribute="leadingMargin" constant="32" id="XnW-iq-0gl"/>
+                                        <constraint firstItem="3uV-bs-feO" firstAttribute="leading" secondItem="tFX-eJ-Gde" secondAttribute="trailing" constant="8" symbolic="YES" id="ajA-gB-e7W"/>
+                                        <constraint firstItem="ZBo-Cj-KPG" firstAttribute="top" secondItem="6cG-8Z-yOr" secondAttribute="top" id="e8q-rE-SfO"/>
+                                        <constraint firstItem="tFX-eJ-Gde" firstAttribute="leading" secondItem="6cG-8Z-yOr" secondAttribute="trailing" constant="8" id="gXe-yq-4OQ"/>
+                                        <constraint firstItem="6cG-8Z-yOr" firstAttribute="leading" secondItem="ZBo-Cj-KPG" secondAttribute="trailing" constant="3" id="h90-Zr-7BE"/>
+                                        <constraint firstItem="5RW-FK-Hx2" firstAttribute="centerY" secondItem="hug-bU-Yue" secondAttribute="centerY" id="jz2-SO-tzO"/>
+                                        <constraint firstItem="3uV-bs-feO" firstAttribute="top" secondItem="hug-bU-Yue" secondAttribute="top" id="o6x-ZB-Mfw"/>
+                                        <constraint firstItem="OPE-zD-YRZ" firstAttribute="leading" secondItem="tFX-eJ-Gde" secondAttribute="leading" id="u81-OG-xqa"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="burgerImage" destination="3uV-bs-feO" id="OkF-Uo-8RU"/>
+                                    <outlet property="burgerName" destination="OPE-zD-YRZ" id="SLc-93-1gs"/>
+                                    <outlet property="catalogueNumberContainer" destination="5RW-FK-Hx2" id="9M1-41-Vtg"/>
+                                    <outlet property="catalogueNumberLabel" destination="5RW-FK-Hx2" id="8o8-OC-bO2"/>
+                                    <outlet property="catalogueNumberNumber" destination="ZBo-Cj-KPG" id="yib-E2-QRF"/>
+                                    <outlet property="kitchenName" destination="tFX-eJ-Gde" id="IEy-k4-0km"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="nsv-HF-F0J" id="iNg-7M-Adp"/>
+                            <outlet property="delegate" destination="nsv-HF-F0J" id="95k-y2-U0U"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="O2w-uX-5pR">
+                        <barButtonItem key="rightBarButtonItem" image="closeSearch" id="anq-aI-s9D">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="closeSearchBtn:" destination="nsv-HF-F0J" id="6jB-G1-pHk"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="searchDisplayController" destination="Vyx-pH-0dV" id="95k-Ja-nwi"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="GaD-Z9-Vuy" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <searchDisplayController id="toA-Dh-zGU">
+                    <connections>
+                        <outlet property="delegate" destination="nsv-HF-F0J" id="R7V-Ta-MYw"/>
+                        <outlet property="searchContentsController" destination="nsv-HF-F0J" id="Vrn-Uh-nta"/>
+                        <outlet property="searchResultsDataSource" destination="nsv-HF-F0J" id="PxI-hl-0Bm"/>
+                        <outlet property="searchResultsDelegate" destination="nsv-HF-F0J" id="gLG-L2-njp"/>
+                    </connections>
+                </searchDisplayController>
+                <searchDisplayController id="Vyx-pH-0dV">
+                    <connections>
+                        <outlet property="delegate" destination="nsv-HF-F0J" id="qep-sF-4lP"/>
+                        <outlet property="searchBar" destination="Uxj-K8-VcH" id="VQH-7V-T7f"/>
+                        <outlet property="searchContentsController" destination="nsv-HF-F0J" id="CTU-uf-tvc"/>
+                        <outlet property="searchResultsDataSource" destination="nsv-HF-F0J" id="4wZ-uB-iXA"/>
+                        <outlet property="searchResultsDelegate" destination="nsv-HF-F0J" id="suI-EV-hbw"/>
+                    </connections>
+                </searchDisplayController>
+            </objects>
+            <point key="canvasLocation" x="2493.5999999999999" y="-1015.2709359605911"/>
+        </scene>
     </scenes>
     <resources>
         <image name="Catalogue" width="25" height="25"/>
@@ -1505,7 +1671,9 @@
         <image name="Upload" width="25" height="25"/>
         <image name="baconBeast" width="200" height="131"/>
         <image name="cameraIcon" width="24" height="24"/>
+        <image name="closeSearch" width="25" height="25"/>
         <image name="noFood" width="100" height="100"/>
         <image name="rating" width="50" height="50"/>
+        <image name="searchIcon" width="25" height="25"/>
     </resources>
 </document>

@@ -22,6 +22,10 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
         
     }
     
+    
+    @IBAction func searchBurgerBtn(_ sender: Any) {
+        self.performSegue(withIdentifier: "searchBurgersSegue", sender: self)
+    }
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var collectionView: UICollectionView!
     
@@ -180,7 +184,7 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
             if (data[0] as! Int) == 1{
                 
                 if (data[1] as AnyObject).count > 0 {
-                    
+                                        
                     self.hideErrorView()
                     
                     self.burgers.removeAll()
@@ -384,7 +388,11 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
             
             BurgerPreview.fetchBurgerPreviews(page: self.pageIndex, filter: self.selectedFilterIndex, session: sharedSession ,completion: { (data) in
                 
+                print("Secondary Call")
+                
                 if (data[1] as AnyObject).count > 0 {
+                    
+                    print(data[1])
                     
                     self.burgers += data[1] as! [BurgerPreview]
                     
@@ -495,7 +503,7 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
                 if(self.noMoreData != true){
         
                     BurgerPreview.fetchBurgerPreviews(page: self.pageIndex, filter: self.selectedFilterIndex, session: sharedSession ,completion: { (data) in
-                        
+                    
                         if (data[1] as AnyObject).count > 0 {
                             
                             self.burgers += data[1] as! [BurgerPreview]
@@ -630,18 +638,32 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
     // This function is called before the segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        let burgerViewController = segue.destination as! BurgerVC
+         if (segue.identifier == "burgerSegue") {
     
-        if burgerThumbnail.size.width == 0.0 {
+            let burgerViewController = segue.destination as! BurgerVC
             
-            burgerViewController.burgerThumbnail = UIImage(named:"baconBeast")
+            if burgerThumbnail.size.width == 0.0 {
+                
+                burgerViewController.burgerThumbnail = UIImage(named:"baconBeast")
+                
+            }else{
+                
+                burgerViewController.burgerThumbnail = burgerThumbnail
+            }
             
-        }else{
+            burgerViewController.burger = selectedBurger
             
-            burgerViewController.burgerThumbnail = burgerThumbnail
+            
+         }else{
+                        
+            let navVC = segue.destination as? UINavigationController
+            
+            let burgerViewController = navVC?.viewControllers.first as! SearchBurgerVC
+            
+            burgerViewController.burgers = burgers
+            
         }
-        
-        burgerViewController.burger = selectedBurger
+    
         
     }
 

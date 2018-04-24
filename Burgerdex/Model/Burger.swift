@@ -10,7 +10,7 @@ import UIKit
 /*
     If the version number directory is different than the current version of the app, this indicates that the old service folder is fine to use with the current app version we are on. This stops us from having to create multiple directories on the server for any small bug fix or enhancement. As well as if we didn't update the service code.
  */
-private let versionNumber = "1.1.0"
+private let versionNumber = "1.2.0"
 private let kBurgerPreview = "https://www.app.burgerdex.ca/services/ios/" + versionNumber + "/allBurgers.php"
 private let kBurgerDetail = "https://www.app.burgerdex.ca/services/ios/" + versionNumber + "/burgerDetail.php"
 private let kSubmitBurger = "https://www.burgerdex.ca/services/submitBurger.php"
@@ -121,6 +121,8 @@ class BurgerPreview : BurgerObject {
                         timeoutInterval: 60.0)
         
         let parameters: [String: Any] = ["page": String(page), "filter": String(filter)]
+        
+        print(parameters)
         
         do {
             
@@ -440,7 +442,7 @@ class BurgerSubmit{
     
         r.httpBody = createBody(parameters: details  as! [String : String],
                                 boundary: boundary,
-                                data: UIImageJPEGRepresentation(image, 0.7)!,
+                                data: UIImageJPEGRepresentation(image, 0.1)!,
                                 mimeType: "image/jpg",
                                 filename: "burger.jpg")
         
@@ -461,6 +463,7 @@ class BurgerSubmit{
                             if let response = response["error"] as? [[String: Any]] {
                                 
                                 var serverMsg : String = "Success"
+                                var serverCode: Int = 0
                                 
                                 for msg in response {
                                     
@@ -468,10 +471,11 @@ class BurgerSubmit{
                                     message.append(msg["message"]! as! String)
                                     
                                     serverMsg = message[1] as! String
+                                    serverCode = message[0] as! Int
                                     
                                 }
                                 
-                                responseCode[0] = 0
+                                responseCode[0] = serverCode
                                 responseCode[1] = serverMsg
                                 
                                 completion(responseCode)

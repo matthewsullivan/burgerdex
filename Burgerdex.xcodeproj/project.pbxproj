@@ -16,6 +16,7 @@
 		EB3C21422006487A00EAC1CB /* FilterCatalogueCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3C21412006487A00EAC1CB /* FilterCatalogueCollectionViewCell.swift */; };
 		EB483DB4208A329000E9125A /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB483DB3208A328F00E9125A /* Account.swift */; };
 		EB66BE06200A762F00921485 /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB66BE05200A762F00921485 /* ImageManager.swift */; };
+		EB6824BE208FC2F200385849 /* SearchBurgerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6824BD208FC2F200385849 /* SearchBurgerVC.swift */; };
 		EB77F68420054C0400ECCD1E /* BurgerBadgeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB77F68320054C0400ECCD1E /* BurgerBadgeCollectionViewCell.swift */; };
 		EB838B4A201BB7C900B9C633 /* UploadHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB838B49201BB7C900B9C633 /* UploadHeaderTableViewCell.swift */; };
 		EB838B4D201BBE0900B9C633 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB838B4C201BBE0900B9C633 /* ActivityIndicator.swift */; };
@@ -45,7 +46,46 @@
 		EBE820F31FFD88F900F5A895 /* BurgerHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE820F21FFD88F900F5A895 /* BurgerHeaderView.swift */; };
 		EBE820F51FFE7EED00F5A895 /* BurgerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE820F41FFE7EED00F5A895 /* BurgerTableViewCell.swift */; };
 		EBE820F71FFE8B3800F5A895 /* BurgerHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE820F61FFE8B3800F5A895 /* BurgerHeaderTableViewCell.swift */; };
+		EBFEE68A208E5BBE00129BF3 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBFEE689208E5BBE00129BF3 /* NotificationService.swift */; };
+		EBFEE68E208E5BBE00129BF3 /* Notifications.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = EBFEE687208E5BBE00129BF3 /* Notifications.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		EBFEE69A208E5ECC00129BF3 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBFEE699208E5ECC00129BF3 /* UserNotifications.framework */; };
+		EBFEE69C208E5ECC00129BF3 /* UserNotificationsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBFEE69B208E5ECC00129BF3 /* UserNotificationsUI.framework */; };
+		EBFEE69F208E5ECC00129BF3 /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBFEE69E208E5ECC00129BF3 /* NotificationViewController.swift */; };
+		EBFEE6A2208E5ECC00129BF3 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EBFEE6A0208E5ECC00129BF3 /* MainInterface.storyboard */; };
+		EBFEE6A6208E5ECC00129BF3 /* NotificationView.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = EBFEE697208E5ECC00129BF3 /* NotificationView.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		EBFEE68C208E5BBE00129BF3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EB857A5A1FFC0959003E5BF1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EBFEE686208E5BBE00129BF3;
+			remoteInfo = Notifications;
+		};
+		EBFEE6A4208E5ECC00129BF3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EB857A5A1FFC0959003E5BF1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EBFEE696208E5ECC00129BF3;
+			remoteInfo = NotificationView;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		EBFEE692208E5BBE00129BF3 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				EBFEE6A6208E5ECC00129BF3 /* NotificationView.appex in Embed App Extensions */,
+				EBFEE68E208E5BBE00129BF3 /* Notifications.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		EB0823BB20223EE5002DB6D2 /* TagCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagCell.swift; sourceTree = "<group>"; };
@@ -57,6 +97,7 @@
 		EB3C21412006487A00EAC1CB /* FilterCatalogueCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCatalogueCollectionViewCell.swift; sourceTree = "<group>"; };
 		EB483DB3208A328F00E9125A /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
 		EB66BE05200A762F00921485 /* ImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageManager.swift; sourceTree = "<group>"; };
+		EB6824BD208FC2F200385849 /* SearchBurgerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBurgerVC.swift; sourceTree = "<group>"; };
 		EB77F68320054C0400ECCD1E /* BurgerBadgeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurgerBadgeCollectionViewCell.swift; sourceTree = "<group>"; };
 		EB838B49201BB7C900B9C633 /* UploadHeaderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadHeaderTableViewCell.swift; sourceTree = "<group>"; };
 		EB838B4C201BBE0900B9C633 /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
@@ -89,6 +130,15 @@
 		EBE820F21FFD88F900F5A895 /* BurgerHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurgerHeaderView.swift; sourceTree = "<group>"; };
 		EBE820F41FFE7EED00F5A895 /* BurgerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurgerTableViewCell.swift; sourceTree = "<group>"; };
 		EBE820F61FFE8B3800F5A895 /* BurgerHeaderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurgerHeaderTableViewCell.swift; sourceTree = "<group>"; };
+		EBFEE687208E5BBE00129BF3 /* Notifications.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Notifications.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		EBFEE689208E5BBE00129BF3 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		EBFEE68B208E5BBE00129BF3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EBFEE697208E5ECC00129BF3 /* NotificationView.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotificationView.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		EBFEE699208E5ECC00129BF3 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
+		EBFEE69B208E5ECC00129BF3 /* UserNotificationsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotificationsUI.framework; path = System/Library/Frameworks/UserNotificationsUI.framework; sourceTree = SDKROOT; };
+		EBFEE69E208E5ECC00129BF3 /* NotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewController.swift; sourceTree = "<group>"; };
+		EBFEE6A1208E5ECC00129BF3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		EBFEE6A3208E5ECC00129BF3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +146,22 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EBFEE684208E5BBE00129BF3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EBFEE694208E5ECC00129BF3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EBFEE69C208E5ECC00129BF3 /* UserNotificationsUI.framework in Frameworks */,
+				EBFEE69A208E5ECC00129BF3 /* UserNotifications.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -119,6 +185,7 @@
 			children = (
 				EBE820EE1FFD30D500F5A895 /* BurgerVC.swift */,
 				EB857A671FFC0959003E5BF1 /* CatalogueVC.swift */,
+				EB6824BD208FC2F200385849 /* SearchBurgerVC.swift */,
 			);
 			path = Catalogue;
 			sourceTree = "<group>";
@@ -189,6 +256,9 @@
 			isa = PBXGroup;
 			children = (
 				EB857A641FFC0959003E5BF1 /* Burgerdex */,
+				EBFEE688208E5BBE00129BF3 /* Notifications */,
+				EBFEE69D208E5ECC00129BF3 /* NotificationView */,
+				EBFEE698208E5ECC00129BF3 /* Frameworks */,
 				EB857A631FFC0959003E5BF1 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -197,6 +267,8 @@
 			isa = PBXGroup;
 			children = (
 				EB857A621FFC0959003E5BF1 /* Burgerdex.app */,
+				EBFEE687208E5BBE00129BF3 /* Notifications.appex */,
+				EBFEE697208E5ECC00129BF3 /* NotificationView.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -277,6 +349,34 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		EBFEE688208E5BBE00129BF3 /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				EBFEE689208E5BBE00129BF3 /* NotificationService.swift */,
+				EBFEE68B208E5BBE00129BF3 /* Info.plist */,
+			);
+			path = Notifications;
+			sourceTree = "<group>";
+		};
+		EBFEE698208E5ECC00129BF3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				EBFEE699208E5ECC00129BF3 /* UserNotifications.framework */,
+				EBFEE69B208E5ECC00129BF3 /* UserNotificationsUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		EBFEE69D208E5ECC00129BF3 /* NotificationView */ = {
+			isa = PBXGroup;
+			children = (
+				EBFEE69E208E5ECC00129BF3 /* NotificationViewController.swift */,
+				EBFEE6A0208E5ECC00129BF3 /* MainInterface.storyboard */,
+				EBFEE6A3208E5ECC00129BF3 /* Info.plist */,
+			);
+			path = NotificationView;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -287,15 +387,52 @@
 				EB857A5E1FFC0959003E5BF1 /* Sources */,
 				EB857A5F1FFC0959003E5BF1 /* Frameworks */,
 				EB857A601FFC0959003E5BF1 /* Resources */,
+				EBFEE692208E5BBE00129BF3 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				EBFEE68D208E5BBE00129BF3 /* PBXTargetDependency */,
+				EBFEE6A5208E5ECC00129BF3 /* PBXTargetDependency */,
 			);
 			name = Burgerdex;
 			productName = Burgerdex;
 			productReference = EB857A621FFC0959003E5BF1 /* Burgerdex.app */;
 			productType = "com.apple.product-type.application";
+		};
+		EBFEE686208E5BBE00129BF3 /* Notifications */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EBFEE68F208E5BBE00129BF3 /* Build configuration list for PBXNativeTarget "Notifications" */;
+			buildPhases = (
+				EBFEE683208E5BBE00129BF3 /* Sources */,
+				EBFEE684208E5BBE00129BF3 /* Frameworks */,
+				EBFEE685208E5BBE00129BF3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Notifications;
+			productName = Notifications;
+			productReference = EBFEE687208E5BBE00129BF3 /* Notifications.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		EBFEE696208E5ECC00129BF3 /* NotificationView */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EBFEE6A7208E5ECC00129BF3 /* Build configuration list for PBXNativeTarget "NotificationView" */;
+			buildPhases = (
+				EBFEE693208E5ECC00129BF3 /* Sources */,
+				EBFEE694208E5ECC00129BF3 /* Frameworks */,
+				EBFEE695208E5ECC00129BF3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NotificationView;
+			productName = NotificationView;
+			productReference = EBFEE697208E5ECC00129BF3 /* NotificationView.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -303,7 +440,7 @@
 		EB857A5A1FFC0959003E5BF1 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0920;
+				LastSwiftUpdateCheck = 0930;
 				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = "Dev & Barrel Inc.";
 				TargetAttributes = {
@@ -315,6 +452,14 @@
 								enabled = 1;
 							};
 						};
+					};
+					EBFEE686208E5BBE00129BF3 = {
+						CreatedOnToolsVersion = 9.3;
+						ProvisioningStyle = Automatic;
+					};
+					EBFEE696208E5ECC00129BF3 = {
+						CreatedOnToolsVersion = 9.3;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -332,6 +477,8 @@
 			projectRoot = "";
 			targets = (
 				EB857A611FFC0959003E5BF1 /* Burgerdex */,
+				EBFEE686208E5BBE00129BF3 /* Notifications */,
+				EBFEE696208E5ECC00129BF3 /* NotificationView */,
 			);
 		};
 /* End PBXProject section */
@@ -348,6 +495,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		EBFEE685208E5BBE00129BF3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EBFEE695208E5ECC00129BF3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EBFEE6A2208E5ECC00129BF3 /* MainInterface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -356,6 +518,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EBE820F11FFD479700F5A895 /* Burger.swift in Sources */,
+				EB6824BE208FC2F200385849 /* SearchBurgerVC.swift in Sources */,
 				EBE820EF1FFD30D500F5A895 /* BurgerVC.swift in Sources */,
 				EB857A6A1FFC0959003E5BF1 /* PassportVC.swift in Sources */,
 				EB77F68420054C0400ECCD1E /* BurgerBadgeCollectionViewCell.swift in Sources */,
@@ -392,7 +555,36 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		EBFEE683208E5BBE00129BF3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EBFEE68A208E5BBE00129BF3 /* NotificationService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EBFEE693208E5ECC00129BF3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EBFEE69F208E5ECC00129BF3 /* NotificationViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		EBFEE68D208E5BBE00129BF3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EBFEE686208E5BBE00129BF3 /* Notifications */;
+			targetProxy = EBFEE68C208E5BBE00129BF3 /* PBXContainerItemProxy */;
+		};
+		EBFEE6A5208E5ECC00129BF3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EBFEE696208E5ECC00129BF3 /* NotificationView */;
+			targetProxy = EBFEE6A4208E5ECC00129BF3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		EB857A6B1FFC0959003E5BF1 /* Main.storyboard */ = {
@@ -409,6 +601,14 @@
 				EB857A711FFC0959003E5BF1 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		EBFEE6A0208E5ECC00129BF3 /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				EBFEE6A1208E5ECC00129BF3 /* Base */,
+			);
+			name = MainInterface.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -528,6 +728,7 @@
 		EB857A771FFC0959003E5BF1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Burgerdex/Burgerdex.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -546,6 +747,7 @@
 		EB857A781FFC0959003E5BF1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Burgerdex/Burgerdex.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -556,6 +758,78 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.devandbarrel.burgerdex;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		EBFEE690208E5BBE00129BF3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = RSD3QQHZ2M;
+				INFOPLIST_FILE = Notifications/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.devandbarrel.burgerdex.Notifications;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		EBFEE691208E5BBE00129BF3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = RSD3QQHZ2M;
+				INFOPLIST_FILE = Notifications/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.devandbarrel.burgerdex.Notifications;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		EBFEE6A8208E5ECC00129BF3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = RSD3QQHZ2M;
+				INFOPLIST_FILE = NotificationView/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.devandbarrel.burgerdex.NotificationView;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		EBFEE6A9208E5ECC00129BF3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = RSD3QQHZ2M;
+				INFOPLIST_FILE = NotificationView/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.devandbarrel.burgerdex.NotificationView;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -578,6 +852,24 @@
 			buildConfigurations = (
 				EB857A771FFC0959003E5BF1 /* Debug */,
 				EB857A781FFC0959003E5BF1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EBFEE68F208E5BBE00129BF3 /* Build configuration list for PBXNativeTarget "Notifications" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EBFEE690208E5BBE00129BF3 /* Debug */,
+				EBFEE691208E5BBE00129BF3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EBFEE6A7208E5ECC00129BF3 /* Build configuration list for PBXNativeTarget "NotificationView" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EBFEE6A8208E5ECC00129BF3 /* Debug */,
+				EBFEE6A9208E5ECC00129BF3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

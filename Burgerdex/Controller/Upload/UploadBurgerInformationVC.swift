@@ -53,8 +53,10 @@ class UploadBurgerInformationVC: UITableViewController,
                                            at: UITableViewScrollPosition.top,
                                            animated: false)
                 
+                UINotificationFeedbackGenerator().notificationOccurred(.success)
+                
                 SwiftSpinner.show("Success..",animated: false).addTapHandler({
-                    
+                   
                    SwiftSpinner.hide()
                     
                 }, subtitle: "Tap to dismiss")
@@ -72,6 +74,8 @@ class UploadBurgerInformationVC: UITableViewController,
                                            animated: false)
                 
                 let response = data[1]
+                
+                UINotificationFeedbackGenerator().notificationOccurred(.error)
                 
                 SwiftSpinner.show("Oops..",animated: false).addTapHandler({
                     

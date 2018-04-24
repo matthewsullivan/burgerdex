@@ -10,7 +10,7 @@ import UIKit
 /*
     If the version number directory is different than the current version of the app, this indicates that the old service folder is fine to use with the current app version we are on. This stops us from having to create multiple directories on the server for any small bug fix or enhancement. As well as if we didn't update the service code.
  */
-private let versionNumber = "1.1.0"
+private let versionNumber = "1.2.0"
 
 private let kUploadToken = "https://www.app.burgerdex.ca/services/ios/apns/send_token.php"
 

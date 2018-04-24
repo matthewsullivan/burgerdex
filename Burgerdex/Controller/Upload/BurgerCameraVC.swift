@@ -44,7 +44,6 @@ class BurgerCameraVC: UIViewController {
         UINavigationBar.appearance().prefersLargeTitles = false
         let barButtonItemAppearance = UIBarButtonItem.appearance()
         barButtonItemAppearance.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.white], for: .normal)
-        
         savePhotoBtn.isEnabled = false
         
         func styleCaptureButton() {
@@ -57,7 +56,7 @@ class BurgerCameraVC: UIViewController {
         styleCaptureButton()
         configureCameraController()
         
-         self.burgerImage.isHidden = true
+        self.burgerImage.isHidden = true
     }
     
     override func viewWillDisappear(_ animated: Bool) {
