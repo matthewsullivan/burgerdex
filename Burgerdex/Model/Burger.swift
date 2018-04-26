@@ -12,6 +12,7 @@ import UIKit
  */
 private let versionNumber = "1.2.0"
 private let kBurgerPreview = "https://www.app.burgerdex.ca/services/ios/" + versionNumber + "/allBurgers.php"
+private let kSearchBurger = "https://www.app.burgerdex.ca/services/ios/" + versionNumber + "/searchBurgers.php"
 private let kBurgerDetail = "https://www.app.burgerdex.ca/services/ios/" + versionNumber + "/burgerDetail.php"
 private let kSubmitBurger = "https://www.burgerdex.ca/services/submitBurger.php"
 private let kBaseImagePath = "https://burgerdex.ca/"
@@ -205,6 +206,122 @@ class BurgerPreview : BurgerObject {
                     
                 }
             
+            } else {
+                
+                DispatchQueue.main.async(execute: {
+                    print("Received empty response.")
+                    
+                    burgerPreviewSuccess[0] = 0
+                    burgerPreviewSuccess[1] = patties
+                    
+                    completion(burgerPreviewSuccess)
+                    
+                })
+            }
+            
+        }).resume()
+        
+    }
+    
+    class func searchForBurgers(searchString: String, session: URLSession,  completion:@escaping (_ resultPatties:Array<Any>)->Void){
+        
+        //Start by invalidating on going long tasks
+        session.invalidateAndCancel()
+        
+        var patties = [BurgerPreview]()
+        
+        var burgerPreviewSuccess = [0,patties] as [Any]
+        
+        let url = kSearchBurger
+        var postRequest = URLRequest(url: URL(string:url)!,
+                                     cachePolicy: .reloadIgnoringCacheData,
+                                     timeoutInterval: 60.0)
+        
+        let parameters: [String: Any] = ["searchString": String(searchString)]
+        
+        print(parameters)
+        
+        do {
+            
+            let jsonParams = try JSONSerialization.data(withJSONObject: parameters, options:[])
+            
+            postRequest.httpBody = jsonParams
+            
+            
+        } catch { print("Error: unable to add parameters to POST request.")}
+        
+        postRequest.httpMethod = "POST"
+        postRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        postRequest.setValue("application/json", forHTTPHeaderField: "Accept")
+        
+        session.dataTask(with: postRequest, completionHandler: { (data, response, error) -> Void in
+            
+            if error != nil { print("POST Request: Communication error: \(error!)") }
+            
+            if data != nil {
+                
+                do {
+                    
+                    if let burgerResults = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers) as? NSDictionary {
+                        
+                        DispatchQueue.main.async(execute: {
+                            
+                            if let burgers = burgerResults["burgers"] as? [[String: Any]] {
+                                
+                                for burger in burgers {
+                                    
+                                    let displayTag = burger["displayTag"] as? String
+                                    let displayText = burger["displayText"] as? String
+                                    let name = burger["name"] as? String
+                                    let kitchen = burger["kitchen"] as? String
+                                    let location = burger["locations"] as? String
+                                    let year = burger["year"] as? String
+                                    let imagePath = burger["image"] as? String
+                                    let thumbPath = burger["thumb"] as? String
+                                    let catalogueNumber = burger["id"] as? Int
+                                    let imageOrigin = kBaseImagePath
+                                    let pattyImagePath = imageOrigin + imagePath!
+                                    let pattyThumbImagePath = imageOrigin + thumbPath!
+                                    
+                                    guard let burgerPreview = BurgerPreview.init(displayTag: displayTag!,
+                                                                                 displayText: displayText!,
+                                                                                 name: name!,
+                                                                                 kitchen: kitchen!,
+                                                                                 location: location!,
+                                                                                 year: year!,
+                                                                                 catalogueNumber: catalogueNumber!,
+                                                                                 photoUrl: pattyImagePath,
+                                                                                 thumbUrl : pattyThumbImagePath,
+                                                                                 photo:UIImage(),
+                                                                                 burgerID: catalogueNumber!)else{
+                                                                                    fatalError("Unable to instantiate burgerPreview")
+                                    }
+                                    
+                                    patties += [burgerPreview]
+                                }
+                                
+                                burgerPreviewSuccess[0] = 1
+                                burgerPreviewSuccess[1] = patties
+                                
+                                completion(burgerPreviewSuccess)
+                            }
+                            
+                            } as @convention(block) () -> Void)
+                    }
+                    
+                } catch {
+                    
+                    print("Error deserializing JSON: \(error)")
+                    
+                    burgerPreviewSuccess[0] = 0
+                    burgerPreviewSuccess[1] = patties
+                    DispatchQueue.main.async(execute: {
+                        completion(burgerPreviewSuccess)
+                        
+                    })
+                    
+                }
+                
             } else {
                 
                 DispatchQueue.main.async(execute: {

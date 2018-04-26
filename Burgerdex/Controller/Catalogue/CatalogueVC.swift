@@ -609,6 +609,22 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
         
     }
     
+    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        
+        if let _ = scrollView as? UITableView {
+            
+            //Complete hack for now. Get back to this later
+            self.collectionView.frame = CGRect(x:self.collectionView.frame.origin.x,
+                                               y: (self.navigationController?.navigationBar.frame.size.height)! + statusBarCorrect,
+                                               width:self.collectionView.frame.width,
+                                               height:self.collectionView.frame.height
+            )
+            
+            self.lastContentOffset = scrollView.contentOffset.y
+        }
+        
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         var burger : BurgerPreview
@@ -664,7 +680,6 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
             
         }
     
-        
     }
 
 }

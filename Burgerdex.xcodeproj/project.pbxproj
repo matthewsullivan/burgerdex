@@ -16,7 +16,6 @@
 		EB3C21422006487A00EAC1CB /* FilterCatalogueCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3C21412006487A00EAC1CB /* FilterCatalogueCollectionViewCell.swift */; };
 		EB483DB4208A329000E9125A /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB483DB3208A328F00E9125A /* Account.swift */; };
 		EB66BE06200A762F00921485 /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB66BE05200A762F00921485 /* ImageManager.swift */; };
-		EB6824BE208FC2F200385849 /* SearchBurgerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6824BD208FC2F200385849 /* SearchBurgerVC.swift */; };
 		EB77F68420054C0400ECCD1E /* BurgerBadgeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB77F68320054C0400ECCD1E /* BurgerBadgeCollectionViewCell.swift */; };
 		EB838B4A201BB7C900B9C633 /* UploadHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB838B49201BB7C900B9C633 /* UploadHeaderTableViewCell.swift */; };
 		EB838B4D201BBE0900B9C633 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB838B4C201BBE0900B9C633 /* ActivityIndicator.swift */; };
@@ -34,6 +33,7 @@
 		EB857A721FFC0959003E5BF1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB857A701FFC0959003E5BF1 /* LaunchScreen.storyboard */; };
 		EB857A7A1FFC0D7B003E5BF1 /* UploadBurgerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB857A791FFC0D7B003E5BF1 /* UploadBurgerVC.swift */; };
 		EBA3F50F202C9C6000660419 /* SwiftSpinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA3F50E202C9C6000660419 /* SwiftSpinner.swift */; };
+		EBC328D4209220F0000CDB71 /* SearchBurgerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC328D3209220F0000CDB71 /* SearchBurgerVC.swift */; };
 		EBCAF4A6200CF96100B9407D /* TableLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCAF4A5200CF96100B9407D /* TableLoader.swift */; };
 		EBD0C4C620226D7800918701 /* TagCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBD0C4C520226D7800918701 /* TagCell.xib */; };
 		EBD41663200FF07B00E33AD6 /* TabBarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD41662200FF07B00E33AD6 /* TabBarVC.swift */; };
@@ -97,7 +97,6 @@
 		EB3C21412006487A00EAC1CB /* FilterCatalogueCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCatalogueCollectionViewCell.swift; sourceTree = "<group>"; };
 		EB483DB3208A328F00E9125A /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
 		EB66BE05200A762F00921485 /* ImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageManager.swift; sourceTree = "<group>"; };
-		EB6824BD208FC2F200385849 /* SearchBurgerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBurgerVC.swift; sourceTree = "<group>"; };
 		EB77F68320054C0400ECCD1E /* BurgerBadgeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurgerBadgeCollectionViewCell.swift; sourceTree = "<group>"; };
 		EB838B49201BB7C900B9C633 /* UploadHeaderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadHeaderTableViewCell.swift; sourceTree = "<group>"; };
 		EB838B4C201BBE0900B9C633 /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
@@ -118,6 +117,7 @@
 		EB857A791FFC0D7B003E5BF1 /* UploadBurgerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadBurgerVC.swift; sourceTree = "<group>"; };
 		EB99F64D20892EBB008A9289 /* Burgerdex.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Burgerdex.entitlements; sourceTree = "<group>"; };
 		EBA3F50E202C9C6000660419 /* SwiftSpinner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftSpinner.swift; sourceTree = "<group>"; };
+		EBC328D3209220F0000CDB71 /* SearchBurgerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBurgerVC.swift; sourceTree = "<group>"; };
 		EBCAF4A5200CF96100B9407D /* TableLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableLoader.swift; sourceTree = "<group>"; };
 		EBD0C4C520226D7800918701 /* TagCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TagCell.xib; sourceTree = "<group>"; };
 		EBD41662200FF07B00E33AD6 /* TabBarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarVC.swift; sourceTree = "<group>"; };
@@ -185,7 +185,7 @@
 			children = (
 				EBE820EE1FFD30D500F5A895 /* BurgerVC.swift */,
 				EB857A671FFC0959003E5BF1 /* CatalogueVC.swift */,
-				EB6824BD208FC2F200385849 /* SearchBurgerVC.swift */,
+				EBC328D3209220F0000CDB71 /* SearchBurgerVC.swift */,
 			);
 			path = Catalogue;
 			sourceTree = "<group>";
@@ -518,7 +518,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EBE820F11FFD479700F5A895 /* Burger.swift in Sources */,
-				EB6824BE208FC2F200385849 /* SearchBurgerVC.swift in Sources */,
+				EBC328D4209220F0000CDB71 /* SearchBurgerVC.swift in Sources */,
 				EBE820EF1FFD30D500F5A895 /* BurgerVC.swift in Sources */,
 				EB857A6A1FFC0959003E5BF1 /* PassportVC.swift in Sources */,
 				EB77F68420054C0400ECCD1E /* BurgerBadgeCollectionViewCell.swift in Sources */,
