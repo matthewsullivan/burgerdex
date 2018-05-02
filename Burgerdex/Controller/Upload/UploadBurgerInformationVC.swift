@@ -9,6 +9,11 @@
 import UIKit
 import Photos
 
+extension UIView {
+    var statusBar: UIView? {
+        return value(forKey: "statusBar") as? UIView
+    }
+}
 
 class UploadBurgerInformationVC: UITableViewController,
                                 UITextFieldDelegate,
@@ -182,6 +187,12 @@ class UploadBurgerInformationVC: UITableViewController,
         progress += 0.1
         
     }
+    
+    let statusBarBgView = { () -> UIView in
+        let statusBarWindow: UIView = UIApplication.shared.value(forKey: "statusBarWindow") as! UIView
+        let statusBarBgView = UIView(frame: (statusBarWindow.statusBar?.bounds)!)
+        return statusBarBgView
+    }()
     
     func delay(seconds: Double, completion: @escaping () -> ()) {
         let popTime = DispatchTime.now() + Double(Int64( Double(NSEC_PER_SEC) * seconds )) / Double(NSEC_PER_SEC)
@@ -427,8 +438,17 @@ class UploadBurgerInformationVC: UITableViewController,
         determineDetailProgress()
     }
     
-    //HACK - works to stop scrollign tableview when the view is being edited
-    override func viewWillAppear(_ animated: Bool) {}
+    //HACK - works to stop scrolling tableview when the view is being edited
+    override func viewWillAppear(_ animated: Bool) {
+        
+        super.viewWillAppear(animated)
+        UIApplication.shared.statusBarStyle = .lightContent
+        let navigationBar = self.navigationController?.navigationBar
+        let colour = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1)
+        self.statusBarBgView.backgroundColor = colour
+        navigationBar?.superview?.insertSubview(self.statusBarBgView, aboveSubview: navigationBar!)
+        
+    }
     
     //Calls this function when the tap is recognized.
     @objc func dismissKeyboard() {
@@ -792,6 +812,8 @@ class UploadBurgerInformationVC: UITableViewController,
                                                                      alpha: 1)
         self.navigationController?.navigationBar.backgroundColor = colour
         //UIApplication.shared.statusBarView?.backgroundColor = colour
+        
+        self.statusBarBgView.removeFromSuperview()
     
     }
     
@@ -979,3 +1001,4 @@ extension UploadBurgerInformationVC: UICollectionViewDelegate,
         
     }
 }
+

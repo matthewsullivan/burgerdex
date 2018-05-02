@@ -9,37 +9,18 @@
 import UIKit
 import UserNotifications
 import UserNotificationsUI
-import CoreMotion
 
 class NotificationViewController: UIViewController, UNNotificationContentExtension {
     
     @IBOutlet weak var imageView: UIImageView!
-    
-    var manager = CMMotionManager()
-    
-    func accelometerUpdate() {
-        if manager.isGyroAvailable {
-            manager.gyroUpdateInterval = 0.1
-            manager.startGyroUpdates()
-        }
-        
-        if manager.isDeviceMotionAvailable {
-            manager.deviceMotionUpdateInterval = 0.01
-            manager.startDeviceMotionUpdates(to: .main) {
-                [weak self] (data: CMDeviceMotion?, error: Error?) in
-                if let gravity = data?.gravity {
-                    let rotation = atan2(gravity.x, gravity.y) - .pi
-                    self?.imageView.transform = CGAffineTransform(rotationAngle: CGFloat(rotation))
-                }
-            }
-        }
-    }
-    
+    @IBOutlet weak var catalogueNumberLabel: UILabel!
+    @IBOutlet weak var catalogueNumberNumber: UILabel!
+   
     override func viewDidLoad() {
         super.viewDidLoad()
-        accelometerUpdate()
-        
+      
         let size = view.bounds.size
+        
         preferredContentSize = CGSize(width: size.width, height: size.height / 2)
     }
     
@@ -53,7 +34,29 @@ class NotificationViewController: UIViewController, UNNotificationContentExtensi
                 let image = UIImage(data: imageData! as Data)!
                 
                 imageView.image = image
-                accelometerUpdate()
+              
+            }
+            
+            if let catalogueLabelString = notificationData["attachment-label"]{
+                
+                catalogueNumberLabel.text = catalogueLabelString as? String
+               
+            }else{
+                
+                catalogueNumberLabel.text = "No."
+                
+            }
+            
+            if let catalogueLabelNumber = notificationData["attachment-number"]{
+                
+                catalogueNumberNumber.text = catalogueLabelNumber as? String
+                
+                
+            }else{
+                
+                catalogueNumberLabel.text = ""
+                catalogueNumberNumber.text = ""
+               
             }
         }
     }

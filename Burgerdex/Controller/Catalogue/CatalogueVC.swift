@@ -161,7 +161,10 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
         
         self.burgers = BurgerPreview.generatePlaceholderBurgers() as! [BurgerPreview]
         
-        requestCatalogueBurgerData(page:1, filter:0)
+        self.collectionView.selectItem(at: IndexPath(row: 1, section: 0), animated: false, scrollPosition:UICollectionViewScrollPosition.left)
+        
+        self.collectionView(self.collectionView, didSelectItemAt: IndexPath(item: 1, section: 0))
+        //requestCatalogueBurgerData(page:1, filter:1)
         
     }
     

@@ -25,6 +25,21 @@ class BurgerVC: UITableViewController {
     
     }
     
+    let statusBarBgView = { () -> UIView in
+        let statusBarWindow: UIView = UIApplication.shared.value(forKey: "statusBarWindow") as! UIView
+        let statusBarBgView = UIView(frame: (statusBarWindow.statusBar?.bounds)!)
+        return statusBarBgView
+    }()
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        UIApplication.shared.statusBarStyle = .lightContent
+        let navigationBar = self.navigationController?.navigationBar
+        let colour = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1)
+        self.statusBarBgView.backgroundColor = colour
+        navigationBar?.superview?.insertSubview(self.statusBarBgView, aboveSubview: navigationBar!)
+    }
+    
     func layoutBurgerView(){
         
         //Reset these arrays as this method may be called from within this view controller to reset it's content.
@@ -493,6 +508,9 @@ class BurgerVC: UITableViewController {
         self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0),
                                    at: UITableViewScrollPosition.top,
                                    animated: false)
+        
+        self.statusBarBgView.removeFromSuperview()
+        
  
         
     }

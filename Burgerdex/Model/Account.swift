@@ -18,8 +18,6 @@ class Account  {
     
     class func insertToken(token: String, session: URLSession,completion:@escaping (_ resultPatties:Array<Any>)->Void){
         
-        print("GOT HERE METHOD CALL")
-        
         //Start by invalidating on going long tasks
         session.invalidateAndCancel()
         

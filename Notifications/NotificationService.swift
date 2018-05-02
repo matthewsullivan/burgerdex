@@ -39,15 +39,13 @@ class NotificationService: UNNotificationServiceExtension {
         
         
         //Actions
-        
-        let likeAction = UNNotificationAction(identifier: "view", title: "View", options: [])
-        
-        //let addToCartAction = UNNotificationAction(identifier: "pizza", title: "Pizza?", options: [])
-        
-        let category = UNNotificationCategory(identifier: "lifestyle", actions: [likeAction], intentIdentifiers: [], options: [])
+        /*
+        let dismissAction = UNNotificationAction(identifier: "dismiss", title: "Dismiss", options: [])
+        */
+        let category = UNNotificationCategory(identifier: "burgerCategory", actions: [], intentIdentifiers: [], options: [])
         
         UNUserNotificationCenter.current().setNotificationCategories([category])
-
+     
         
         content.attachments = [attachment]
         contentHandler(content.copy() as! UNNotificationContent)
