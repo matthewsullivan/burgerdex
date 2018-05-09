@@ -25,6 +25,7 @@ class NotificationViewController: UIViewController, UNNotificationContentExtensi
     }
     
     func didReceive(_ notification: UNNotification) {
+        
         if let notificationData = notification.request.content.userInfo["data"] as? [String: Any] {
             
             // Grab the attachment
@@ -36,7 +37,7 @@ class NotificationViewController: UIViewController, UNNotificationContentExtensi
                 imageView.image = image
               
             }
-            
+ 
             if let catalogueLabelString = notificationData["attachment-label"]{
                 
                 catalogueNumberLabel.text = catalogueLabelString as? String

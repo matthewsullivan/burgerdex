@@ -230,6 +230,13 @@
 			path = "Progress Views";
 			sourceTree = "<group>";
 		};
+		EB600B2D20A365A300F6D808 /* Dialogues */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Dialogues;
+			sourceTree = "<group>";
+		};
 		EB838B4B201BBDF100B9C633 /* Loaders */ = {
 			isa = PBXGroup;
 			children = (
@@ -339,6 +346,7 @@
 		EBE820EB1FFC119500F5A895 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				EB600B2D20A365A300F6D808 /* Dialogues */,
 				EB1F4C71202DE6A60041E44C /* Progress Views */,
 				EB838B50201BD7A600B9C633 /* TextFields */,
 				EB838B4B201BBDF100B9C633 /* Loaders */,

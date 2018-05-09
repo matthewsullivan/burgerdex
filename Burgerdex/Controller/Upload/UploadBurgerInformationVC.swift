@@ -47,7 +47,14 @@ class UploadBurgerInformationVC: UITableViewController,
         
         // silly hack for server.
         details["seasonal"] = details["limited"] as AnyObject
-      
+        details["deviceName"] = UIDevice.current.name as AnyObject
+        
+        print(TimeZone.current.identifier)
+        
+        details["timezone"] = TimeZone.current.identifier as AnyObject
+        
+        details["deviceType"] = UIDevice.current.modelName as AnyObject
+        
         submit.submitBurger(details: details, image:photo, completion: { (data) in
             
             print("Response ", data)
@@ -420,6 +427,7 @@ class UploadBurgerInformationVC: UITableViewController,
     }
    
     @objc func keyboardWillShow(notification: NSNotification){
+        
         var userInfo = notification.userInfo!
         var keyboardFrame:CGRect = (userInfo[UIKeyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
         keyboardFrame = self.view.convert(keyboardFrame, from: nil)
@@ -441,12 +449,14 @@ class UploadBurgerInformationVC: UITableViewController,
     //HACK - works to stop scrolling tableview when the view is being edited
     override func viewWillAppear(_ animated: Bool) {
         
-        super.viewWillAppear(animated)
+        //super.viewWillAppear(animated) uggh don't call super or keyboard will cause the scrollview to scroll like crazy on first input selection.
         UIApplication.shared.statusBarStyle = .lightContent
         let navigationBar = self.navigationController?.navigationBar
         let colour = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1)
         self.statusBarBgView.backgroundColor = colour
         navigationBar?.superview?.insertSubview(self.statusBarBgView, aboveSubview: navigationBar!)
+        
+        
         
     }
     
@@ -503,7 +513,6 @@ class UploadBurgerInformationVC: UITableViewController,
         cell.burgerDescriptionTextView.resignFirstResponder()
         cell.newIngredientTextField.resignFirstResponder()
         
-
         flowLayout = cell.flowLayout
         flowLayout.sectionInset = UIEdgeInsetsMake(8, 8, 8, 8)
         ingredientCollectionView = cell.ingredientCollectionView

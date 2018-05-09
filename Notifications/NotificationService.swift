@@ -16,7 +16,7 @@ class NotificationService: UNNotificationServiceExtension {
     override func didReceive(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
         self.contentHandler = contentHandler
         bestAttemptContent = (request.content.mutableCopy() as? UNMutableNotificationContent)
-        
+    
         //Media
         func failEarly() {
             contentHandler(request.content)
@@ -36,8 +36,7 @@ class NotificationService: UNNotificationServiceExtension {
         
         guard let imageData = NSData(contentsOf:NSURL(string: attachmentURL)! as URL) else { return failEarly() }
         guard let attachment = UNNotificationAttachment.create(imageFileIdentifier: "image.gif", data: imageData, options: nil) else { return failEarly() }
-        
-        
+            
         //Actions
         /*
         let dismissAction = UNNotificationAction(identifier: "dismiss", title: "Dismiss", options: [])
@@ -45,7 +44,6 @@ class NotificationService: UNNotificationServiceExtension {
         let category = UNNotificationCategory(identifier: "burgerCategory", actions: [], intentIdentifiers: [], options: [])
         
         UNUserNotificationCenter.current().setNotificationCategories([category])
-     
         
         content.attachments = [attachment]
         contentHandler(content.copy() as! UNNotificationContent)
