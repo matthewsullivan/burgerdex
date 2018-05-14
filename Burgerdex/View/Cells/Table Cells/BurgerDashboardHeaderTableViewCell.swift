@@ -1,5 +1,5 @@
 //
-//  BurgerHeaderTableViewCell.swift
+//  BurgerDashboardHeaderTableViewCell.swift
 //  Burgerdex
 //
 //  Created by Matthew Sullivan on 2018-01-04.
@@ -8,13 +8,14 @@
 
 import UIKit
 
-class BurgerHeaderTableViewCell: UITableViewCell {
+class BurgerDashboardHeaderTableViewCell: UITableViewCell {
+    
     
     @IBOutlet weak var burgerName: UILabel!
     @IBOutlet weak var kitchenName: UILabel!
     @IBOutlet weak var catalogueNumberLabel: UILabel!
     @IBOutlet weak var catalogueNumberNumber: UILabel!
-   
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

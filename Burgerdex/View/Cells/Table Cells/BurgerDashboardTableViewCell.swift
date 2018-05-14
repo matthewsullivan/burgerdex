@@ -1,5 +1,5 @@
 //
-//  BurgerTableViewCell.swift
+//  BurgerDashboardTableViewCell.swift
 //  Burgerdex
 //
 //  Created by Matthew Sullivan on 2018-01-04.
@@ -8,17 +8,14 @@
 
 import UIKit
 
-class BurgerTableViewCell: UITableViewCell {
+class BurgerDashboardTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var discoveryDate: UILabel!
-    @IBOutlet weak var region: UILabel!
-    @IBOutlet weak var price: UILabel!
-    @IBOutlet weak var descript: UILabel!
+    @IBOutlet weak var averagePrice: UILabel!
+    @IBOutlet weak var sightings: UILabel!
+    @IBOutlet weak var locations: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var ingredients: UILabel!
-    
-    @IBOutlet weak var fusionLabel: UILabel!
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -32,6 +29,8 @@ class BurgerTableViewCell: UITableViewCell {
     }
     
     func setCollectionViewDataSourceDelegate<D: UICollectionViewDataSource & UICollectionViewDelegate>(_ dataSourceDelegate: D, forRow row: Int) {
+        
+        print("SET UP COLLECTION")
         
         self.collectionView.delegate = dataSourceDelegate
         self.collectionView.dataSource = dataSourceDelegate

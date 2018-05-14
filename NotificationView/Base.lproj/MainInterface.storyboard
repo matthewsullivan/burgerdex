@@ -22,18 +22,18 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="320"/>
                                 <color key="backgroundColor" red="0.21960784310000001" green="0.19215686269999999" blue="0.15686274510000001" alpha="1" colorSpace="calibratedRGB"/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="199" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eMS-zo-K6J">
-                                <rect key="frame" x="118" y="202" width="192" height="107"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eMS-zo-K6J">
+                                <rect key="frame" x="176" y="202" width="134" height="107"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="107" id="gA7-It-3aj"/>
-                                    <constraint firstAttribute="width" constant="192" id="ymm-LV-e8L"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="134" id="ymm-LV-e8L"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="115"/>
                                 <color key="textColor" white="1" alpha="0.69881742294520544" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="No." textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cg1-OH-aVM">
-                                <rect key="frame" x="16" y="246" width="104" height="54"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cg1-OH-aVM">
+                                <rect key="frame" x="64" y="246" width="104" height="54"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="104" id="e7G-rl-agf"/>
                                     <constraint firstAttribute="height" constant="54" id="z7c-qe-jna"/>
@@ -50,7 +50,7 @@
                             <constraint firstItem="rAB-ba-Pke" firstAttribute="leading" secondItem="2BE-c3-nQJ" secondAttribute="leading" id="OY4-Jb-Jm8"/>
                             <constraint firstItem="2BE-c3-nQJ" firstAttribute="bottom" secondItem="eMS-zo-K6J" secondAttribute="bottom" constant="11" id="WuR-3F-9zO"/>
                             <constraint firstItem="rAB-ba-Pke" firstAttribute="top" secondItem="2BE-c3-nQJ" secondAttribute="top" id="hID-lt-LId"/>
-                            <constraint firstItem="eMS-zo-K6J" firstAttribute="leading" secondItem="Cg1-OH-aVM" secondAttribute="trailing" constant="-2" id="lDG-Jx-CHe"/>
+                            <constraint firstItem="eMS-zo-K6J" firstAttribute="leading" secondItem="Cg1-OH-aVM" secondAttribute="trailing" constant="8" id="lDG-Jx-CHe"/>
                             <constraint firstItem="2BE-c3-nQJ" firstAttribute="bottom" secondItem="Cg1-OH-aVM" secondAttribute="bottom" constant="20" id="lGh-KF-03g"/>
                             <constraint firstItem="rAB-ba-Pke" firstAttribute="bottom" secondItem="2BE-c3-nQJ" secondAttribute="bottom" id="lUH-Ac-epc"/>
                             <constraint firstItem="2BE-c3-nQJ" firstAttribute="trailing" secondItem="eMS-zo-K6J" secondAttribute="trailing" constant="10" id="qIQ-A2-NVt"/>

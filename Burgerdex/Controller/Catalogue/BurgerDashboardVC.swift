@@ -1,5 +1,5 @@
 //
-//  BurgerVC.swift
+//  BurgerDashboardVC.swift
 //  Burgerdex
 //
 //  Created by Matthew Sullivan on 2018-01-03.
@@ -7,21 +7,27 @@
 //
 import UIKit
 
-class BurgerVC: UITableViewController {
+class BurgerDashboardVC: UITableViewController {
     
     private let kLazyLoadCollectionCellImage = 1
     
     var burger: BurgerPreview!
     var burgerAttr = [Array<BurgerObject>]()
     var badges = [Badge]()
-    var fusionBurgers = [BurgerPreview]()
+    var sightingsBurgers = [BurgerPreview]()
     var burgerThumbnail : UIImage!
+    
+    var scrollSize: CGFloat = 0.0
+    
+    var selectedBurger: BurgerPreview!
+    
+    var carousel: ZKCarousel! = ZKCarousel()
     
     override func viewDidLoad() {
         
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        
+        scrollSize = view.frame.size.width;
         layoutBurgerView()
     
     }
@@ -45,7 +51,7 @@ class BurgerVC: UITableViewController {
         
         //Reset these arrays as this method may be called from within this view controller to reset it's content.
         burgerAttr.removeAll()
-        fusionBurgers.removeAll()
+        sightingsBurgers.removeAll()
         badges.removeAll()
         
         let burgerHeaderView = BurgerHeaderView.init(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 200))
@@ -64,32 +70,6 @@ class BurgerVC: UITableViewController {
         
         burgerHeaderView.burgerImage.addSubview(blurEffectView)
         
-        let url = URL(string: burger.photoUrl)
-        
-        URLSession.shared.dataTask(with: url!, completionHandler: { (data, response, error) in
-            
-            if error != nil {
-                print(error!)
-                return
-            }
-            DispatchQueue.main.async(execute: {
-                
-                
-                UIView.animate(withDuration: 0.5, animations: {
-                    
-                    blurEffectView.alpha = 0.0
-                    
-                }, completion: { _ in
-                    
-                    burgerHeaderView.burgerImage.image  = UIImage(data: data!)
-                    
-                    blurEffectView.removeFromSuperview()
-                })
-                
-                
-            })
-            
-        }).resume()
         
         tableView.estimatedRowHeight = 85.0
         tableView.rowHeight = UITableViewAutomaticDimension
@@ -104,15 +84,17 @@ class BurgerVC: UITableViewController {
         
         TableLoader.addLoaderTo(self.tableView)
         
-        Burger.fetchBurgerDetails(burgerID: burger.burgerID,completion: { (data) in
+        Burger.fetchBurgerDetails(burgerID: burger.recordID,completion: { (data) in
             
             if data.count > 0{
                 
                 burgerInfo = data[0] as! Burger
                 
-                if burgerInfo.fused.count > 0 {
+                if burgerInfo.sightings.count > 0 {
                     
-                    for burger in burgerInfo.fused {
+                    var imageCount = 1
+                    
+                    for burger in burgerInfo.sightings {
                         
                         let displayTag = burger["displayTag"] as? String
                         let displayText = burger["displayText"] as? String
@@ -123,12 +105,18 @@ class BurgerVC: UITableViewController {
                         let imagePath = burger["image"] as? String
                         let thumbPath = burger["thumb"] as? String
                         var catalogueNumber = burger["id"] as? Int
+                        var recordNumber = burger["recordId"] as? Int
+                        let totalSightings = burger["sightings"] as? Int
                         let imageOrigin = "https://burgerdex.ca/"
-                       
+                        
+                        let quote = burger["description"] as? String
+                        let descript = "\u{22}" + quote! + "\u{22}"
+                        
                         let pattyImagePath = imageOrigin + imagePath!
                         let thumbPattyPath = imageOrigin + thumbPath!
                         
                         if catalogueNumber == nil {catalogueNumber = 0}
+                        if recordNumber == nil {recordNumber = 0}
                         
                         guard let burgerPreview = BurgerPreview.init(displayTag: displayTag!,
                                                                      displayText: displayText!,
@@ -140,11 +128,53 @@ class BurgerVC: UITableViewController {
                                                                    photoUrl: pattyImagePath,
                                                                    thumbUrl: thumbPattyPath,
                                                                    photo: UIImage(),
-                                                                   burgerID: catalogueNumber!)else{
+                                                                   burgerID: catalogueNumber!,
+                                                                   recordID: recordNumber!,
+                                                                   sightings: totalSightings!)else{
                                                                  fatalError("Unable to instantiate burgerPreview")
                         }
                         
-                        self.fusionBurgers += [burgerPreview]
+                        self.sightingsBurgers += [burgerPreview]
+                        
+                        let url = URL(string: burgerPreview.photoUrl)
+                        
+                        URLSession.shared.dataTask(with: url!, completionHandler: { (data, response, error) in
+                            
+                            if error != nil {
+                                print(error!)
+                                return
+                            }
+                            DispatchQueue.main.async(execute: {
+                                
+                                UIView.animate(withDuration: 0.5, animations: {
+                                    
+                                    blurEffectView.alpha = 0.0
+                                    
+                                }, completion: { _ in
+                                    
+                                    let title = burgerPreview.displayTag + " " + burgerPreview.displayText
+                                
+                                    let slide = ZKCarouselSlide(image: UIImage(data: data!)!, title:title, description: descript)
+                                    // Add the slides to the carousel
+                                   
+                                    self.carousel.slides.append(slide)
+                                    
+                                    print(burgerInfo.sightings.count)
+                                    print(imageCount)
+                                    
+                                    if imageCount == burgerInfo.sightings.count{
+                                        
+                                        self.setupCarousel()
+                                        
+                                    }
+                                    
+                                   imageCount = imageCount + 1
+                                    
+                                })
+                                
+                            })
+                            
+                        }).resume()
                     }
                     
                 }
@@ -154,7 +184,7 @@ class BurgerVC: UITableViewController {
                 TableLoader.removeLoaderFrom(self.tableView)
                 
                 self.burgerAttr[0] = [burgerInfo as BurgerObject]
-                self.burgerAttr.append(self.fusionBurgers)
+                self.burgerAttr.append(self.sightingsBurgers)
                 
                 guard let ratingBadge = Badge.init(ratingTitle: burgerInfo.rating,
                                                    badgeTitle: "rating",
@@ -257,6 +287,30 @@ class BurgerVC: UITableViewController {
                     self.badges += [hasModsBadge]
                 }
                 
+                guard let sightingsBadge = Badge.init(ratingTitle: String(burgerInfo.sightings.count),
+                                                      badgeTitle: "sightings",
+                                                      badgeIcon: UIImage(named: "sightings")!
+                    )else {
+                        
+                        fatalError("Unable to instantiate fusion badge")
+                }
+                
+                self.badges += [sightingsBadge]
+                
+                var locationTitle = "location"
+                
+                if burgerInfo.locationCount > 1 {locationTitle = "locations"}
+                
+                guard let locationsBadge = Badge.init(ratingTitle: String(burgerInfo.locationCount),
+                                                   badgeTitle: locationTitle,
+                                                   badgeIcon: UIImage(named: "locations")!
+                    )else {
+                        
+                        fatalError("Unable to instantiate fusion badge")
+                }
+                
+                self.badges += [locationsBadge]
+                
                 self.tableView.reloadData()
                 
             }else{
@@ -269,6 +323,21 @@ class BurgerVC: UITableViewController {
         
     }
     
+    func setupCarousel(){
+        
+        let burgerHeaderView = self.tableView.tableHeaderView as! BurgerHeaderView
+    
+        self.carousel.frame = burgerHeaderView.burgerImage.frame
+        self.carousel.pageControl.numberOfPages = self.carousel.slides.count
+        self.carousel.interval = 8
+        self.carousel.start()
+    
+        burgerHeaderView.containerView.addSubview(self.carousel)
+       
+        burgerHeaderView.burgerImage.removeFromSuperview()
+
+    }
+    
     override func didReceiveMemoryWarning() {
         
         super.didReceiveMemoryWarning()
@@ -277,7 +346,7 @@ class BurgerVC: UITableViewController {
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
-        guard let tableViewCell = cell as? BurgerTableViewCell else { return }
+        guard let tableViewCell = cell as? BurgerDashboardTableViewCell else { return }
         
         tableViewCell.setCollectionViewDataSourceDelegate(self, forRow: indexPath.row)
 
@@ -301,31 +370,27 @@ class BurgerVC: UITableViewController {
             // Table view cells are reused and should be dequeued using a cell identifier.
             let cellIdentifier = "BurgerInfoCell"
             
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? BurgerTableViewCell  else{
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? BurgerDashboardTableViewCell  else{
                 fatalError("The dequeued cell is not an instance of BurgerTableViewCell.")
             }
             
             let burger = burgerAttr[indexPath.section][indexPath.row] as! Burger
             
-            cell.discoveryDate.text = burger.dateCaptured
-            cell.price.text = burger.price
-            cell.region.text = burger.location
-            cell.descript.text = burger.descript
+            let sightingsTotal : Int = burger.sightings.count
+            let totalSightings = String(sightingsTotal)
             
+            var locationTitle = " location"
+            
+            if burger.locationCount > 1 {locationTitle = " locations"}
+            
+            cell.averagePrice.text = burger.averagePrice
+            cell.sightings.text = "Catalogued " + totalSightings + " times"
+            cell.locations.text = String(burger.locationCount) + locationTitle + " documented"
+           
             let ingredients = "• " + burger.ingredients.replacingOccurrences(of: ",", with: "\n\n• ")
             
             cell.ingredients.text = ingredients
-            
-            if (burger.fused.count == 0){
-                
-                cell.fusionLabel.text = ""
-                
-            }else{
-                
-                cell.fusionLabel.text = "Fusibles:"
-                
-            }
-            
+        
             return cell
             
          }else{
@@ -358,29 +423,16 @@ class BurgerVC: UITableViewController {
 
         
     }
-
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
          if indexPath.section != 0 {
             
             let patty = burgerAttr[indexPath.section][indexPath.row] as! BurgerPreview
             
-            burgerThumbnail = patty.photo
-            self.burger = patty
-            
-            UIView.animate(withDuration: 0.1, animations: {
-                
-                let desiredOffset = CGPoint(x: 0, y: -self.tableView.contentInset.top)
-                
-                self.tableView.setContentOffset(desiredOffset, animated: false)
-                
-            }, completion: {
-                
-                (value: Bool) in
-              
-                self.layoutBurgerView()
-                
-            })
+            selectedBurger = patty
+        
+            self.performSegue(withIdentifier: "sightingBurgerDetails", sender: self)
         }
     }
     
@@ -456,7 +508,7 @@ class BurgerVC: UITableViewController {
         
          if section == 0 {
             
-            let  cell = tableView.dequeueReusableCell(withIdentifier: "BurgerHeaderCell") as! BurgerHeaderTableViewCell
+            let  cell = tableView.dequeueReusableCell(withIdentifier: "BurgerHeaderCell") as! BurgerDashboardHeaderTableViewCell
             
             cell.burgerName.text = burger.name
             cell.kitchenName.text = burger.kitchen
@@ -506,6 +558,7 @@ class BurgerVC: UITableViewController {
             let headerView = self.tableView.tableHeaderView as! BurgerHeaderView
             
             headerView.scrollViewDidScroll(scrollView: scrollView)
+            
         }
         
     }
@@ -548,18 +601,33 @@ class BurgerVC: UITableViewController {
         }
     }
 
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    // This function is called before the segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-    
+        if (segue.identifier == "sightingBurgerDetails") {
+            
+            let burgerViewController = segue.destination as! BurgerVC
+            
+            if burgerThumbnail.size.width == 0.0 {
+                
+                burgerViewController.burgerThumbnail = UIImage(named:"baconBeast")
+                
+            }else{
+                
+                burgerViewController.burgerThumbnail = burgerThumbnail
+            }
+            
+            burgerViewController.burger = selectedBurger
+            
+            
+        }
+        
     }
     
 }
 
 
-extension BurgerVC: UICollectionViewDelegate, UICollectionViewDataSource {
+extension BurgerDashboardVC: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         

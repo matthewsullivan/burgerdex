@@ -373,7 +373,15 @@ class SearchBurgerVC: UIViewController, UITableViewDelegate, UITableViewDataSour
         burgerThumbnail = burger.photo
         selectedBurger = burger
         
-        self.performSegue(withIdentifier: "burgerDetailSegue", sender: self)
+        if(burger.sightings > 1){
+            
+            self.performSegue(withIdentifier: "searchMultipleSightingSegue", sender: self)
+            
+        }else{
+            
+            self.performSegue(withIdentifier: "burgerDetailSegue", sender: self)
+        }
+        
         
     }
     
@@ -423,6 +431,21 @@ class SearchBurgerVC: UIViewController, UITableViewDelegate, UITableViewDataSour
         if (segue.identifier == "burgerDetailSegue") {
             
             let burgerViewController = segue.destination as! BurgerVC
+            
+            if burgerThumbnail.size.width == 0.0 {
+                
+                burgerViewController.burgerThumbnail = UIImage(named:"baconBeast")
+                
+            }else{
+                
+                burgerViewController.burgerThumbnail = burgerThumbnail
+            }
+            
+            burgerViewController.burger = selectedBurger
+            
+        }else{
+            
+            let burgerViewController = segue.destination as! BurgerDashboardVC
             
             if burgerThumbnail.size.width == 0.0 {
                 

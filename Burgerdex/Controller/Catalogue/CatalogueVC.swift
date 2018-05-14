@@ -644,7 +644,16 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
         burgerThumbnail = burger.photo
         selectedBurger = burger
         
-        self.performSegue(withIdentifier: "burgerSegue", sender: self)
+        if(burger.sightings > 1){
+          
+            self.performSegue(withIdentifier: "multipleSightingSegue", sender: self)
+            
+        }else{
+            
+             self.performSegue(withIdentifier: "burgerSegue", sender: self)
+        }
+        
+       
         
     }
     
@@ -672,6 +681,21 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
             
             burgerViewController.burger = selectedBurger
             
+            
+         }else if(segue.identifier == "multipleSightingSegue"){
+            
+            let burgerViewController = segue.destination as! BurgerDashboardVC
+            
+            if burgerThumbnail.size.width == 0.0 {
+                
+                burgerViewController.burgerThumbnail = UIImage(named:"baconBeast")
+                
+            }else{
+                
+                burgerViewController.burgerThumbnail = burgerThumbnail
+            }
+            
+            burgerViewController.burger = selectedBurger
             
          }else{
                         

@@ -17,6 +17,7 @@ class BurgerHeaderView: UIView {
     var containerLayoutConstraint = NSLayoutConstraint()
     var burgerImage = UIImageView()
     
+
     override init(frame: CGRect) {
         
         super.init(frame: frame)
@@ -41,6 +42,7 @@ class BurgerHeaderView: UIView {
         burgerImage.contentMode = .scaleAspectFill
         burgerImage.image = UIImage(named: "baconBeast")
         containerView.addSubview(burgerImage)
+        
         
         let layerHeight = frame.size.height
         let layerWidth = frame.size.width * 3
@@ -69,6 +71,7 @@ class BurgerHeaderView: UIView {
         shapeLayer.fillColor = UIColor.white.cgColor
         containerView.layer.addSublayer(shapeLayer)
         containerView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[imageView]|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["imageView" : burgerImage]))
+        
         bottomLayoutConstraint = NSLayoutConstraint(item: burgerImage, attribute: .bottom, relatedBy: .equal, toItem: containerView, attribute: .bottom, multiplier: 1.0, constant: 0.0)
         containerView.addConstraint(bottomLayoutConstraint)
         heightLayoutConstraint = NSLayoutConstraint(item: burgerImage, attribute: .height, relatedBy: .equal, toItem: containerView, attribute: .height, multiplier: 1.0, constant: 0.0)

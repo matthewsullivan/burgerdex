@@ -104,7 +104,7 @@ class BurgerVC: UITableViewController {
         
         TableLoader.addLoaderTo(self.tableView)
         
-        Burger.fetchBurgerDetails(burgerID: burger.burgerID,completion: { (data) in
+        Burger.fetchBurgerDetails(burgerID: burger.recordID,completion: { (data) in
             
             if data.count > 0{
                 
@@ -123,12 +123,15 @@ class BurgerVC: UITableViewController {
                         let imagePath = burger["image"] as? String
                         let thumbPath = burger["thumb"] as? String
                         var catalogueNumber = burger["id"] as? Int
+                        var recordNumber = burger["recordId"] as? Int
+                        let totalSightings = burger["sightings"] as? Int
                         let imageOrigin = "https://burgerdex.ca/"
                        
                         let pattyImagePath = imageOrigin + imagePath!
                         let thumbPattyPath = imageOrigin + thumbPath!
                         
                         if catalogueNumber == nil {catalogueNumber = 0}
+                        if recordNumber == nil {recordNumber = 0}
                         
                         guard let burgerPreview = BurgerPreview.init(displayTag: displayTag!,
                                                                      displayText: displayText!,
@@ -140,7 +143,9 @@ class BurgerVC: UITableViewController {
                                                                    photoUrl: pattyImagePath,
                                                                    thumbUrl: thumbPattyPath,
                                                                    photo: UIImage(),
-                                                                   burgerID: catalogueNumber!)else{
+                                                                   burgerID: catalogueNumber!,
+                                                                   recordID: recordNumber!,
+                                                                   sightings: totalSightings!)else{
                                                                  fatalError("Unable to instantiate burgerPreview")
                         }
                         
@@ -316,7 +321,15 @@ class BurgerVC: UITableViewController {
             
             cell.ingredients.text = ingredients
             
-            if burger.fused.count == 0 {cell.fusionLabel.text = ""}
+            if (burger.fused.count == 0){
+                
+                cell.fusionLabel.text = ""
+                
+            }else{
+                
+                cell.fusionLabel.text = "Fusions"
+                
+            }
             
             return cell
             

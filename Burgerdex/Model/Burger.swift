@@ -10,7 +10,7 @@ import UIKit
 /*
     If the version number directory is different than the current version of the app, this indicates that the old service folder is fine to use with the current app version we are on. This stops us from having to create multiple directories on the server for any small bug fix or enhancement. As well as if we didn't update the service code.
  */
-private let versionNumber = "1.2.0"
+private let versionNumber = "1.5.0"
 private let kBurgerPreview = "https://www.app.burgerdex.ca/services/ios/" + versionNumber + "/allBurgers.php"
 private let kSearchBurger = "https://www.app.burgerdex.ca/services/ios/" + versionNumber + "/searchBurgers.php"
 private let kBurgerDetail = "https://www.app.burgerdex.ca/services/ios/" + versionNumber + "/burgerDetail.php"
@@ -33,6 +33,8 @@ class BurgerPreview : BurgerObject {
     var year: String
     var catalogueNumber: Int
     var burgerID: Int
+    var recordID: Int
+    var sightings: Int
     var photoUrl: String
     var thumbUrl: String
     var photo: UIImage
@@ -47,7 +49,9 @@ class BurgerPreview : BurgerObject {
           photoUrl: String,
           thumbUrl: String,
           photo: UIImage,
-          burgerID: Int) {
+          burgerID: Int,
+          recordID: Int,
+          sightings: Int) {
         
         if displayTag.isEmpty ||
            displayText.isEmpty ||
@@ -70,6 +74,8 @@ class BurgerPreview : BurgerObject {
         self.year = year
         self.catalogueNumber = catalogueNumber
         self.burgerID = burgerID
+        self.recordID = recordID
+        self.sightings = sightings
         self.photoUrl = photoUrl
         self.thumbUrl = thumbUrl
         self.photo = photo
@@ -93,7 +99,9 @@ class BurgerPreview : BurgerObject {
                                                        photoUrl: "baconBeast",
                                                        thumbUrl: "baconBeast",
                                                           photo:UIImage(),
-                                                       burgerID: 0)else{
+                                                       burgerID: 0,
+                                                       recordID: 0,
+                                                       sightings: 1)else{
                                                     
                                                     fatalError("Unable to instantiate burgerPreview")
             }
@@ -163,6 +171,8 @@ class BurgerPreview : BurgerObject {
                                     let imagePath = burger["image"] as? String
                                     let thumbPath = burger["thumb"] as? String
                                     let catalogueNumber = burger["id"] as? Int
+                                    let recordNumber = burger["recordId"] as? Int
+                                    let totalSightings = burger["sightings"] as? Int
                                     let imageOrigin = kBaseImagePath
                                     let pattyImagePath = imageOrigin + imagePath!
                                     let pattyThumbImagePath = imageOrigin + thumbPath!
@@ -177,7 +187,9 @@ class BurgerPreview : BurgerObject {
                                                                                  photoUrl: pattyImagePath,
                                                                                  thumbUrl : pattyThumbImagePath,
                                                                                  photo:UIImage(),
-                                                                                 burgerID: catalogueNumber!)else{
+                                                                                 burgerID: catalogueNumber!,
+                                                                        recordID:recordNumber!,
+                                                                        sightings: totalSightings!)else{
                                         fatalError("Unable to instantiate burgerPreview")
                                     }
                                     
@@ -279,6 +291,8 @@ class BurgerPreview : BurgerObject {
                                     let imagePath = burger["image"] as? String
                                     let thumbPath = burger["thumb"] as? String
                                     let catalogueNumber = burger["id"] as? Int
+                                    let recordNumber = burger["recordId"] as? Int
+                                    let totalSightings = burger["sightings"] as? Int
                                     let imageOrigin = kBaseImagePath
                                     let pattyImagePath = imageOrigin + imagePath!
                                     let pattyThumbImagePath = imageOrigin + thumbPath!
@@ -293,7 +307,9 @@ class BurgerPreview : BurgerObject {
                                                                                  photoUrl: pattyImagePath,
                                                                                  thumbUrl : pattyThumbImagePath,
                                                                                  photo:UIImage(),
-                                                                                 burgerID: catalogueNumber!)else{
+                                                                                 burgerID: catalogueNumber!,
+                                                                                 recordID: recordNumber!,
+                                                                                sightings: totalSightings!)else{
                                                                                     fatalError("Unable to instantiate burgerPreview")
                                     }
                                     
@@ -350,9 +366,12 @@ class Burger : BurgerObject{
     var location: String
     var rating: String
     var price: String
+    var averagePrice: String
     var ingredients: String
     var fusion: Bool
     var fused: [Dictionary<String, AnyObject>]
+    var sightings: [Dictionary<String, AnyObject>]
+    var locationCount: Int
     var veggie: Bool
     var spicy: Bool
     var extinct: Bool
@@ -369,9 +388,12 @@ class Burger : BurgerObject{
          location: String,
          rating: String,
          price: String,
+  averagePrice: String,
          ingredients: String,
          fusion: Bool,
          fused: [Dictionary<String, AnyObject>],
+         sightings: [Dictionary<String, AnyObject>],
+     locationCount: Int,
          veggie: Bool,
          spicy: Bool,
          extinct: Bool,
@@ -389,8 +411,11 @@ class Burger : BurgerObject{
         self.location = location
         self.rating = rating
         self.price = price
+        self.averagePrice = averagePrice
         self.ingredients = ingredients
         self.fusion = fusion
+        self.sightings = sightings
+        self.locationCount = locationCount
         self.fused = fused
         self.veggie = veggie
         self.spicy = spicy
@@ -412,9 +437,12 @@ class Burger : BurgerObject{
                                            location: "Clarington",
                                            rating: "9.2",
                                            price: "CAD $17.00",
+                                    averagePrice: "$17.00",
                                            ingredients: "BBQ Sauce \n\n Fresh (never frozen, delivered that day) double patty \n\n Bacon \n\n Cheese \n\n standard toppings of your choice.",
                                            fusion: false,
                                            fused: [],
+                                           sightings: [],
+                                       locationCount: 1,
                                            veggie: false,
                                            spicy: false,
                                            extinct: false,
@@ -479,11 +507,14 @@ class Burger : BurgerObject{
                                     let locations = burger["locations"] as? String
                                     let rating = burger["rating"] as? String
                                     let price = burger["price"] as? String
+                                    let averagePrice = burger["averagePrice"] as? String
                                     let ingredients = burger["ingredients"] as? String
                                     let dateCaptured = burger["dated"] as? String
                                     let catalogueNumber = burger["id"] as? Int
                                     let fusion = burger["fusion"] as? Bool
                                     let fused = burger["fused"] as? [Dictionary<String, AnyObject>]
+                                    let sightings = burger["sightings"] as? [Dictionary<String, AnyObject>]
+                                    let locationCount = burger["locationCount"] as? Int
                                     let veggie = burger["veggie"] as? Bool
                                     let spicy = burger["spicy"] as? Bool
                                     let extinct = burger["extinct"] as? Bool
@@ -499,9 +530,12 @@ class Burger : BurgerObject{
                                                                        location: locations!,
                                                                        rating: rating!,
                                                                        price: price!,
+                                                                averagePrice: averagePrice!,
                                                                        ingredients: ingredients!,
                                                                        fusion: fusion!,
                                                                        fused: fused!,
+                                                                       sightings: sightings!,
+                                                                    locationCount: locationCount!,
                                                                        veggie: veggie!,
                                                                        spicy: spicy!,
                                                                        extinct: extinct!,
