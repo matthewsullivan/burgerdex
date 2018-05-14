@@ -10,6 +10,7 @@
 		EB0823BC20223EE5002DB6D2 /* TagCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0823BB20223EE5002DB6D2 /* TagCell.swift */; };
 		EB0823BE20223EF4002DB6D2 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0823BD20223EF4002DB6D2 /* Tag.swift */; };
 		EB0823C020223EFB002DB6D2 /* FlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0823BF20223EFB002DB6D2 /* FlowLayout.swift */; };
+		EB14692A20A9E59800A58C17 /* ZKCarousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB14692920A9E59800A58C17 /* ZKCarousel.swift */; };
 		EB1F4C87202DF31A0041E44C /* WaveObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1F4C85202DF31A0041E44C /* WaveObject.swift */; };
 		EB1F4C88202DF31A0041E44C /* MMImageUpload.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1F4C86202DF31A0041E44C /* MMImageUpload.swift */; };
 		EB3C2140200645D400EAC1CB /* FilterCatalogueCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3C213F200645D400EAC1CB /* FilterCatalogueCell.swift */; };
@@ -33,6 +34,9 @@
 		EB857A721FFC0959003E5BF1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB857A701FFC0959003E5BF1 /* LaunchScreen.storyboard */; };
 		EB857A7A1FFC0D7B003E5BF1 /* UploadBurgerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB857A791FFC0D7B003E5BF1 /* UploadBurgerVC.swift */; };
 		EBA3F50F202C9C6000660419 /* SwiftSpinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA3F50E202C9C6000660419 /* SwiftSpinner.swift */; };
+		EBC2151420A4B1DE00FF543A /* BurgerDashboardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC2151320A4B1DE00FF543A /* BurgerDashboardVC.swift */; };
+		EBC2151620A4B54600FF543A /* BurgerDashboardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC2151520A4B54600FF543A /* BurgerDashboardTableViewCell.swift */; };
+		EBC2151820A4C57700FF543A /* BurgerDashboardHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC2151720A4C57700FF543A /* BurgerDashboardHeaderTableViewCell.swift */; };
 		EBC328D4209220F0000CDB71 /* SearchBurgerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC328D3209220F0000CDB71 /* SearchBurgerVC.swift */; };
 		EBCAF4A6200CF96100B9407D /* TableLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCAF4A5200CF96100B9407D /* TableLoader.swift */; };
 		EBD0C4C620226D7800918701 /* TagCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBD0C4C520226D7800918701 /* TagCell.xib */; };
@@ -91,6 +95,7 @@
 		EB0823BB20223EE5002DB6D2 /* TagCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagCell.swift; sourceTree = "<group>"; };
 		EB0823BD20223EF4002DB6D2 /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
 		EB0823BF20223EFB002DB6D2 /* FlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowLayout.swift; sourceTree = "<group>"; };
+		EB14692920A9E59800A58C17 /* ZKCarousel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZKCarousel.swift; sourceTree = "<group>"; };
 		EB1F4C85202DF31A0041E44C /* WaveObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WaveObject.swift; sourceTree = "<group>"; };
 		EB1F4C86202DF31A0041E44C /* MMImageUpload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MMImageUpload.swift; sourceTree = "<group>"; };
 		EB3C213F200645D400EAC1CB /* FilterCatalogueCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCatalogueCell.swift; sourceTree = "<group>"; };
@@ -117,6 +122,9 @@
 		EB857A791FFC0D7B003E5BF1 /* UploadBurgerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadBurgerVC.swift; sourceTree = "<group>"; };
 		EB99F64D20892EBB008A9289 /* Burgerdex.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Burgerdex.entitlements; sourceTree = "<group>"; };
 		EBA3F50E202C9C6000660419 /* SwiftSpinner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftSpinner.swift; sourceTree = "<group>"; };
+		EBC2151320A4B1DE00FF543A /* BurgerDashboardVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurgerDashboardVC.swift; sourceTree = "<group>"; };
+		EBC2151520A4B54600FF543A /* BurgerDashboardTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurgerDashboardTableViewCell.swift; sourceTree = "<group>"; };
+		EBC2151720A4C57700FF543A /* BurgerDashboardHeaderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurgerDashboardHeaderTableViewCell.swift; sourceTree = "<group>"; };
 		EBC328D3209220F0000CDB71 /* SearchBurgerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBurgerVC.swift; sourceTree = "<group>"; };
 		EBCAF4A5200CF96100B9407D /* TableLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableLoader.swift; sourceTree = "<group>"; };
 		EBD0C4C520226D7800918701 /* TagCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TagCell.xib; sourceTree = "<group>"; };
@@ -174,7 +182,9 @@
 				EB838B49201BB7C900B9C633 /* UploadHeaderTableViewCell.swift */,
 				EB838B4E201BC15900B9C633 /* UploadTableViewCell.swift */,
 				EBE820F41FFE7EED00F5A895 /* BurgerTableViewCell.swift */,
+				EBC2151520A4B54600FF543A /* BurgerDashboardTableViewCell.swift */,
 				EBE820EC1FFC21C800F5A895 /* CatalogueTableViewCell.swift */,
+				EBC2151720A4C57700FF543A /* BurgerDashboardHeaderTableViewCell.swift */,
 				EBE820F61FFE8B3800F5A895 /* BurgerHeaderTableViewCell.swift */,
 			);
 			path = "Table Cells";
@@ -184,6 +194,7 @@
 			isa = PBXGroup;
 			children = (
 				EBE820EE1FFD30D500F5A895 /* BurgerVC.swift */,
+				EBC2151320A4B1DE00FF543A /* BurgerDashboardVC.swift */,
 				EB857A671FFC0959003E5BF1 /* CatalogueVC.swift */,
 				EBC328D3209220F0000CDB71 /* SearchBurgerVC.swift */,
 			);
@@ -293,6 +304,14 @@
 			path = Burgerdex;
 			sourceTree = "<group>";
 		};
+		EBC2151920A4E32A00FF543A /* Carousel */ = {
+			isa = PBXGroup;
+			children = (
+				EB14692920A9E59800A58C17 /* ZKCarousel.swift */,
+			);
+			path = Carousel;
+			sourceTree = "<group>";
+		};
 		EBCAF4A3200CF89600B9407D /* Storyboards&Assets */ = {
 			isa = PBXGroup;
 			children = (
@@ -346,6 +365,7 @@
 		EBE820EB1FFC119500F5A895 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				EBC2151920A4E32A00FF543A /* Carousel */,
 				EB600B2D20A365A300F6D808 /* Dialogues */,
 				EB1F4C71202DE6A60041E44C /* Progress Views */,
 				EB838B50201BD7A600B9C633 /* TextFields */,
@@ -530,6 +550,7 @@
 				EBE820EF1FFD30D500F5A895 /* BurgerVC.swift in Sources */,
 				EB857A6A1FFC0959003E5BF1 /* PassportVC.swift in Sources */,
 				EB77F68420054C0400ECCD1E /* BurgerBadgeCollectionViewCell.swift in Sources */,
+				EBC2151420A4B1DE00FF543A /* BurgerDashboardVC.swift in Sources */,
 				EBE820F71FFE8B3800F5A895 /* BurgerHeaderTableViewCell.swift in Sources */,
 				EB0823C020223EFB002DB6D2 /* FlowLayout.swift in Sources */,
 				EBA3F50F202C9C6000660419 /* SwiftSpinner.swift in Sources */,
@@ -539,12 +560,15 @@
 				EB0823BC20223EE5002DB6D2 /* TagCell.swift in Sources */,
 				EBE820F51FFE7EED00F5A895 /* BurgerTableViewCell.swift in Sources */,
 				EBE820F31FFD88F900F5A895 /* BurgerHeaderView.swift in Sources */,
+				EBC2151820A4C57700FF543A /* BurgerDashboardHeaderTableViewCell.swift in Sources */,
 				EBE2D4DD201A6E49003BC9F7 /* UploadBurgerInformationVC.swift in Sources */,
+				EBC2151620A4B54600FF543A /* BurgerDashboardTableViewCell.swift in Sources */,
 				EB3C21422006487A00EAC1CB /* FilterCatalogueCollectionViewCell.swift in Sources */,
 				EB838B56201BD7BA00B9C633 /* TweePlaceholderTextField.swift in Sources */,
 				EB66BE06200A762F00921485 /* ImageManager.swift in Sources */,
 				EB857A7A1FFC0D7B003E5BF1 /* UploadBurgerVC.swift in Sources */,
 				EB3C2140200645D400EAC1CB /* FilterCatalogueCell.swift in Sources */,
+				EB14692A20A9E59800A58C17 /* ZKCarousel.swift in Sources */,
 				EB838B4A201BB7C900B9C633 /* UploadHeaderTableViewCell.swift in Sources */,
 				EB857A661FFC0959003E5BF1 /* AppDelegate.swift in Sources */,
 				EB1F4C87202DF31A0041E44C /* WaveObject.swift in Sources */,
