@@ -69,8 +69,7 @@ class BurgerDashboardVC: UITableViewController {
         blurEffectView.alpha = 0.9
         
         burgerHeaderView.burgerImage.addSubview(blurEffectView)
-        
-        
+    
         tableView.estimatedRowHeight = 85.0
         tableView.rowHeight = UITableViewAutomaticDimension
         
@@ -164,6 +163,7 @@ class BurgerDashboardVC: UITableViewController {
                                     
                                     if imageCount == burgerInfo.sightings.count{
                                         
+                                        self.carousel.slides.reverse()
                                         self.setupCarousel()
                                         
                                     }
@@ -325,16 +325,27 @@ class BurgerDashboardVC: UITableViewController {
     
     func setupCarousel(){
         
+        print("HIT THIS BITCH")
+        
         let burgerHeaderView = self.tableView.tableHeaderView as! BurgerHeaderView
     
         self.carousel.frame = burgerHeaderView.burgerImage.frame
+        self.carousel.contentMode = .scaleAspectFill
         self.carousel.pageControl.numberOfPages = self.carousel.slides.count
-        self.carousel.interval = 8
-        self.carousel.start()
-    
+        //self.carousel.interval = 8
+        //self.carousel.start()
+        self.carousel.alpha = 0.0
         burgerHeaderView.containerView.addSubview(self.carousel)
-       
-        burgerHeaderView.burgerImage.removeFromSuperview()
+        
+        UIView.animate(withDuration: 0.5, animations: {
+            
+            self.carousel.alpha = 1.0
+            
+        }, completion: { _ in
+            
+            burgerHeaderView.burgerImage.removeFromSuperview()
+            
+        })
 
     }
     
@@ -503,7 +514,7 @@ class BurgerDashboardVC: UITableViewController {
      if !decelerate { loadImagesForOnscreenRows() }
      }
      */
-    
+
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
          if section == 0 {
@@ -528,6 +539,8 @@ class BurgerDashboardVC: UITableViewController {
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
         if let _ = scrollView as? UITableView {
+            
+            updateCarouselViewHeight()
             
             var offset = scrollView.contentOffset.y / 40
             
@@ -563,6 +576,22 @@ class BurgerDashboardVC: UITableViewController {
         
     }
     
+    func updateCarouselViewHeight(){
+        
+        var headerRect = CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 0)
+        
+        if tableView.contentOffset.y < 200 {
+            
+            headerRect.origin.y = tableView.contentOffset.y
+            headerRect.size.height = -tableView.contentOffset.y + 200
+            
+        }
+        
+        self.carousel.collectionView.collectionViewLayout.invalidateLayout()
+        self.carousel.frame = headerRect
+
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         
         super.viewWillDisappear(animated)
@@ -572,9 +601,7 @@ class BurgerDashboardVC: UITableViewController {
                                    animated: false)
         
         self.statusBarBgView.removeFromSuperview()
-        
- 
-        
+                
     }
         
     

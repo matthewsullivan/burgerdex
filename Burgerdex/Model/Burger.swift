@@ -571,10 +571,16 @@ class Burger : BurgerObject{
                     print("Received empty response.")
                     
                     completion(patty)
+                    
+                    // Could cause crashes
+                    self.fetchBurgerDetails(burgerID: burgerID,completion: { (data) in
+                        
+                        completion(patty)
+            
+                    })
                 })
             }
         }).resume()
-        
     }
 }
 

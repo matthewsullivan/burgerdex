@@ -10,7 +10,6 @@ import UIKit
 
 final public class ZKCarousel: UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, UICollectionViewDataSource {
     
-    
     public var slides : [ZKCarouselSlide] = [] {
         didSet {
             self.collectionView.reloadData()
@@ -28,12 +27,12 @@ final public class ZKCarousel: UIView, UICollectionViewDelegateFlowLayout, UICol
         control.currentPage = 0
         control.hidesForSinglePage = true
         control.pageIndicatorTintColor = .lightGray
-        control.currentPageIndicatorTintColor = UIColor(red:0.20, green:0.60, blue:0.86, alpha:1.0)
+        control.currentPageIndicatorTintColor = UIColor(red: 227/255, green: 173/255, blue: 107/255, alpha: 1)
         control.translatesAutoresizingMaskIntoConstraints = false
         return control
     }()
     
-    fileprivate lazy var collectionView : UICollectionView = {
+    public lazy var collectionView : UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -42,7 +41,7 @@ final public class ZKCarousel: UIView, UICollectionViewDelegateFlowLayout, UICol
         cv.isPagingEnabled = true
         cv.register(carouselCollectionViewCell.self, forCellWithReuseIdentifier: "slideCell")
         cv.clipsToBounds = true
-        cv.backgroundColor = .clear
+        cv.backgroundColor = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1)
         cv.showsHorizontalScrollIndicator = false
         cv.bounces = false
         cv.translatesAutoresizingMaskIntoConstraints = false
@@ -60,6 +59,7 @@ final public class ZKCarousel: UIView, UICollectionViewDelegateFlowLayout, UICol
     }
     
     private func setupCarousel() {
+        
         self.backgroundColor = .clear
         
         self.addSubview(collectionView)
@@ -118,6 +118,9 @@ final public class ZKCarousel: UIView, UICollectionViewDelegateFlowLayout, UICol
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "slideCell", for: indexPath) as! carouselCollectionViewCell
         cell.slide = self.slides[indexPath.item]
+        cell.clipsToBounds = false
+        cell.contentMode = .scaleAspectFill
+        cell.backgroundColor = UIColor.red
         return cell
     }
     
@@ -161,7 +164,7 @@ fileprivate class carouselCollectionViewCell: UICollectionViewCell {
     private lazy var imageView : UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFill
-        iv.backgroundColor = .clear
+        iv.backgroundColor = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1)
         iv.clipsToBounds = true
         iv.addBlackGradientLayer(frame: self.bounds)
         iv.translatesAutoresizingMaskIntoConstraints = false
@@ -173,7 +176,7 @@ fileprivate class carouselCollectionViewCell: UICollectionViewCell {
         label.adjustsFontSizeToFitWidth = true
         label.font = UIFont.boldSystemFont(ofSize: 40)
         label.textColor = .white
-        label.textAlignment = .center
+        label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -182,7 +185,7 @@ fileprivate class carouselCollectionViewCell: UICollectionViewCell {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 19)
         label.textColor = .white
-        label.textAlignment = .center
+        label.textAlignment = .left
         label.numberOfLines = 0
         label.backgroundColor = .clear
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -281,9 +284,12 @@ extension UIView {
 extension UIImageView {
     func addBlackGradientLayer(frame: CGRect){
         let gradient = CAGradientLayer()
-        gradient.frame = frame
-        gradient.colors = [UIColor.clear.cgColor, UIColor.black.withAlphaComponent(0.8).cgColor]
-        gradient.locations = [0.0, 0.6]
+        gradient.frame = CGRect(x: frame.origin.x,
+                               y: frame.origin.y,
+                           width: frame.size.width,
+                          height: frame.size.height * 2)
+        gradient.colors = [UIColor.clear.cgColor, UIColor.black.withAlphaComponent(0.4).cgColor]
+        gradient.locations = [0.0, 0.4]
         self.layer.insertSublayer(gradient, at: 0)
     }
 }
