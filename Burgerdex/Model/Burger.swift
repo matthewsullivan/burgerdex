@@ -596,12 +596,16 @@ class BurgerSubmit{
         r.httpMethod = "POST"
         let boundary = "Boundary-\(UUID().uuidString)"
         r.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        
+        print("Image before", image);
     
         r.httpBody = createBody(parameters: details  as! [String : String],
                                 boundary: boundary,
                                 data: UIImageJPEGRepresentation(image, 0.1)!,
                                 mimeType: "image/jpg",
                                 filename: "burger.jpg")
+        
+        print("Image after", UIImageJPEGRepresentation(image, 0.1) ?? "");
         
         URLSession.shared.dataTask(with: r as URLRequest, completionHandler: { (data, response, error) -> Void in
             
@@ -657,10 +661,11 @@ class BurgerSubmit{
             } else {
                 
                 DispatchQueue.main.async(execute: {
-                    print("Received empty response.")
                     
-                    responseCode[0] = 0
-                    responseCode[1] = message
+                    print("Received empty response.\(String(describing: error))")
+                    
+                    responseCode[0] = 1
+                    responseCode[1] = "Burger upload failed."
                     
                     completion(responseCode)
                     

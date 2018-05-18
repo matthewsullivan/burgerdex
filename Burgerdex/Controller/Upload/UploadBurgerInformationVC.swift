@@ -41,7 +41,7 @@ class UploadBurgerInformationVC: UITableViewController,
         details["ratingLbl"] = "" as AnyObject
         details["iphone"] = "1" as AnyObject
         
-        SwiftSpinner.show(delay: 0.5, title: "Uploading Burger" , animated: true)
+        SwiftSpinner.show(delay: 0, title: "Uploading Burger" , animated: true)
     
         let submit = BurgerSubmit()
         
@@ -96,7 +96,7 @@ class UploadBurgerInformationVC: UITableViewController,
                 }, subtitle: (response as! String) + "\n\n Tap anywhere and try again.")
                 
             }
-        
+            
         })
         
         let tmpLbl = UILabel()

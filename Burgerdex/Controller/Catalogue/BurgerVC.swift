@@ -39,6 +39,7 @@ class BurgerVC: UITableViewController {
         let colour = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1)
         self.statusBarBgView.backgroundColor = colour
         navigationBar?.superview?.insertSubview(self.statusBarBgView, aboveSubview: navigationBar!)
+        
     }
     
     func layoutBurgerView(){
