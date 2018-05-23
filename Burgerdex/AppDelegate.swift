@@ -14,6 +14,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
     
+    var visibleViewController: UIViewController? {
+        return getVisibleViewController(nil)
+    }
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
 
@@ -25,11 +29,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func setupNavigationAndStatusBarLayout(){
-        
-        // Hack to fix disapearing navigation bar when leaving the app from a notifcation tap.
-        let NavVccVar = UIApplication.shared.keyWindow?.rootViewController as Any
-        let ShnSrnVar = (NavVccVar as AnyObject).visibleViewController
-        ShnSrnVar??.navigationController?.isNavigationBarHidden = false
         
         UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
         let barButtonItemAppearance = UIBarButtonItem.appearance()
@@ -122,7 +121,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
-    /// Handle push notification actions
+    // Handle push notification actions
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         
         if response.actionIdentifier == "dismiss" {
@@ -151,21 +150,48 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
         
     }
+    
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-        
+  
     
+        // HACK
+        visibleViewController?.navigationController?.isNavigationBarHidden = false
+        
+        print(visibleViewController ?? "")
+      
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     
     }
+    
+    // Hack navigation bar fix. Need to get the upper most view controller within the tab bar but from the app delegate.
+    private func getVisibleViewController(_ rootViewController: UIViewController?) -> UIViewController? {
+        
+        let rootVC = rootViewController ?? UIApplication.shared.keyWindow?.rootViewController
+        
+        if rootVC!.isKind(of: UINavigationController.self) {
+            let navigationController = rootVC as! UINavigationController
+            return getVisibleViewController(navigationController.viewControllers.last!)
+        }
+        
+        if rootVC!.isKind(of: UITabBarController.self) {
+            let tabBarController = rootVC as! UITabBarController
+            return getVisibleViewController(tabBarController.selectedViewController!)
+        }
+        
+        if let presentedVC = rootVC?.presentedViewController {
+            return getVisibleViewController(presentedVC)
+        }
+        
+        return rootVC
+    }
 
 
 }
-
 
 extension UIApplication {
     

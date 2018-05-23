@@ -325,8 +325,6 @@ class BurgerDashboardVC: UITableViewController {
     
     func setupCarousel(){
         
-        print("HIT THIS BITCH")
-        
         let burgerHeaderView = self.tableView.tableHeaderView as! BurgerHeaderView
     
         self.carousel.frame = burgerHeaderView.burgerImage.frame

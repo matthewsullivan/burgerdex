@@ -67,6 +67,7 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
         
     }
     
+
     func hideErrorView(){
         
          errorContainerView.isHidden = true

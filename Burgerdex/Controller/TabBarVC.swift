@@ -30,7 +30,7 @@ class TabBarVC: UITabBarController {
                 
                 tabBar.items?[0].title = "Catalogue"
                 tabBar.items?[1].title = "New Discovery"
-                tabBar.items?[2].title = "Passport"
+                //tabBar.items?[2].title = "Passport"
                 
             }else{
                 
@@ -42,7 +42,7 @@ class TabBarVC: UITabBarController {
             
             tabBar.items?[0].title = "Catalogue"
             tabBar.items?[1].title = "New Discovery"
-            tabBar.items?[2].title = "Passport"
+            //tabBar.items?[2].title = "Passport"
             
         }
         
