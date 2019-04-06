@@ -7,9 +7,7 @@
 //
 
 import UIKit
-/*
-    If the version number directory is different than the current version of the app, this indicates that the old service folder is fine to use with the current app version we are on. This stops us from having to create multiple directories on the server for any small bug fix or enhancement. As well as if we didn't update the service code.
- */
+
 private let versionNumber = "1.5.0"
 private let kBurgerPreview = "https://www.app.burgerdex.ca/services/ios/" + versionNumber + "/allBurgers.php"
 private let kSearchBurger = "https://www.app.burgerdex.ca/services/ios/" + versionNumber + "/searchBurgers.php"
@@ -17,11 +15,7 @@ private let kBurgerDetail = "https://www.app.burgerdex.ca/services/ios/" + versi
 private let kSubmitBurger = "https://www.burgerdex.ca/services/submitBurger.php"
 private let kBaseImagePath = "https://burgerdex.ca/"
 
-//Only using protocol and : BurgerObject on multiple classes due to using multiple different object types in a table view.
-//Instead of class BurgerPreview : BurgerObject { syntax, use class BurgerPreview { elsewhere
-protocol BurgerObject {
-    
-}
+protocol BurgerObject {}
 
 class BurgerPreview : BurgerObject {
 
@@ -65,7 +59,6 @@ class BurgerPreview : BurgerObject {
             return nil
         }
         
-        //Initialize stored properties.
         self.displayTag = displayTag
         self.displayText = displayText
         self.name = name
@@ -88,7 +81,6 @@ class BurgerPreview : BurgerObject {
         var patties = [BurgerPreview]()
         
         for _ in 1...10 {
-            
             guard let burgerPlaceholder = BurgerPreview.init(displayTag:"No.",
                                                           displayText:"19",
                                                           name:"Bacon Beast",
@@ -107,21 +99,15 @@ class BurgerPreview : BurgerObject {
             }
             
             patties += [burgerPlaceholder]
-            
         }
         
         return patties
-        
     }
     
-    
     class func fetchBurgerPreviews(page: Int, filter: Int, session: URLSession,  completion:@escaping (_ resultPatties:Array<Any>)->Void){
-        
-        //Start by invalidating on going long tasks
         session.invalidateAndCancel()
         
         var patties = [BurgerPreview]()
-        
         var burgerPreviewSuccess = [0,patties] as [Any]
 
         let url = kBurgerPreview
@@ -134,14 +120,10 @@ class BurgerPreview : BurgerObject {
         print(parameters)
         
         do {
-            
             let jsonParams = try JSONSerialization.data(withJSONObject: parameters, options:[])
             
             postRequest.httpBody = jsonParams
-    
-            
-        } catch { print("Error: unable to add parameters to POST request.")}
-        
+        } catch {}
         postRequest.httpMethod = "POST"
         postRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         postRequest.setValue("application/json", forHTTPHeaderField: "Accept")
@@ -149,19 +131,13 @@ class BurgerPreview : BurgerObject {
         session.dataTask(with: postRequest, completionHandler: { (data, response, error) -> Void in
             
             if error != nil { print("POST Request: Communication error: \(error!)") }
-            
             if data != nil {
-                
                 do {
-                   
                     if let burgerResults = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers) as? NSDictionary {
-                    
                         DispatchQueue.main.async(execute: {
-                        
                             if let burgers = burgerResults["burgers"] as? [[String: Any]] {
                                 
                                 for burger in burgers {
-                                    
                                     let displayTag = burger["displayTag"] as? String
                                     let displayText = burger["displayText"] as? String
                                     let name = burger["name"] as? String
@@ -189,59 +165,42 @@ class BurgerPreview : BurgerObject {
                                                                                  photo:UIImage(),
                                                                                  burgerID: catalogueNumber!,
                                                                         recordID:recordNumber!,
-                                                                        sightings: totalSightings!)else{
+                                                                        sightings: totalSightings!)
+                                    else{
                                         fatalError("Unable to instantiate burgerPreview")
                                     }
-                                    
                                     patties += [burgerPreview]
                                 }
-                                
                                  burgerPreviewSuccess[0] = 1
                                  burgerPreviewSuccess[1] = patties
                                 
                                 completion(burgerPreviewSuccess)
                             }
-                            
                         } as @convention(block) () -> Void)
                     }
-        
                 } catch {
-                    
-                    print("Error deserializing JSON: \(error)")
-                    
                     burgerPreviewSuccess[0] = 0
                     burgerPreviewSuccess[1] = patties
                     DispatchQueue.main.async(execute: {
                         completion(burgerPreviewSuccess)
                         
                     })
-                    
                 }
-            
             } else {
-                
                 DispatchQueue.main.async(execute: {
-                    print("Received empty response.")
-                    
                     burgerPreviewSuccess[0] = 0
                     burgerPreviewSuccess[1] = patties
                     
                     completion(burgerPreviewSuccess)
-                    
                 })
             }
-            
         }).resume()
-        
     }
     
     class func searchForBurgers(searchString: String, session: URLSession,  completion:@escaping (_ resultPatties:Array<Any>)->Void){
-        
-        //Start by invalidating on going long tasks
         session.invalidateAndCancel()
         
         var patties = [BurgerPreview]()
-        
         var burgerPreviewSuccess = [0,patties] as [Any]
         
         let url = kSearchBurger
@@ -251,37 +210,24 @@ class BurgerPreview : BurgerObject {
         
         let parameters: [String: Any] = ["searchString": String(searchString)]
         
-        print(parameters)
-        
         do {
-            
             let jsonParams = try JSONSerialization.data(withJSONObject: parameters, options:[])
             
             postRequest.httpBody = jsonParams
-            
-            
-        } catch { print("Error: unable to add parameters to POST request.")}
-        
+        } catch {}
         postRequest.httpMethod = "POST"
         postRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         postRequest.setValue("application/json", forHTTPHeaderField: "Accept")
         
         session.dataTask(with: postRequest, completionHandler: { (data, response, error) -> Void in
-            
             if error != nil { print("POST Request: Communication error: \(error!)") }
             
             if data != nil {
-                
                 do {
-                    
                     if let burgerResults = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers) as? NSDictionary {
-                        
                         DispatchQueue.main.async(execute: {
-                            
                             if let burgers = burgerResults["burgers"] as? [[String: Any]] {
-                                
                                 for burger in burgers {
-                                    
                                     let displayTag = burger["displayTag"] as? String
                                     let displayText = burger["displayText"] as? String
                                     let name = burger["name"] as? String
@@ -309,8 +255,9 @@ class BurgerPreview : BurgerObject {
                                                                                  photo:UIImage(),
                                                                                  burgerID: catalogueNumber!,
                                                                                  recordID: recordNumber!,
-                                                                                sightings: totalSightings!)else{
-                                                                                    fatalError("Unable to instantiate burgerPreview")
+                                                                                sightings: totalSightings!)
+                                    else{
+                                        fatalError("Unable to instantiate burgerPreview")
                                     }
                                     
                                     patties += [burgerPreview]
@@ -321,43 +268,29 @@ class BurgerPreview : BurgerObject {
                                 
                                 completion(burgerPreviewSuccess)
                             }
-                            
-                            } as @convention(block) () -> Void)
+                        } as @convention(block) () -> Void)
                     }
-                    
                 } catch {
-                    
-                    print("Error deserializing JSON: \(error)")
-                    
                     burgerPreviewSuccess[0] = 0
                     burgerPreviewSuccess[1] = patties
                     DispatchQueue.main.async(execute: {
                         completion(burgerPreviewSuccess)
                         
                     })
-                    
                 }
-                
             } else {
-                
                 DispatchQueue.main.async(execute: {
-                    print("Received empty response.")
-                    
                     burgerPreviewSuccess[0] = 0
                     burgerPreviewSuccess[1] = patties
                     
                     completion(burgerPreviewSuccess)
-                    
                 })
             }
-            
         }).resume()
-        
     }
 }
 
 class Burger : BurgerObject{
-    
     var name: String
     var kitchen: String
     var catalogueNumber: Int
@@ -401,8 +334,7 @@ class Burger : BurgerObject{
          hasChallenge: Bool,
          hasMods: Bool,
          dateCaptured: String) {
-        
-        // Initialize stored properties.
+
         self.name = name
         self.kitchen = kitchen
         self.catalogueNumber = catalogueNumber
@@ -449,9 +381,10 @@ class Burger : BurgerObject{
                                            seasonal: false,
                                            hasChallenge: false,
                                            hasMods: false,
-                                           dateCaptured: "2017-10-18 08:08:59") else {
+                                           dateCaptured: "2017-10-18 08:08:59")
+            else {
                                             
-                                            fatalError("Unable to instantiate burger")
+                fatalError("Unable to instantiate burger")
         }
         
         return burgerPlaceholder
@@ -459,7 +392,6 @@ class Burger : BurgerObject{
     }
     
     class func fetchBurgerDetails(burgerID: Int, completion:@escaping (_ pattyInformation:Array<Any>)->Void){
-        
         let url = kBurgerDetail
         
         var postRequest = URLRequest(url: URL(string:url)!,
@@ -469,38 +401,25 @@ class Burger : BurgerObject{
         let parameters: [String: Any] = ["id": String(burgerID)]
         
         do {
-            
             let jsonParams = try JSONSerialization.data(withJSONObject: parameters, options:[])
             
             postRequest.httpBody = jsonParams
-            
-            
-        } catch { print("Error: unable to add parameters to POST request.")}
-        
+        } catch {}
         postRequest.httpMethod = "POST"
         postRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         postRequest.setValue("application/json", forHTTPHeaderField: "Accept")
         
         URLSession.shared.dataTask(with: postRequest, completionHandler: { (data, response, error) -> Void in
-            
-            print(postRequest)
-            
             if error != nil { print("POST Request: Communication error: \(error!)") }
             
             var patty = [Burger]()
             
             if data != nil {
-                
                 do {
-                    
                     if let burgerResults = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers) as? NSDictionary {
-                        
                         DispatchQueue.main.async(execute: {
-                            
                             if let burgers = burgerResults["burger"] as? [[String: Any]] {
-                                
                                 for burger in burgers {
-                                    
                                     let name = burger["name"] as? String
                                     let kitchen = burger["kitchen"] as? String
                                     let descript = burger["description"] as? String
@@ -542,41 +461,28 @@ class Burger : BurgerObject{
                                                                        seasonal: seasonal!,
                                                                        hasChallenge: hasChallenge!,
                                                                        hasMods: hasMods!,
-                                                                       dateCaptured: dateCaptured!)else {
+                                                                       dateCaptured: dateCaptured!)
+                                        else {
                                                                         
-                                                                        fatalError("Unable to instantiate burger")
+                                        fatalError("Unable to instantiate burger")
                                     }
                                     
                                     patty.append(burgerInfo)
                                     
                                     completion(patty)
                                 }
-                                
-                               
                             }
-                            
-                            } as @convention(block) () -> Void)
+                        } as @convention(block) () -> Void)
                     }
-                    
                 } catch {
-                    
-                    print("Error deserializing JSON: \(error)")
-                    
                     completion(patty)
                 }
-                
             } else {
                 DispatchQueue.main.async(execute: {
-                    
-                    print("Received empty response.")
-                    
                     completion(patty)
                     
-                    // Could cause crashes
                     self.fetchBurgerDetails(burgerID: burgerID,completion: { (data) in
-                        
                         completion(patty)
-            
                     })
                 })
             }
@@ -585,11 +491,9 @@ class Burger : BurgerObject{
 }
 
 class BurgerSubmit{
-    
     func submitBurger(details: Dictionary<String, Any>, image: UIImage, completion:@escaping (_ requestResponse:Array<Any>)->Void){
         
         var message = [Any]()
-        
         var responseCode = [0,message] as [Any]
         
         var r  = URLRequest(url: URL(string: kSubmitBurger)!)
@@ -597,37 +501,24 @@ class BurgerSubmit{
         let boundary = "Boundary-\(UUID().uuidString)"
         r.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
         
-        print("Image before", image);
-    
         r.httpBody = createBody(parameters: details  as! [String : String],
                                 boundary: boundary,
                                 data: UIImageJPEGRepresentation(image, 0.1)!,
                                 mimeType: "image/jpg",
                                 filename: "burger.jpg")
         
-        print("Image after", UIImageJPEGRepresentation(image, 0.1) ?? "");
-        
         URLSession.shared.dataTask(with: r as URLRequest, completionHandler: { (data, response, error) -> Void in
             
             if error != nil { print("POST Request: Comsmunication error: \(error!)") }
-            
             if data != nil {
-                
                 do {
-                    
                     if let response = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers) as? NSDictionary {
-                        
-                        print(response)
-                        
                         DispatchQueue.main.async(execute: {
-                            
                             if let response = response["error"] as? [[String: Any]] {
-                                
                                 var serverMsg : String = "Success"
                                 var serverCode: Int = 0
                                 
                                 for msg in response {
-                                    
                                     message.append(msg["code"]! as! Int)
                                     message.append(msg["message"]! as! String)
                                     
@@ -646,34 +537,21 @@ class BurgerSubmit{
                     }
                     
                 } catch {
-                    
-                    print("Error deserializing JSON: \(error)")
-                    
                     responseCode[0] = 1
                     responseCode[1] = message
                     DispatchQueue.main.async(execute: {
                         completion(responseCode)
                         
                     })
-                    
                 }
-                
             } else {
-                
                 DispatchQueue.main.async(execute: {
-                    
-                    print("Received empty response.\(String(describing: error))")
-                    
                     responseCode[0] = 1
                     responseCode[1] = "Burger upload failed."
-                    
                     completion(responseCode)
-                    
                 })
             }
-            
         }).resume()
-
     }
     
     func createBody(parameters: [String: String],
@@ -683,7 +561,6 @@ class BurgerSubmit{
                     filename: String) -> Data {
         
         let body = NSMutableData()
-        
         let boundaryPrefix = "--\(boundary)\r\n"
         
         for (key, value) in parameters {
@@ -712,7 +589,6 @@ extension NSMutableData {
 
 
 class Badge : BurgerObject{
-    
     var ratingTitle: String
     var badgeTitle: String
     var badgeIcon: UIImage
@@ -720,8 +596,7 @@ class Badge : BurgerObject{
     init?(ratingTitle: String,
           badgeTitle: String,
           badgeIcon: UIImage) {
-        
-        // Initialize stored properties.
+
         self.ratingTitle = ratingTitle
         self.badgeTitle = badgeTitle
         self.badgeIcon = badgeIcon

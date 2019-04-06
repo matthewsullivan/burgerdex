@@ -28,8 +28,6 @@ class BurgerCameraVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
         
         func configureCameraController() {
             cameraController.prepare {(error) in
@@ -71,7 +69,6 @@ class BurgerCameraVC: UIViewController {
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     @IBAction func saveBurgerPhoto(_ sender: Any) {
@@ -89,26 +86,14 @@ class BurgerCameraVC: UIViewController {
     @IBAction func cancelBurgerCapture(_ sender: Any) {
         
         if self.cancelBurgerPhotoBtn.tag == 1{
-            
              dismiss(animated: true, completion: nil)
-            
         }else{
-            
-            //self.view.bringSubview(toFront: self.capturePreviewView)
-            //self.view.sendSubview(toBack: self.burgerImage)
             self.burgerImage.isHidden = true
-            
             self.savePhotoBtn.isEnabled = false
-            
             self.cancelBurgerPhotoBtn.title = "Cancel"
             
             cancelBurgerPhotoBtn.tag = 1
         }
-    
-       
-        
-       
-        
     }
 }
 
@@ -134,21 +119,11 @@ extension BurgerCameraVC {
             }
             
             self.burgerImage.image = image
-            //self.view.bringSubview(toFront: self.burgerImage)
-            
-             self.burgerImage.isHidden = false
-            
+            self.burgerImage.isHidden = false
             self.savePhotoBtn.isEnabled = true
-        
             self.cancelBurgerPhotoBtn.title = "Re-Take"
             self.cancelBurgerPhotoBtn.tag = 0
-        
-            /*
-            
-
- */
         }
     }
-    
 }
 

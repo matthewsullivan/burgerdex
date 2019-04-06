@@ -26,18 +26,8 @@ class UploadBurgerVC: UIViewController, UploadBurgerDelegate {
     
     var firstLoad = 0
     
-    @IBAction func errorButtonLabel(_ sender: Any) {
-        
-        if let url = URL(string:UIApplicationOpenSettingsURLString) {
-            if UIApplication.shared.canOpenURL(url) {
-                UIApplication.shared.open(url, options: [:], completionHandler: { success in
-                    print("Open app settings success: \(success)")
-                })
-            }
-        }
-    }
-    
     @IBOutlet fileprivate weak var collectionView: UICollectionView!
+
     fileprivate let kCellReuseIdentifier = "PhotoCell"
     fileprivate let kColumnCnt: Int = 3
     fileprivate let kCellSpacing: CGFloat = 2
@@ -51,68 +41,46 @@ class UploadBurgerVC: UIViewController, UploadBurgerDelegate {
         
         super.viewDidLoad()
         
-        // Do any additional setup after loading the view, typically from a nib.
         self.title = "New Discovery"
         
         setupCollectionViewOfCameraRollPhotos()
-        
-
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         
-        
-        /*
-            Used to reload the view if the user saves a new photo. This doesn't seem to crash when photo access is denied.
-         
-            If crashes happen in the future we will wrap the load and collection data reload in a boolen set in the etupCollectionViewOfCameraRollPhotos method.
-        */
-        
         if(firstLoad > 0) {
-            
             loadPhotos()
+
             self.collectionView.reloadData()
-            
         }
         
         firstLoad = 1
-        
-        
-        
     }
     
     func setupCollectionViewOfCameraRollPhotos(){
-        
         let status = PHPhotoLibrary.authorizationStatus()
         
         switch (status) {
-            
             case PHAuthorizationStatus.notDetermined:
                 PHPhotoLibrary.requestAuthorization { (status) -> Void in
                     if status == PHAuthorizationStatus.authorized {
-                       
                         self.errorContainerView.isHidden = true
                         
                         self.initView()
                         self.loadPhotos()
-                        
                     }
                 }
             
             case PHAuthorizationStatus.authorized:
-                
                 self.errorContainerView.isHidden = true
-                
                 
                 initView()
                 loadPhotos()
         
 
-                break // remove this maybe?
-            //openImagePickerButton.isEnabled = true
+                break
             case PHAuthorizationStatus.restricted, PHAuthorizationStatus.denied:
-                
                 self.errorContainerView.isHidden = false
                 self.displayErrorView(errorType: 0)
                 
@@ -122,14 +90,11 @@ class UploadBurgerVC: UIViewController, UploadBurgerDelegate {
         }
         
         self.collectionView.reloadData()
-        
     }
     
     func displayErrorView(errorType: Int){
-        
         self.errorContainerView.isHidden = false
-        //Error Type 0 = Filter match
-        //Error Type 1 = Network Connection
+        
         if errorType == 0 {
             
             self.errorImageContainer.image = UIImage(named: "noFood")
@@ -137,45 +102,31 @@ class UploadBurgerVC: UIViewController, UploadBurgerDelegate {
             self.errorBodyLabel.text = "Burgerdex requires access to your photos to upload a burger. Please go to your settings and allow access to your Camera Roll or Camera to begin the burger creation process."
             self.errorButton.isHidden = false
         }
-        
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     func performBurgerInformationSegue(photo : UIImage){
-        
         selectedPhoto = photo
         
         self.performSegue(withIdentifier: "uploadBurgerInfoSegue", sender: self)
-        
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
         if segue.identifier == "uploadBurgerInfoSegue" {
-                        
             let burgerInformationViewController = segue.destination as! UploadBurgerInformationVC
-            
             burgerInformationViewController.photo = selectedPhoto
-            
         }else{
-            
             let burgerCameraView = segue.destination as! BurgerCameraVC
-            
             burgerCameraView.delegate = self
-            
         }
-    
     }
-
 }
 
 fileprivate extension UploadBurgerVC {
-    fileprivate func initView() {
-        
+    func initView() {
         cameraBtn.isEnabled = true
         
         collectionView.delegate = self
@@ -195,12 +146,12 @@ fileprivate extension UploadBurgerVC {
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: kCellReuseIdentifier)
     }
     
-    fileprivate func loadPhotos() {
-    
+    func loadPhotos() {
         let options = PHFetchOptions()
         options.sortDescriptors = [
             NSSortDescriptor(key: "creationDate", ascending: false)
         ]
+
         fetchResult = PHAsset.fetchAssets(with: .image, options: options)
     }
 }
@@ -215,16 +166,13 @@ extension UploadBurgerVC: UICollectionViewDataSource {
             imageView.contentMode = .scaleAspectFill
             imageView.clipsToBounds = true
             cell.contentView.addSubview(imageView)
-            
         }
     
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
         return fetchResult.count
-        
     }
 }
     
@@ -252,13 +200,11 @@ extension UploadBurgerVC: UICollectionViewDelegate {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
         photoAsset = fetchResult.object(at: indexPath.item)
         
         self.selectedPhoto = getAssetThumbnail(asset: photoAsset)
     
         self.performSegue(withIdentifier: "uploadBurgerInfoSegue", sender: self)
-        
     }
     
     func getAssetThumbnail(asset: PHAsset) -> UIImage {
@@ -272,6 +218,5 @@ extension UploadBurgerVC: UICollectionViewDelegate {
     
         return thumbnail
     }
-    
 }
 

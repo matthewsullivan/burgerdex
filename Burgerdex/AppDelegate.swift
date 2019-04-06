@@ -11,7 +11,6 @@ import UserNotifications
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    
     var window: UIWindow?
     
     var visibleViewController: UIViewController? {
@@ -19,8 +18,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-
         setupNavigationAndStatusBarLayout()
         
         registerForPushNotifications()
@@ -28,9 +25,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
-    func setupNavigationAndStatusBarLayout(){
-        
-        UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
+    func setupNavigationAndStatusBarLayout(){        
+        var preferredStatusBarStyle : UIStatusBarStyle {
+            return .lightContent
+        }
+
         let barButtonItemAppearance = UIBarButtonItem.appearance()
         barButtonItemAppearance.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.clear], for: .normal)
         
@@ -74,40 +73,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         var fetchedToken = ""
         
         if((UserDefaults.standard.object(forKey: "deviceToken")) != nil){
-            
             fetchedToken = UserDefaults.standard.object(forKey: "deviceToken") as! String
         }
         
         if(fetchedToken != token){
-            
             let sharedSession = URLSession.shared
             
             Account.insertToken(token: token, session: sharedSession , completion: { (data) in
-                
                 if (data[0] as! Int) == 1{
-                    
-                    print("Save to defaults");
-                    
                     let defaults = UserDefaults.standard
                     
                     defaults.set(token, forKey: "deviceToken")
-                    
-                    
                 }
-                
             })
-            
-        }else{
-            
-            print("Token is the same as what is in the database, on the device, and what has been generated");
-            
         }
-    
     }
     
     func application(_ application: UIApplication,
                      didFailToRegisterForRemoteNotificationsWithError error: Error) {
-        print("Failed to register: \(error)")
     }
 
     
@@ -121,56 +104,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
-    // Handle push notification actions
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         
-        if response.actionIdentifier == "dismiss" {
-            //Do something...
-            
-            print("Go to full burger preview")
-            
-        }
+        if response.actionIdentifier == "dismiss" {}
         
         completionHandler()
     }
     
-    func applicationWillResignActive(_ application: UIApplication) {
-        // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-        // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
-        
-    }
+    func applicationWillResignActive(_ application: UIApplication) {}
 
-    func applicationDidEnterBackground(_ application: UIApplication) {
-        // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-        // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    func applicationDidEnterBackground(_ application: UIApplication) {}
 
-    }
-
-    func applicationWillEnterForeground(_ application: UIApplication) {
-        // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
-        
-    }
+    func applicationWillEnterForeground(_ application: UIApplication) {}
     
 
     func applicationDidBecomeActive(_ application: UIApplication) {
-        // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-  
-    
-        // HACK
         visibleViewController?.navigationController?.isNavigationBarHidden = false
-        
-        print(visibleViewController ?? "")
-      
     }
 
-    func applicationWillTerminate(_ application: UIApplication) {
-        // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    func applicationWillTerminate(_ application: UIApplication) {}
     
-    }
-    
-    // Hack navigation bar fix. Need to get the upper most view controller within the tab bar but from the app delegate.
     private func getVisibleViewController(_ rootViewController: UIViewController?) -> UIViewController? {
-        
         let rootVC = rootViewController ?? UIApplication.shared.keyWindow?.rootViewController
         
         if rootVC!.isKind(of: UINavigationController.self) {
@@ -189,14 +143,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         return rootVC
     }
-
-
 }
 
 extension UIApplication {
-    
     var statusBarView : UIView? {
-        
         return value(forKey: "statusBar") as? UIView
     }
 }

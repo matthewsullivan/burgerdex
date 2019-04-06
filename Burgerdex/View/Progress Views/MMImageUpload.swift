@@ -74,7 +74,7 @@ public extension UIImageView {
         }
     }
     
-    public var style:LoadingStyle {
+    var style:LoadingStyle {
         get {
             if let current = objc_getAssociatedObject(self,&StyleKey) as? LoadingStyle {
                 return current
@@ -88,7 +88,7 @@ public extension UIImageView {
         }
     }
     
-    public var status:UploadStatus {
+    var status:UploadStatus {
         get {
             if let current = objc_getAssociatedObject(self,&UploadKey) as? UploadStatus {
                 return current
@@ -101,7 +101,7 @@ public extension UIImageView {
         }
     }
     
-    public var completedBlock:(() -> Void)? {
+    var completedBlock:(() -> Void)? {
         get {
             if let c = objc_getAssociatedObject(self, &CompletedBlock) as? (() -> Void) {
                 return c
@@ -115,7 +115,7 @@ public extension UIImageView {
         }
     }
     
-    public var failBlock:(()-> Void)? {
+    var failBlock:(()-> Void)? {
         get {
             if let c = objc_getAssociatedObject(self, &FailBlock) as? (() -> Void) {
                 return c
@@ -235,8 +235,7 @@ public extension UIImageView  {
         self.currentProgress = animationProgress()
     }
     
-    public func uploadImage(image:UIImage,progress:Float) {
-        
+    func uploadImage(image:UIImage,progress:Float) {
         self.uploadImage(image:image, progress: progress, duration: DefaultDuration)
     }
     
@@ -261,11 +260,11 @@ public extension UIImageView  {
         }
     }
     
-    public func uploadImageFail() {
+    func uploadImageFail() {
         self.uploadImageFail(duration:DefaultDuration)
     }
     
-    public func uploadImageFail(duration:CFTimeInterval) {
+    func uploadImageFail(duration:CFTimeInterval) {
         
         if self.status == .completed || self.status == .failed {
             return
@@ -291,11 +290,11 @@ public extension UIImageView  {
         CATransaction.commit()
     }
     
-    public func uploadCompleted() {
+    func uploadCompleted() {
         self.uploadCompleted(duration:DefaultDuration)
     }
     
-    public func uploadCompleted(duration:CFTimeInterval) {
+    func uploadCompleted(duration:CFTimeInterval) {
         if self.status == .completed {
             return
         }
