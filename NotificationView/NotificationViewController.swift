@@ -37,13 +37,13 @@ class NotificationViewController: UIViewController, UNNotificationContentExtensi
  
             if let catalogueLabelString = notificationData["attachment-label"]{
                 catalogueNumberLabel.text = catalogueLabelString as? String
-            }else{
+            } else {
                 catalogueNumberLabel.text = "No."
             }
             
             if let catalogueLabelNumber = notificationData["attachment-number"]{
                 catalogueNumberNumber.text = catalogueLabelNumber as? String
-            }else{
+            } else {
                 catalogueNumberLabel.text = ""
                 catalogueNumberNumber.text = ""
             }

@@ -18,7 +18,6 @@ private let kBaseImagePath = "https://burgerdex.ca/"
 protocol BurgerObject {}
 
 class BurgerPreview : BurgerObject {
-
     var displayTag: String
     var displayText: String
     var name: String
@@ -54,8 +53,7 @@ class BurgerPreview : BurgerObject {
            catalogueNumber < 0 ||
            burgerID < 0 ||
            location.isEmpty  ||
-           year.isEmpty{
-            
+           year.isEmpty {
             return nil
         }
         
@@ -72,12 +70,9 @@ class BurgerPreview : BurgerObject {
         self.photoUrl = photoUrl
         self.thumbUrl = thumbUrl
         self.photo = photo
-        
-        
     }
     
     class func generatePlaceholderBurgers() ->Array<Any>{
-        
         var patties = [BurgerPreview]()
         
         for _ in 1...10 {
@@ -93,9 +88,9 @@ class BurgerPreview : BurgerObject {
                                                           photo:UIImage(),
                                                        burgerID: 0,
                                                        recordID: 0,
-                                                       sightings: 1)else{
-                                                    
-                                                    fatalError("Unable to instantiate burgerPreview")
+                                                       sightings: 1)
+            else {
+                    fatalError("Unable to instantiate burgerPreview")
             }
             
             patties += [burgerPlaceholder]
@@ -117,8 +112,6 @@ class BurgerPreview : BurgerObject {
         
         let parameters: [String: Any] = ["page": String(page), "filter": String(filter)]
         
-        print(parameters)
-        
         do {
             let jsonParams = try JSONSerialization.data(withJSONObject: parameters, options:[])
             
@@ -129,8 +122,6 @@ class BurgerPreview : BurgerObject {
         postRequest.setValue("application/json", forHTTPHeaderField: "Accept")
         
         session.dataTask(with: postRequest, completionHandler: { (data, response, error) -> Void in
-            
-            if error != nil { print("POST Request: Communication error: \(error!)") }
             if data != nil {
                 do {
                     if let burgerResults = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers) as? NSDictionary {
@@ -166,7 +157,7 @@ class BurgerPreview : BurgerObject {
                                                                                  burgerID: catalogueNumber!,
                                                                         recordID:recordNumber!,
                                                                         sightings: totalSightings!)
-                                    else{
+                                    else {
                                         fatalError("Unable to instantiate burgerPreview")
                                     }
                                     patties += [burgerPreview]
@@ -183,7 +174,6 @@ class BurgerPreview : BurgerObject {
                     burgerPreviewSuccess[1] = patties
                     DispatchQueue.main.async(execute: {
                         completion(burgerPreviewSuccess)
-                        
                     })
                 }
             } else {
@@ -220,8 +210,6 @@ class BurgerPreview : BurgerObject {
         postRequest.setValue("application/json", forHTTPHeaderField: "Accept")
         
         session.dataTask(with: postRequest, completionHandler: { (data, response, error) -> Void in
-            if error != nil { print("POST Request: Communication error: \(error!)") }
-            
             if data != nil {
                 do {
                     if let burgerResults = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers) as? NSDictionary {
@@ -256,7 +244,7 @@ class BurgerPreview : BurgerObject {
                                                                                  burgerID: catalogueNumber!,
                                                                                  recordID: recordNumber!,
                                                                                 sightings: totalSightings!)
-                                    else{
+                                    else {
                                         fatalError("Unable to instantiate burgerPreview")
                                     }
                                     
@@ -356,11 +344,9 @@ class Burger : BurgerObject{
         self.hasChallenge = hasChallenge
         self.hasMods = hasMods
         self.dateCaptured = dateCaptured
-        
     }
     
     class func generateBurgerPlaceholderInformation() ->Burger{
-        
         guard let burgerPlaceholder = Burger.init(name: "Bacon Beast",
                                            kitchen: "Burger Delight",
                                            catalogueNumber: 0,
@@ -382,13 +368,11 @@ class Burger : BurgerObject{
                                            hasChallenge: false,
                                            hasMods: false,
                                            dateCaptured: "2017-10-18 08:08:59")
-            else {
-                                            
-                fatalError("Unable to instantiate burger")
+        else {
+            fatalError("Unable to instantiate burger")
         }
         
         return burgerPlaceholder
-        
     }
     
     class func fetchBurgerDetails(burgerID: Int, completion:@escaping (_ pattyInformation:Array<Any>)->Void){
@@ -410,8 +394,6 @@ class Burger : BurgerObject{
         postRequest.setValue("application/json", forHTTPHeaderField: "Accept")
         
         URLSession.shared.dataTask(with: postRequest, completionHandler: { (data, response, error) -> Void in
-            if error != nil { print("POST Request: Communication error: \(error!)") }
-            
             var patty = [Burger]()
             
             if data != nil {
@@ -462,8 +444,7 @@ class Burger : BurgerObject{
                                                                        hasChallenge: hasChallenge!,
                                                                        hasMods: hasMods!,
                                                                        dateCaptured: dateCaptured!)
-                                        else {
-                                                                        
+                                    else {
                                         fatalError("Unable to instantiate burger")
                                     }
                                     
@@ -508,8 +489,6 @@ class BurgerSubmit{
                                 filename: "burger.jpg")
         
         URLSession.shared.dataTask(with: r as URLRequest, completionHandler: { (data, response, error) -> Void in
-            
-            if error != nil { print("POST Request: Comsmunication error: \(error!)") }
             if data != nil {
                 do {
                     if let response = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers) as? NSDictionary {
@@ -524,7 +503,6 @@ class BurgerSubmit{
                                     
                                     serverMsg = message[1] as! String
                                     serverCode = message[0] as! Int
-                                    
                                 }
                                 
                                 responseCode[0] = serverCode
@@ -535,13 +513,11 @@ class BurgerSubmit{
                             
                         } as @convention(block) () -> Void)
                     }
-                    
                 } catch {
                     responseCode[0] = 1
                     responseCode[1] = message
                     DispatchQueue.main.async(execute: {
                         completion(responseCode)
-                        
                     })
                 }
             } else {
@@ -600,7 +576,5 @@ class Badge : BurgerObject{
         self.ratingTitle = ratingTitle
         self.badgeTitle = badgeTitle
         self.badgeIcon = badgeIcon
-        
     }
-    
 }

@@ -16,18 +16,15 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
     @IBOutlet weak var errorHeaderLabel: UILabel!
     @IBOutlet weak var errorBodyLabel: UILabel!
     @IBOutlet weak var errorImageContainer: UIImageView!
+    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var collectionView: UICollectionView!
+
     @IBAction func errorButtonLabel(_ sender: Any) {
-        
         self.requestCatalogueBurgerData(page:1, filter:self.selectedFilterIndex)
-        
     }
-    
-    
     @IBAction func searchBurgerBtn(_ sender: Any) {
         self.performSegue(withIdentifier: "searchBurgersSegue", sender: self)
     }
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var collectionView: UICollectionView!
     
     var selectedBurger: BurgerPreview!
     var burgerThumbnail: UIImage!
@@ -95,7 +92,7 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
                 statusBarCorrect = UIApplication.shared.statusBarFrame.height - 20
                 
                 sbshown = true
-            }else{
+            } else {
                 sbshown = false
                 
                 statusBarCorrect = UIApplication.shared.statusBarFrame.height
@@ -109,7 +106,7 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
         if (sbshown) {
             sbshown = false
             statusBarCorrect = UIApplication.shared.statusBarFrame.height
-        }else{
+        } else {
             sbshown = true
             statusBarCorrect = UIApplication.shared.statusBarFrame.height - 20
         }
@@ -189,7 +186,6 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
                         for (key, value) in sortedByKeyDictionary {
                             self.burgerSortedArray.append(BurgerSort(sectionName: key, sectionObjects: value))
                         }
-                        
                     }
                     
                     if self.selectedFilterIndex == 2{
@@ -203,7 +199,6 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
                            
                             self.burgerSortedArray.append(BurgerSort(sectionName: key, sectionObjects: value))
                         }
-                        
                     }
                     
                     self.tableView.reloadData()
@@ -214,8 +209,7 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
                     self.tableView.isScrollEnabled = true
                     
                     self.pageIndex  += 1
-                    
-                }else{
+                } else {
                     self.displayErrorView(errorType: 0)
                     
                     self.burgers.removeAll()
@@ -227,7 +221,7 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
                     self.tableView.allowsSelection = true
                     self.tableView.isScrollEnabled = true
                 }
-            }else{
+            } else {
                 self.displayErrorView(errorType: 1)
                 
                 self.burgers.removeAll()
@@ -249,7 +243,7 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
     func numberOfSections(in tableView: UITableView) -> Int {
         if selectedFilterIndex == 14 || selectedFilterIndex == 13 || selectedFilterIndex == 2{
             return burgerSortedArray.count
-        }else{
+        } else {
             return 1
         }
     }
@@ -257,7 +251,7 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if selectedFilterIndex == 14 || selectedFilterIndex == 13 || selectedFilterIndex == 2{
             return burgerSortedArray[section].sectionObjects.count
-        }else{
+        } else {
             return burgers.count
         }
     }
@@ -272,7 +266,7 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
         
         if selectedFilterIndex == 14 || selectedFilterIndex == 13 || selectedFilterIndex == 2{
             burger = burgerSortedArray[indexPath.section].sectionObjects[indexPath.row]
-        }else{
+        } else {
             burger = burgers[indexPath.row]
         }
         
@@ -315,7 +309,7 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
                     
                     self.tableView.reloadData()
                     
-                }else{
+                } else {
                     self.noMoreData = true
                 }
             })
@@ -335,7 +329,7 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
         
         if selectedFilterIndex == 14 || selectedFilterIndex == 13 || selectedFilterIndex == 2{
             burger = burgerSortedArray[indexPath.section].sectionObjects[indexPath.row]
-        }else{
+        } else {
             burger = burgers[indexPath.row]
         }
         
@@ -372,7 +366,6 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
                                 for (key, value) in sortedByKeyDictionary {
                                     self.burgerSortedArray.append(BurgerSort(sectionName: key, sectionObjects: value))
                                 }
-                                
                             }
                             
                             if self.selectedFilterIndex == 13{
@@ -385,7 +378,6 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
                                 for (key, value) in sortedByKeyDictionary {
                                     self.burgerSortedArray.append(BurgerSort(sectionName: key, sectionObjects: value))
                                 }
-                                
                             }
                             
                             if self.selectedFilterIndex == 2{
@@ -397,15 +389,12 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
                                 let sortedByKeyDictionary = dictionary.sorted { $0.0 > $1.0 }
                                 
                                 for (key, value) in sortedByKeyDictionary {
-                                    
                                     self.burgerSortedArray.append(BurgerSort(sectionName: key, sectionObjects: value))
                                 }
-                                
                             }
                             
                             self.tableView.reloadData()
-                        }else{
-                            
+                        } else {
                             self.noMoreData = true
                         }
                     })
@@ -445,7 +434,7 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
         
         if selectedFilterIndex == 14 || selectedFilterIndex == 13 || selectedFilterIndex == 2{
             burger = burgerSortedArray[indexPath.section].sectionObjects[indexPath.row]
-        }else{
+        } else {
             burger = burgers[indexPath.row]
         }
     
@@ -454,8 +443,8 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
         
         if(burger.sightings > 1){
             self.performSegue(withIdentifier: "multipleSightingSegue", sender: self)
-        }else{
-             self.performSegue(withIdentifier: "burgerSegue", sender: self)
+        } else {
+            self.performSegue(withIdentifier: "burgerSegue", sender: self)
         }
     }
     
@@ -469,24 +458,23 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
             
             if burgerThumbnail.size.width == 0.0 {
                 burgerViewController.burgerThumbnail = UIImage(named:"baconBeast")
-            }else{
+            } else {
                 burgerViewController.burgerThumbnail = burgerThumbnail
             }
             
             burgerViewController.burger = selectedBurger
             
-            
-         }else if(segue.identifier == "multipleSightingSegue"){
+         } else if (segue.identifier == "multipleSightingSegue"){
             let burgerViewController = segue.destination as! BurgerDashboardVC
+
             if burgerThumbnail.size.width == 0.0 {
                 burgerViewController.burgerThumbnail = UIImage(named:"baconBeast")
-            }else{
+            } else {
                 burgerViewController.burgerThumbnail = burgerThumbnail
             }
 
             burgerViewController.burger = selectedBurger
-            
-         }else{
+         } else {
             let navVC = segue.destination as? UINavigationController
             let burgerViewController = navVC?.viewControllers.first as! SearchBurgerVC
             
@@ -503,8 +491,8 @@ extension CatalogueVC: UICollectionViewDelegate, UICollectionViewDataSource, UIC
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let filterNames = filters[indexPath.row]
         
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FilterCatalogueCell", for: indexPath) as? FilterCatalogueCollectionViewCell  else{
-            
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FilterCatalogueCell", for: indexPath) as? FilterCatalogueCollectionViewCell
+        else {
             fatalError("The dequeued cell is not an instance of FilterCatalogueCell.")
         }
 
@@ -517,7 +505,7 @@ extension CatalogueVC: UICollectionViewDelegate, UICollectionViewDataSource, UIC
                                            alpha: 1)
             
             cell.filterName.textColor = UIColor.white
-        }else{
+        } else {
             cell.backgroundColor = UIColor.clear
             cell.filterName.textColor = UIColor.gray
         }
@@ -530,6 +518,7 @@ extension CatalogueVC: UICollectionViewDelegate, UICollectionViewDataSource, UIC
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         let size: CGSize = filters[indexPath.row].size(withAttributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14.0)])
+
         return CGSize(width: size.width + 25.0, height: collectionView.bounds.size.height)
     }
     
@@ -569,8 +558,7 @@ extension CatalogueVC: UICollectionViewDelegate, UICollectionViewDataSource, UIC
                                            at: UITableViewScrollPosition.top,
                                            animated: false)
             }
-            
-        }else{
+        } else {
             if self.burgers.count > 0 {
                 self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0),
                                            at: UITableViewScrollPosition.top,

@@ -35,7 +35,6 @@ class UploadBurgerInformationVC: UITableViewController,
     let tvPlaceHolder = "Describe your first few bites."
     
     @IBAction func submitBtn(_ sender: Any) {
-        
         setInputValueFields()
         
         details["ratingLbl"] = "" as AnyObject
@@ -64,7 +63,7 @@ class UploadBurgerInformationVC: UITableViewController,
                  self.delay(seconds: 1.5, completion: {
                     SwiftSpinner.hide()
                 })
-            }else{
+            } else {
                 self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0),
                                            at: UITableViewScrollPosition.top,
                                            animated: false)
@@ -224,63 +223,63 @@ class UploadBurgerInformationVC: UITableViewController,
                 
         guard let fusionBadge = Badge.init(ratingTitle: "",
                                            badgeTitle: "fusion",
-                                           badgeIcon: UIImage(named: "fusion")!
-            )else {
-                fatalError("Unable to instantiate fusion badge")
+                                           badgeIcon: UIImage(named: "fusion")!)
+        else {
+            fatalError("Unable to instantiate fusion badge")
         }
         
         self.badges += [fusionBadge]
 
         guard let veggieBadge = Badge.init(ratingTitle: "",
                                            badgeTitle: "veggie",
-                                           badgeIcon: UIImage(named: "veggie")!
-            )else {
-                fatalError("Unable to instantiate veggie badge")
+                                           badgeIcon: UIImage(named: "veggie")!)
+        else {
+            fatalError("Unable to instantiate veggie badge")
         }
         
         self.badges += [veggieBadge]
 
         guard let spicyBadge = Badge.init(ratingTitle: "",
                                           badgeTitle: "spicy",
-                                          badgeIcon: UIImage(named: "spicy")!
-            )else {
-                fatalError("Unable to instantiate spicy badge")
+                                          badgeIcon: UIImage(named: "spicy")!)
+        else {
+            fatalError("Unable to instantiate spicy badge")
         }
         
         self.badges += [spicyBadge]
 
         guard let extinctBadge = Badge.init(ratingTitle: "",
                                             badgeTitle: "extinct",
-                                            badgeIcon: UIImage(named: "available")!
-            )else {
-                fatalError("Unable to instantiate extinct badge")
+                                            badgeIcon: UIImage(named: "available")!)
+        else {
+            fatalError("Unable to instantiate extinct badge")
         }
         
         self.badges += [extinctBadge]
 
         guard let seasonalBadge = Badge.init(ratingTitle: "",
                                              badgeTitle: "limited",
-                                             badgeIcon: UIImage(named: "seasonal")!
-            )else {
-                fatalError("Unable to instantiate seasonal badge")
+                                             badgeIcon: UIImage(named: "seasonal")!)
+        else {
+            fatalError("Unable to instantiate seasonal badge")
         }
         
         self.badges += [seasonalBadge]
 
         guard let hasChallengeBadge = Badge.init(ratingTitle: "",
                                                  badgeTitle: "challenge",
-                                                 badgeIcon: UIImage(named: "hasChallenge")!
-            )else {
-                fatalError("Unable to instantiate hasChallenge badge")
+                                                 badgeIcon: UIImage(named: "hasChallenge")!)
+        else {
+            fatalError("Unable to instantiate hasChallenge badge")
         }
         
         self.badges += [hasChallengeBadge]
  
         guard let hasModsBadge = Badge.init(ratingTitle: "",
                                             badgeTitle: "mods",
-                                            badgeIcon: UIImage(named: "hasMods")!
-            )else {
-                fatalError("Unable to instantiate hasChallege badge")
+                                            badgeIcon: UIImage(named: "hasMods")!)
+        else {
+            fatalError("Unable to instantiate hasChallege badge")
         }
         
         self.badges += [hasModsBadge]
@@ -321,7 +320,7 @@ class UploadBurgerInformationVC: UITableViewController,
             progress = (progress + 0.15 <= 1.0) ? progress + 0.15 : 1.0
             
             headerBurgerNameLabel.text = fields["name"]?.text
-        }else{
+        } else {
             headerBurgerNameLabel.text = headerBurgerNamePlaceholder
         }
         
@@ -329,10 +328,9 @@ class UploadBurgerInformationVC: UITableViewController,
             progress = (progress + 0.15 <= 1.0) ? progress + 0.15 : 1.0
             
             headerKitchenLabel.text = fields["kitchen"]?.text
-        }else{
+        } else {
             headerKitchenLabel.text = headerBurgerKitchenPlaceholder
         }
-        
         
         var atLeastOneIngredient = false
 
@@ -341,7 +339,7 @@ class UploadBurgerInformationVC: UITableViewController,
                 atLeastOneIngredient = true
                 
                 break
-            }else{
+            } else {
                 atLeastOneIngredient = false
             }
         }
@@ -362,7 +360,7 @@ class UploadBurgerInformationVC: UITableViewController,
             self.submitBtn.isEnabled = true
             self.submitBtn.alpha = 1.0;
             
-        }else{
+        } else {
             self.submitBtn.isEnabled = false
             self.submitBtn.alpha = 0.5;
         }
@@ -371,7 +369,6 @@ class UploadBurgerInformationVC: UITableViewController,
     }
    
     @objc func keyboardWillShow(notification: NSNotification){
-        
         var userInfo = notification.userInfo!
         var keyboardFrame:CGRect = (userInfo[UIKeyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
         keyboardFrame = self.view.convert(keyboardFrame, from: nil)
@@ -406,7 +403,6 @@ class UploadBurgerInformationVC: UITableViewController,
     }
 
     override func didReceiveMemoryWarning() {
-        
         super.didReceiveMemoryWarning()
     }
     
@@ -426,7 +422,8 @@ class UploadBurgerInformationVC: UITableViewController,
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cellIdentifier = "UploadInfoCell"
         
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? UploadTableViewCell  else{
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? UploadTableViewCell
+        else {
             fatalError("The dequeued cell is not an instance of UploadTableViewCell.")
         }
         
@@ -478,13 +475,13 @@ class UploadBurgerInformationVC: UITableViewController,
         
         if details["name"] as! String != headerBurgerNamePlaceholder {
             cell.burgerNameTextField.text = (details["name"] as! String)
-        }else{
+        } else {
             cell.burgerNameTextField.text = ""
         }
         
         if details["kitchen"] as! String != headerBurgerKitchenPlaceholder {
             cell.kitchenNameTextField.text = (details["kitchen"] as! String)
-        }else{
+        } else {
             cell.kitchenNameTextField.text = ""
         }
         
@@ -581,7 +578,6 @@ class UploadBurgerInformationVC: UITableViewController,
         let calcHeight = textView.sizeThatFits(textView.frame.size).height
         
         if startHeight != calcHeight {
-            
             UIView.setAnimationsEnabled(false)
             self.tableView.beginUpdates()
             self.tableView.endUpdates()
@@ -596,11 +592,10 @@ class UploadBurgerInformationVC: UITableViewController,
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {}
 
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
-    {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 1 {
             return 80
-        }else{
+        } else {
             return tableView.rowHeight
         }
     }
@@ -609,7 +604,7 @@ class UploadBurgerInformationVC: UITableViewController,
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 1 {
             return 0.0
-        }else{
+        } else {
             return 80.0
         }
     }
@@ -620,13 +615,13 @@ class UploadBurgerInformationVC: UITableViewController,
         
             if (details["name"] as! String) != headerBurgerNamePlaceholder && (details["name"] as! String) != "" {
                 cell.burgerName.text = (details["name"] as! String)
-            }else{
+            } else {
                 cell.burgerName.text = headerBurgerNamePlaceholder
             }
             
             if (details["kitchen"] as! String) != headerBurgerKitchenPlaceholder && (details["kitchen"] as! String) != ""{
                  cell.kitchenName.text = (details["kitchen"] as! String)
-            }else{
+            } else {
                 cell.kitchenName.text = headerBurgerKitchenPlaceholder
             }
         
@@ -643,7 +638,7 @@ class UploadBurgerInformationVC: UITableViewController,
             determineDetailProgress()
             
             return cell.contentView
-        }else{
+        } else {
             return nil
         }
     }
@@ -663,14 +658,14 @@ class UploadBurgerInformationVC: UITableViewController,
                                                                              blue: 107/255,
                                                                              alpha: 1)
                 self.navigationController?.navigationBar.backgroundColor = colour
-            }else{
+            } else {
                 let colour = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: offset)
                 
                 self.navigationController?.navigationBar.tintColor = UIColor.white
                 self.navigationController?.navigationBar.backgroundColor = colour
             }
+
             let headerView = self.tableView.tableHeaderView as! BurgerHeaderView
-            
             headerView.scrollViewDidScroll(scrollView: scrollView)
         }
     }
@@ -703,7 +698,7 @@ extension UploadBurgerInformationVC: UICollectionViewDelegate,
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
          if collectionView == self.ingredientCollectionView {
              return tags.count
-         }else{
+         } else {
              return badges.count
         }
     }
@@ -715,11 +710,11 @@ extension UploadBurgerInformationVC: UICollectionViewDelegate,
             self.configureCell(cell: cell, forIndexPath: indexPath as NSIndexPath)
         
             return cell
-         }else{
+         } else {
             let burgerBadge = badges[indexPath.row]
             
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BadgeCell", for: indexPath) as? BurgerBadgeCollectionViewCell  else{
-                
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BadgeCell", for: indexPath) as? BurgerBadgeCollectionViewCell
+            else {
                 fatalError("The dequeued cell is not an instance of BurgerTableViewCell.")
             }
             
@@ -743,11 +738,9 @@ extension UploadBurgerInformationVC: UICollectionViewDelegate,
             if (details[detailsKey] as AnyObject) as! String == "1"{cell.selectionStatus.backgroundColor = colour}
             
             if(firstLayout){
-        
                 firstLayout = false
                 
                 redrawIngredientHeight()
-        
             }
             
             return cell
@@ -767,7 +760,7 @@ extension UploadBurgerInformationVC: UICollectionViewDelegate,
             self.configureCell(cell: self.sizingCell!, forIndexPath: indexPath as NSIndexPath)
             
             return self.sizingCell!.systemLayoutSizeFitting(UILayoutFittingCompressedSize)
-        }else{
+        } else {
             let cellSize = CGSize(width: 65, height: 85);
             
             return cellSize
@@ -781,7 +774,7 @@ extension UploadBurgerInformationVC: UICollectionViewDelegate,
             determineDetailProgress()
             
             self.ingredientCollectionView.reloadData()
-        }else{
+        } else {
             selectedBadgesIndex = indexPath.row
             
             let colour = UIColor(red: 222/255,
@@ -803,7 +796,7 @@ extension UploadBurgerInformationVC: UICollectionViewDelegate,
                     
                     cell.selectionStatus.backgroundColor = colour
                     
-                }else{
+                } else {
                     
                     if indexPath.row == 0 {details["fusion"] = "0" as AnyObject}
                     if indexPath.row == 1 {details["veggie"] = "0" as AnyObject}
@@ -827,7 +820,7 @@ extension UploadBurgerInformationVC: UICollectionViewDelegate,
             if !ingredients.contains(tag.name!) {
                 ingredients.append(tag.name!)
             }
-        }else{
+        } else {
             if let index = ingredients.index(of: tag.name!) {
                 ingredients.remove(at: index)
             }

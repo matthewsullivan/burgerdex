@@ -24,10 +24,10 @@ class TabBarVC: UITabBarController {
                 
                 tabBar.items?[0].title = "Catalogue"
                 tabBar.items?[1].title = "New Discovery"
-            }else{
+            } else {
                  UITabBarItem.appearance().setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.clear], for: .normal)
             }
-        }else{
+        } else {
             tabBar.items?[0].title = "Catalogue"
             tabBar.items?[1].title = "New Discovery"
         }

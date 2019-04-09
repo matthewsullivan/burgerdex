@@ -9,7 +9,6 @@
 import UIKit
 
 class PassportVC: UIViewController {
-
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -19,7 +18,5 @@ class PassportVC: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-
-
 }
 

@@ -35,8 +35,6 @@ class Account  {
         postRequest.setValue("application/json", forHTTPHeaderField: "Accept")
         
         session.dataTask(with: postRequest, completionHandler: { (data, response, error) -> Void in
-            if error != nil { print("POST Request: Communication error: \(error!)") }
-            
             if data != nil {
                 do {
                     if let tokenResponse = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers) as? NSDictionary {
@@ -47,7 +45,7 @@ class Account  {
                                 tokenResponseData[0] = 0
                 
                                 completion(tokenResponseData)
-                            }else{
+                            } else {
                                 tokenResponseData[0] = 1
                                 
                                 completion(tokenResponseData)
@@ -59,16 +57,13 @@ class Account  {
             
                     DispatchQueue.main.async(execute: {
                         completion(tokenResponseData)
-                        
                     })
                 }
-                
             } else {
                 tokenResponseData[0] = 1
         
                 DispatchQueue.main.async(execute: {
                     completion(tokenResponseData)
-                    
                 })
             }
         }).resume()

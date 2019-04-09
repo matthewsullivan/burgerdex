@@ -71,10 +71,8 @@ extension UNNotificationAttachment {
                                                                         url: fileURL!,
                                                                         options: options)
                 return imageAttachment
-            } catch let error {
-                print("error \(error)")
-            }
+            } catch {}
             
-            return nil
+        return nil
     }
 }

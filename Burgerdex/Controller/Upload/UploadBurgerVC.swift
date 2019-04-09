@@ -10,24 +10,21 @@ import UIKit
 import Photos
 
 class UploadBurgerVC: UIViewController, UploadBurgerDelegate {
-    
     @IBOutlet weak var errorButton: UIButton!
     @IBOutlet weak var errorContainerView: UIView!
     @IBOutlet weak var errorHeaderLabel: UILabel!
     @IBOutlet weak var errorBodyLabel: UILabel!
     @IBOutlet weak var errorImageContainer: UIImageView!
-    
     @IBOutlet weak var cameraBtn: UIBarButtonItem!
+    @IBOutlet fileprivate weak var collectionView: UICollectionView!
+
     @IBAction func cameraButtonTouch(_ sender: Any) {
         self.performSegue(withIdentifier: "burgerCameraSegue", sender: self)
     }
     
     var selectedPhoto : UIImage!
-    
     var firstLoad = 0
     
-    @IBOutlet fileprivate weak var collectionView: UICollectionView!
-
     fileprivate let kCellReuseIdentifier = "PhotoCell"
     fileprivate let kColumnCnt: Int = 3
     fileprivate let kCellSpacing: CGFloat = 2
@@ -38,7 +35,6 @@ class UploadBurgerVC: UIViewController, UploadBurgerDelegate {
     var photoAsset : PHAsset!
     
     override func viewDidLoad() {
-        
         super.viewDidLoad()
         
         self.title = "New Discovery"
@@ -78,7 +74,6 @@ class UploadBurgerVC: UIViewController, UploadBurgerDelegate {
                 initView()
                 loadPhotos()
         
-
                 break
             case PHAuthorizationStatus.restricted, PHAuthorizationStatus.denied:
                 self.errorContainerView.isHidden = false
@@ -96,7 +91,6 @@ class UploadBurgerVC: UIViewController, UploadBurgerDelegate {
         self.errorContainerView.isHidden = false
         
         if errorType == 0 {
-            
             self.errorImageContainer.image = UIImage(named: "noFood")
             self.errorHeaderLabel.text = "SORRY"
             self.errorBodyLabel.text = "Burgerdex requires access to your photos to upload a burger. Please go to your settings and allow access to your Camera Roll or Camera to begin the burger creation process."
@@ -118,7 +112,7 @@ class UploadBurgerVC: UIViewController, UploadBurgerDelegate {
         if segue.identifier == "uploadBurgerInfoSegue" {
             let burgerInformationViewController = segue.destination as! UploadBurgerInformationVC
             burgerInformationViewController.photo = selectedPhoto
-        }else{
+        } else {
             let burgerCameraView = segue.destination as! BurgerCameraVC
             burgerCameraView.delegate = self
         }

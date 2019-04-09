@@ -36,6 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearance().barTintColor = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1)
         UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
         UINavigationBar.appearance().shadowImage = UIImage()
+
         let colour = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1)
         
         UINavigationBar.appearance().backgroundColor = colour
@@ -53,9 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func registerForPushNotifications() {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
-            (granted, error) in
-            print("Permission granted: \(granted)")
-            
+            (granted, error) in 
             guard granted else { return }
             
             self.getNotificationSettings()
@@ -96,7 +95,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func getNotificationSettings() {
         UNUserNotificationCenter.current().getNotificationSettings { (settings) in
-            print("Notification settings: \(settings)")
             guard settings.authorizationStatus == .authorized else { return }
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.registerForRemoteNotifications()

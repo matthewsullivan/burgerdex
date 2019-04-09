@@ -125,7 +125,6 @@ final public class ZKCarousel: UIView, UICollectionViewDelegateFlowLayout, UICol
     }
     
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        print(slides.count)
         return self.slides.count
     }
     
@@ -153,10 +152,7 @@ fileprivate class carouselCollectionViewCell: UICollectionViewCell {
     
     fileprivate var slide : ZKCarouselSlide? {
         didSet {
-            guard let slide = slide else {
-                print("ZKCarousel could not parse the slide you provided. \n\(String(describing: self.slide))")
-                return
-            }
+            guard let slide = slide else { return }
             self.parseData(forSlide: slide)
         }
     }

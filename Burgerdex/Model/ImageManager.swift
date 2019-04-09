@@ -33,8 +33,7 @@ class ImageManager: NSObject {
             let session = URLSession.shared
             let downloadTask = session.downloadTask(with: url, completionHandler: { (retrievedURL, response, error) -> Void in
                 var found = false
-                if error != nil { print("Error downloading image \(url.absoluteString): \(error!.localizedDescription)") }
-                else if retrievedURL != nil {
+                if retrievedURL != nil {
                     if let data = try? Data(contentsOf: retrievedURL!) {
                         if let image = UIImage(data: data) {
                             found = true

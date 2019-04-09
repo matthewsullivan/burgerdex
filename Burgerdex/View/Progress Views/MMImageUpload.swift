@@ -279,7 +279,6 @@ public extension UIImageView  {
                 self.uploadImage(image: i, progress: 0.0, duration: duration)
             } else {
                 self.status = .none
-                print("Not set Upload Image")
             }
         }
         self.sectorLayer.frame = self.layerFrame()
@@ -304,7 +303,6 @@ public extension UIImageView  {
             self.uploadImage(image:i, progress:1.0,duration: duration)
         } else {
             self.status = .none
-            print("not set Upload Image")
         }
     }
     

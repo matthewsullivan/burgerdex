@@ -18,8 +18,10 @@ class SearchBurgerVC: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet weak var errorHeaderLabel: UILabel!
     @IBOutlet weak var errorBodyLabel: UILabel!
     @IBOutlet weak var errorImageContainer: UIImageView!
+    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var searchBar: UISearchBar!
+
     @IBAction func errorButtonLabel(_ sender: Any) {
-        
         searchBar.text = ""
                 
         TableLoader.removeLoaderFrom(self.tableView)
@@ -27,23 +29,18 @@ class SearchBurgerVC: UIViewController, UITableViewDelegate, UITableViewDataSour
         self.tableView.reloadData()
         
         hideErrorView()
-        
     }
-    
-    var selectedBurger: BurgerPreview!
-    var burgerThumbnail: UIImage!
-    
-    let sharedSession = URLSession.shared
-    
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var searchBar: UISearchBar!
-    
-    var sbshown: Bool = false
-    var statusBarCorrect: CGFloat = 20.0
-    
     @IBAction func closeSearchBtn(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
     }
+    
+    let sharedSession = URLSession.shared
+    
+    var selectedBurger: BurgerPreview!
+    var burgerThumbnail: UIImage!
+    var sbshown: Bool = false
+    var statusBarCorrect: CGFloat = 20.0
+    var lastContentOffset: CGFloat = 0
     
     func checkForStatusBars(){
         if UIDevice.current.modelName != "iPhone10,3" || UIDevice.current.modelName != "iPhone10,6" {
@@ -51,12 +48,11 @@ class SearchBurgerVC: UIViewController, UITableViewDelegate, UITableViewDataSour
                 statusBarCorrect = UIApplication.shared.statusBarFrame.height - 20
                 
                 sbshown = true
-            }else{
+            } else {
                 sbshown = false
                 
                 statusBarCorrect = UIApplication.shared.statusBarFrame.height
             }
-
             NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationDidChangeStatusBarFrame, object: nil, queue: nil, using: statusbarChange)
         }
     }
@@ -65,7 +61,7 @@ class SearchBurgerVC: UIViewController, UITableViewDelegate, UITableViewDataSour
         if (sbshown) {
             sbshown = false
             statusBarCorrect = UIApplication.shared.statusBarFrame.height
-        }else{
+        } else {
             sbshown = true
             statusBarCorrect = UIApplication.shared.statusBarFrame.height - 20
         }
@@ -81,7 +77,6 @@ class SearchBurgerVC: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         checkPassedBurgers()
         checkForStatusBars()
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -93,7 +88,7 @@ class SearchBurgerVC: UIViewController, UITableViewDelegate, UITableViewDataSour
     func checkPassedBurgers(){
         if burgers.count > 0 {
             hideErrorView()
-        }else{
+        } else {
             self.displayErrorView(errorType: 0)
         }
     }
@@ -165,7 +160,7 @@ class SearchBurgerVC: UIViewController, UITableViewDelegate, UITableViewDataSour
                     self.tableView.reloadData()
                     
                     TableLoader.removeLoaderFrom(self.tableView)
-                }else{
+                } else {
                     self.displayErrorView(errorType: 0)
                     
                     self.burgers = self.originalSetOfBurgers
@@ -179,7 +174,7 @@ class SearchBurgerVC: UIViewController, UITableViewDelegate, UITableViewDataSour
                    
                     searchBar.resignFirstResponder()
                 }
-            }else{
+            } else {
                 self.displayErrorView(errorType: 1)
                 
                 TableLoader.removeLoaderFrom(self.tableView)
@@ -291,7 +286,7 @@ class SearchBurgerVC: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         if(burger.sightings > 1){
             self.performSegue(withIdentifier: "searchMultipleSightingSegue", sender: self)
-        }else{
+        } else {
             self.performSegue(withIdentifier: "burgerDetailSegue", sender: self)
         }
     }
@@ -300,8 +295,6 @@ class SearchBurgerVC: UIViewController, UITableViewDelegate, UITableViewDataSour
         return 80.0
     }
     
-    var lastContentOffset: CGFloat = 0
-    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if let _ = scrollView as? UITableView {
             self.searchBar.frame = CGRect(x:self.searchBar.frame.origin.x,
@@ -309,7 +302,7 @@ class SearchBurgerVC: UIViewController, UITableViewDelegate, UITableViewDataSour
                                                width:self.searchBar.frame.width,
                                                height:self.searchBar.frame.height
             )
-            
+
             self.lastContentOffset = scrollView.contentOffset.y
         }
     }
@@ -331,17 +324,17 @@ class SearchBurgerVC: UIViewController, UITableViewDelegate, UITableViewDataSour
             let burgerViewController = segue.destination as! BurgerVC
             if burgerThumbnail.size.width == 0.0 {
                 burgerViewController.burgerThumbnail = UIImage(named:"baconBeast")
-            }else{
+            } else {
                 burgerViewController.burgerThumbnail = burgerThumbnail
             }
             
             burgerViewController.burger = selectedBurger
-        }else{
+        } else {
             let burgerViewController = segue.destination as! BurgerDashboardVC
             
             if burgerThumbnail.size.width == 0.0 {
                 burgerViewController.burgerThumbnail = UIImage(named:"baconBeast")
-            }else{
+            } else {
                 burgerViewController.burgerThumbnail = burgerThumbnail
             }
             burgerViewController.burger = selectedBurger
