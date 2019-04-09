@@ -23,11 +23,6 @@ class BurgerHeaderView: UIView {
         
         self.backgroundColor = UIColor.white
         
-        // The container view is needed to extend the visible area for the image view
-        // to include that below the navigation bar. If this container view isn't present
-        // the image view would be clipped at the navigation bar's bottom and the parallax
-        // effect would not work correctly
-        
         containerView.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(containerView)
         self.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[containerView]|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["containerView" : containerView]))
@@ -46,23 +41,19 @@ class BurgerHeaderView: UIView {
         let layerHeight = frame.size.height
         let layerWidth = frame.size.width * 3
         
-        // Create Path
         let bezierPath = UIBezierPath()
         
-        //  Points
         let pointA = CGPoint(x: 0, y: layerHeight)
         let pointB = CGPoint(x: layerWidth, y: layerHeight - 30)
         let pointC = CGPoint(x: layerWidth, y: layerHeight + 1)
         let pointD = CGPoint(x: 0, y: layerHeight + 1)
-        
-        // Draw the path
+
         bezierPath.move(to: pointA)
         bezierPath.addLine(to: pointB)
         bezierPath.addLine(to: pointC)
         bezierPath.addLine(to: pointD)
         bezierPath.close()
         
-        // Mask to Path
         let shapeLayer = CAShapeLayer()
         shapeLayer.path = bezierPath.cgPath
         layer.mask = shapeLayer
@@ -78,21 +69,16 @@ class BurgerHeaderView: UIView {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        
         super.init(coder: aDecoder)
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
-        
         containerLayoutConstraint.constant = scrollView.contentInset.top
         
         let offsetY = -(scrollView.contentOffset.y + scrollView.contentInset.top)
         
         containerView.clipsToBounds = offsetY <= 0
-        
         bottomLayoutConstraint.constant = offsetY >= 0 ? 0 : -offsetY / 2
-        
         heightLayoutConstraint.constant = max(offsetY + scrollView.contentInset.top, scrollView.contentInset.top)
     }
-
 }

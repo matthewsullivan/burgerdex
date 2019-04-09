@@ -17,7 +17,6 @@ class NotificationService: UNNotificationServiceExtension {
         self.contentHandler = contentHandler
         bestAttemptContent = (request.content.mutableCopy() as? UNMutableNotificationContent)
     
-        //Media
         func failEarly() {
             contentHandler(request.content)
         }
@@ -36,11 +35,7 @@ class NotificationService: UNNotificationServiceExtension {
         
         guard let imageData = NSData(contentsOf:NSURL(string: attachmentURL)! as URL) else { return failEarly() }
         guard let attachment = UNNotificationAttachment.create(imageFileIdentifier: "image.gif", data: imageData, options: nil) else { return failEarly() }
-            
-        //Actions
-        /*
-        let dismissAction = UNNotificationAction(identifier: "dismiss", title: "Dismiss", options: [])
-        */
+        
         let category = UNNotificationCategory(identifier: "burgerCategory", actions: [], intentIdentifiers: [], options: [])
         
         UNUserNotificationCenter.current().setNotificationCategories([category])
@@ -50,8 +45,6 @@ class NotificationService: UNNotificationServiceExtension {
     }
     
     override func serviceExtensionTimeWillExpire() {
-        // Called just before the extension will be terminated by the system.
-        // Use this as an opportunity to deliver your "best attempt" at modified content, otherwise the original push payload will be used.
         if let contentHandler = contentHandler, let bestAttemptContent =  bestAttemptContent {
             contentHandler(bestAttemptContent)
         }
@@ -60,7 +53,6 @@ class NotificationService: UNNotificationServiceExtension {
 }
 extension UNNotificationAttachment {
     
-    /// Save the image to disk
     static func create(imageFileIdentifier: String, data: NSData, options: [NSObject : AnyObject]?)
         -> UNNotificationAttachment? {
             
@@ -79,10 +71,8 @@ extension UNNotificationAttachment {
                                                                         url: fileURL!,
                                                                         options: options)
                 return imageAttachment
-            } catch let error {
-                print("error \(error)")
-            }
+            } catch {}
             
-            return nil
+        return nil
     }
 }

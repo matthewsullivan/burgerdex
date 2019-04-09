@@ -28,36 +28,24 @@ class NotificationViewController: UIViewController, UNNotificationContentExtensi
         
         if let notificationData = notification.request.content.userInfo["data"] as? [String: Any] {
             
-            // Grab the attachment
             if let urlString = notificationData["attachment-url"], let fileUrl = URL(string: urlString as! String) {
-                
                 let imageData = NSData(contentsOf: fileUrl)
                 let image = UIImage(data: imageData! as Data)!
                 
                 imageView.image = image
-              
             }
  
             if let catalogueLabelString = notificationData["attachment-label"]{
-                
                 catalogueNumberLabel.text = catalogueLabelString as? String
-               
-            }else{
-                
+            } else {
                 catalogueNumberLabel.text = "No."
-                
             }
             
             if let catalogueLabelNumber = notificationData["attachment-number"]{
-                
                 catalogueNumberNumber.text = catalogueLabelNumber as? String
-                
-                
-            }else{
-                
+            } else {
                 catalogueNumberLabel.text = ""
                 catalogueNumberNumber.text = ""
-               
             }
         }
     }

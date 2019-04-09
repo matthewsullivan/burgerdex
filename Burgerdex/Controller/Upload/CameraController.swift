@@ -41,7 +41,6 @@ extension CameraController {
             for camera in cameras {
                 if camera.position == .front {
                     self.frontCamera = camera
-                    
                 }
                 
                 if camera.position == .back {
@@ -73,7 +72,6 @@ extension CameraController {
                 
                 self.currentCameraPosition = .front
             }
-                
             else { throw CameraControllerError.noCamerasAvailable }
         }
         
@@ -181,7 +179,6 @@ extension CameraController {
         self.photoOutput?.capturePhoto(with: settings, delegate: self)
         self.photoCaptureCompletionBlock = completion
     }
-
 }
 
 

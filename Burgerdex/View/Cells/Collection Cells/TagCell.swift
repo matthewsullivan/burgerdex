@@ -9,12 +9,10 @@
 import UIKit
 
 class TagCell: UICollectionViewCell {
-    
     @IBOutlet weak var tagName: UILabel!
     @IBOutlet weak var tagNameMaxWidthConstraint: NSLayoutConstraint!
     
     override func awakeFromNib() {
-        
         self.backgroundColor = UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1)
         
         self.tagName.textColor = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1)

@@ -28,10 +28,7 @@ class BurgerDashboardTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    func setCollectionViewDataSourceDelegate<D: UICollectionViewDataSource & UICollectionViewDelegate>(_ dataSourceDelegate: D, forRow row: Int) {
-        
-        print("SET UP COLLECTION")
-        
+    func setCollectionViewDataSourceDelegate<D: UICollectionViewDataSource & UICollectionViewDelegate>(_ dataSourceDelegate: D, forRow row: Int) {        
         self.collectionView.delegate = dataSourceDelegate
         self.collectionView.dataSource = dataSourceDelegate
         self.collectionView.tag = row
