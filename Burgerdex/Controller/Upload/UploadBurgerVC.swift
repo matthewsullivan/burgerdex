@@ -216,4 +216,3 @@ extension UploadBurgerVC: UICollectionViewDelegate {
         return thumbnail
     }
 }
-
