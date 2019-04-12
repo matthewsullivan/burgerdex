@@ -16,74 +16,26 @@ extension UIView {
 }
 
 class UploadBurgerInformationVC: UITableViewController,
-                                UITextFieldDelegate,
-                                UITextViewDelegate{
-    
-    var photo : UIImage!
-    var badges = [Badge]()
-    var fields : [String:AnyObject] = [:]
-    var details : [String:AnyObject] = [:]
-    var selectedBadgesIndex = Int()
-    weak var submitBtn: UIButton!
-    var ingredients = [String]()
-    
-    var headerBurgerNameLabel : UILabel!
-    var headerKitchenLabel : UILabel!
+                                 UITextFieldDelegate,
+                                 UITextViewDelegate {
     let headerBurgerNamePlaceholder  = "Mystery Burger"
     let headerBurgerKitchenPlaceholder  = "Mystery Kitchen"
-    
     let tvPlaceHolder = "Describe your first few bites."
     
-    @IBAction func submitBtn(_ sender: Any) {
-        setInputValueFields()
-        
-        details["ratingLbl"] = "" as AnyObject
-        details["iphone"] = "1" as AnyObject
-        
-        SwiftSpinner.show(delay: 0, title: "Uploading Burger" , animated: true)
-    
-        let submit = BurgerSubmit()
-
-        details["seasonal"] = details["limited"] as AnyObject
-        details["deviceName"] = UIDevice.current.name as AnyObject
-        details["timezone"] = TimeZone.current.identifier as AnyObject
-        details["deviceType"] = UIDevice.current.modelName as AnyObject
-        
-        submit.submitBurger(details: details, image:photo, completion: { (data) in
-            if (data[0] as! Int) == 0{
-                self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0),
-                                           at: UITableViewScrollPosition.top,
-                                           animated: false)
-                
-                UINotificationFeedbackGenerator().notificationOccurred(.success)
-                
-                SwiftSpinner.show("Success..",animated: false).addTapHandler({
-                   SwiftSpinner.hide()
-                }, subtitle: "Tap to dismiss")
-                 self.delay(seconds: 1.5, completion: {
-                    SwiftSpinner.hide()
-                })
-            } else {
-                self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0),
-                                           at: UITableViewScrollPosition.top,
-                                           animated: false)
-                
-                let response = data[1]
-                
-                UINotificationFeedbackGenerator().notificationOccurred(.error)
-                
-                SwiftSpinner.show("Oops..",animated: false).addTapHandler({
-                    SwiftSpinner.hide()
-                }, subtitle: (response as! String) + "\n\n Tap anywhere and try again.")
-            }
-        })
-        
-        let tmpLbl = UILabel()
-        tmpLbl.text = "5.0"
-
-        details["ratingLbl"] = tmpLbl
-    }
-    
+    var addIngredientButton: UIButton!
+    var badges = [Badge]()
+    var details : [String:AnyObject] = [:]
+    var firstLayout = true
+    var fields : [String:AnyObject] = [:]
+    var headerBurgerNameLabel : UILabel!
+    var headerKitchenLabel : UILabel!
+    var heightConstraint: NSLayoutConstraint!
+    var imgView:UIImageView!
+    var ingredients = [String]()
+    var photo : UIImage!
+    var progress:Float =  0.0
+    var selectedBadgesIndex = Int()
+    var sizingCell: TagCell?
     var TAGS = ["Cheddar Cheese",
                 "Lettuce",
                 "Beef Patty",
@@ -145,33 +97,76 @@ class UploadBurgerInformationVC: UITableViewController,
                 "Ranch",
                 "Spinach",
                 "Sun-Dried Tomato"]
-    
-    var sizingCell: TagCell?
     var tags = [Tag]()
-
-    var heightConstraint: NSLayoutConstraint!
     
-    weak var ingredientCollectionView: UICollectionView!
     weak var flowLayout: FlowLayout!
+    weak var ingredientCollectionView: UICollectionView!
+    weak var submitBtn: UIButton!
     
-    var firstLayout = true
+    @IBAction func submitBtn(_ sender: Any) {
+        setInputValueFields()
+        
+        details["ratingLbl"] = "" as AnyObject
+        details["iphone"] = "1" as AnyObject
+        
+        SwiftSpinner.show(delay: 0, title: "Uploading Burger" , animated: true)
     
-    var addIngredientButton: UIButton!
-    
-    var imgView:UIImageView!
-    var progress:Float =  0.0
+        let submit = BurgerSubmit()
+
+        details["seasonal"] = details["limited"] as AnyObject
+        details["deviceName"] = UIDevice.current.name as AnyObject
+        details["timezone"] = TimeZone.current.identifier as AnyObject
+        details["deviceType"] = UIDevice.current.modelName as AnyObject
+        
+        submit.submitBurger(details: details, image:photo, completion: { (data) in
+            if (data[0] as! Int) == 0 {
+                self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0),
+                                           at: UITableViewScrollPosition.top,
+                                           animated: false)
+                
+                UINotificationFeedbackGenerator().notificationOccurred(.success)
+                
+                SwiftSpinner.show("Success..", animated: false).addTapHandler({
+                   SwiftSpinner.hide()
+                }, subtitle: "Tap to dismiss")
+                 self.delay(seconds: 1.5, completion: {
+                    SwiftSpinner.hide()
+                })
+            } else {
+                self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0),
+                                           at: UITableViewScrollPosition.top,
+                                           animated: false)
+                
+                let response = data[1]
+                
+                UINotificationFeedbackGenerator().notificationOccurred(.error)
+                
+                SwiftSpinner.show("Oops..",animated: false).addTapHandler({
+                    SwiftSpinner.hide()
+                }, subtitle: (response as! String) + "\n\n Tap anywhere and try again.")
+            }
+        })
+        
+        let tmpLbl = UILabel()
+        tmpLbl.text = "5.0"
+
+        details["ratingLbl"] = tmpLbl
+    }
 
     @objc func reset() {
         self.imgView.uploadImage(image:photo, progress: progress)
+
         if(progress <= 1.0) {
             self.perform(#selector(self.reset), with: nil, afterDelay: 0.3)
         }
+
         progress += 0.1
     }
     
     let statusBarBgView = { () -> UIView in
         let statusBarWindow: UIView = UIApplication.shared.value(forKey: "statusBarWindow") as! UIView
         let statusBarBgView = UIView(frame: (statusBarWindow.statusBar?.bounds)!)
+
         return statusBarBgView
     }()
     
@@ -309,11 +304,19 @@ class UploadBurgerInformationVC: UITableViewController,
         
         view.addGestureRecognizer(tap)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(UploadBurgerInformationVC.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(UploadBurgerInformationVC.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(UploadBurgerInformationVC.keyboardWillShow),
+                                               name: NSNotification.Name.UIKeyboardWillShow,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(UploadBurgerInformationVC.keyboardWillHide),
+                                               name: NSNotification.Name.UIKeyboardWillHide,
+                                               object: nil)
     }
     
     func determineDetailProgress(){
+        var atLeastOneIngredient = false
+
         progress = 0.15
         
         if !(fields["name"]?.text ?? "").isEmpty{
@@ -332,8 +335,6 @@ class UploadBurgerInformationVC: UITableViewController,
             headerKitchenLabel.text = headerBurgerKitchenPlaceholder
         }
         
-        var atLeastOneIngredient = false
-
         for tags in self.tags {
             if tags.selected{
                 atLeastOneIngredient = true
@@ -369,12 +370,16 @@ class UploadBurgerInformationVC: UITableViewController,
     }
    
     @objc func keyboardWillShow(notification: NSNotification){
+        var contentInset:UIEdgeInsets = self.tableView.contentInset
         var userInfo = notification.userInfo!
+        
         var keyboardFrame:CGRect = (userInfo[UIKeyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
+        
+        
         keyboardFrame = self.view.convert(keyboardFrame, from: nil)
         
-        var contentInset:UIEdgeInsets = self.tableView.contentInset
         contentInset.bottom = keyboardFrame.size.height
+        
         self.tableView.contentInset = contentInset
         
         determineDetailProgress()
@@ -382,19 +387,22 @@ class UploadBurgerInformationVC: UITableViewController,
     
     @objc func keyboardWillHide(notification: NSNotification) {
         let contentInset:UIEdgeInsets = UIEdgeInsets.zero
+
         self.tableView.contentInset = contentInset
         
         determineDetailProgress()
     }
 
     override func viewWillAppear(_ animated: Bool) {
+        let colour = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1)
+        let navigationBar = self.navigationController?.navigationBar
+        
         var preferredStatusBarStyle : UIStatusBarStyle {
             return .lightContent
         }
 
-        let navigationBar = self.navigationController?.navigationBar
-        let colour = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1)
         self.statusBarBgView.backgroundColor = colour
+        
         navigationBar?.superview?.insertSubview(self.statusBarBgView, aboveSubview: navigationBar!)
     }
     
@@ -443,7 +451,9 @@ class UploadBurgerInformationVC: UITableViewController,
         
         flowLayout = cell.flowLayout
         flowLayout.sectionInset = UIEdgeInsetsMake(8, 8, 8, 8)
+
         ingredientCollectionView = cell.ingredientCollectionView
+
         heightConstraint = cell.heightConstraint
         
         let cellNib = UINib(nibName: "TagCell", bundle: nil)
@@ -518,14 +528,14 @@ class UploadBurgerInformationVC: UITableViewController,
          }
     }
 
-    func redrawIngredientHeight(){
-        setInputValueFields()
-        
+    func redrawIngredientHeight() {
         let height = self.ingredientCollectionView.collectionViewLayout.collectionViewContentSize.height
+        
+        setInputValueFields()
+
         heightConstraint.constant = height
 
         self.view.layoutIfNeeded()
-    
         self.tableView.reloadData()
     }
     
@@ -574,16 +584,17 @@ class UploadBurgerInformationVC: UITableViewController,
     }
     
     func textViewDidChange(_ textView: UITextView) {
-        let startHeight = textView.frame.size.height
         let calcHeight = textView.sizeThatFits(textView.frame.size).height
+        let startHeight = textView.frame.size.height
         
         if startHeight != calcHeight {
+            let scrollTo = self.tableView.contentSize.height - self.tableView.frame.size.height
+            
             UIView.setAnimationsEnabled(false)
+
             self.tableView.beginUpdates()
             self.tableView.endUpdates()
-            
-            let scrollTo = self.tableView.contentSize.height - self.tableView.frame.size.height
-
+           
             self.tableView.setContentOffset(CGPoint(x:0, y:scrollTo), animated: false)
             
             UIView.setAnimationsEnabled(true)
@@ -599,7 +610,6 @@ class UploadBurgerInformationVC: UITableViewController,
             return tableView.rowHeight
         }
     }
-    
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 1 {
@@ -693,8 +703,8 @@ class UploadBurgerInformationVC: UITableViewController,
 }
 
 extension UploadBurgerInformationVC: UICollectionViewDelegate,
-                                  UICollectionViewDataSource,
-                                  UICollectionViewDelegateFlowLayout {
+                                     UICollectionViewDataSource,
+                                     UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
          if collectionView == self.ingredientCollectionView {
              return tags.count
@@ -712,6 +722,12 @@ extension UploadBurgerInformationVC: UICollectionViewDelegate,
             return cell
          } else {
             let burgerBadge = badges[indexPath.row]
+            let colour = UIColor(red: 222/255,
+                                 green: 173/255,
+                                 blue: 107/255,
+                                 alpha: 1.0)
+            
+            var detailsKey = burgerBadge.badgeTitle
             
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BadgeCell", for: indexPath) as? BurgerBadgeCollectionViewCell
             else {
@@ -724,13 +740,6 @@ extension UploadBurgerInformationVC: UICollectionViewDelegate,
             cell.selectionStatus.backgroundColor = .clear
             cell.selectionStatus.layer.cornerRadius = cell.selectionStatus.frame.size.width / 2
             cell.selectionStatus.clipsToBounds = true
-            
-            let colour = UIColor(red: 222/255,
-                                 green: 173/255,
-                                 blue: 107/255,
-                                 alpha: 1.0)
-            
-            var detailsKey = burgerBadge.badgeTitle
             
             if burgerBadge.badgeTitle == "challenge" {detailsKey = "hasChallenge"}
             if burgerBadge.badgeTitle == "mods" {detailsKey = "hasMods"}
@@ -753,8 +762,8 @@ extension UploadBurgerInformationVC: UICollectionViewDelegate,
     
  
     internal func collectionView(_ collectionView: UICollectionView,
-                                 layout collectionViewLayout: UICollectionViewLayout,
-                                 sizeForItemAt indexPath: IndexPath) -> CGSize{
+                                   layout collectionViewLayout: UICollectionViewLayout,
+                                   sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         if collectionView == self.ingredientCollectionView {
             self.configureCell(cell: self.sizingCell!, forIndexPath: indexPath as NSIndexPath)
@@ -785,7 +794,6 @@ extension UploadBurgerInformationVC: UICollectionViewDelegate,
             if let cell = collectionView.cellForItem(at: indexPath)  as? BurgerBadgeCollectionViewCell {
                 
                 if  cell.selectionStatus.backgroundColor != colour{
-                    
                     if indexPath.row == 0 {details["fusion"] = "1" as AnyObject}
                     if indexPath.row == 1 {details["veggie"] = "1" as AnyObject}
                     if indexPath.row == 2 {details["spicy"] = "1" as AnyObject}
@@ -795,9 +803,7 @@ extension UploadBurgerInformationVC: UICollectionViewDelegate,
                     if indexPath.row == 6 {details["hasMods"] = "1" as AnyObject}
                     
                     cell.selectionStatus.backgroundColor = colour
-                    
                 } else {
-                    
                     if indexPath.row == 0 {details["fusion"] = "0" as AnyObject}
                     if indexPath.row == 1 {details["veggie"] = "0" as AnyObject}
                     if indexPath.row == 2 {details["spicy"] = "0" as AnyObject}
@@ -826,9 +832,22 @@ extension UploadBurgerInformationVC: UICollectionViewDelegate,
             }
         }
     
-        cell.tagName.textColor = tag.selected ? UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1) : UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1)
+        cell.tagName.textColor = tag.selected ? UIColor(red: 56/255,
+                                                        green: 49/255,
+                                                        blue: 40/255,
+                                                        alpha: 1) :
+                                                UIColor(red: 56/255,
+                                                        green: 49/255,
+                                                        blue: 40/255,
+                                                        alpha: 1)
      
-        cell.backgroundColor = tag.selected ? UIColor(red: 222/255,green: 173/255,blue: 107/255,alpha: 1):  UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1)
+        cell.backgroundColor = tag.selected ? UIColor(red: 222/255,
+                                                      green: 173/255,
+                                                      blue: 107/255,
+                                                      alpha: 1):
+                                                      UIColor(red: 0.8,
+                                                              green: 0.8,
+                                                              blue: 0.8,
+                                                              alpha: 1)
     }
 }
-

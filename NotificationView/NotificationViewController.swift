@@ -11,10 +11,9 @@ import UserNotifications
 import UserNotificationsUI
 
 class NotificationViewController: UIViewController, UNNotificationContentExtension {
-    
-    @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var catalogueNumberLabel: UILabel!
     @IBOutlet weak var catalogueNumberNumber: UILabel!
+    @IBOutlet weak var imageView: UIImageView!
    
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,9 +24,7 @@ class NotificationViewController: UIViewController, UNNotificationContentExtensi
     }
     
     func didReceive(_ notification: UNNotification) {
-        
         if let notificationData = notification.request.content.userInfo["data"] as? [String: Any] {
-            
             if let urlString = notificationData["attachment-url"], let fileUrl = URL(string: urlString as! String) {
                 let imageData = NSData(contentsOf: fileUrl)
                 let image = UIImage(data: imageData! as Data)!
@@ -35,13 +32,13 @@ class NotificationViewController: UIViewController, UNNotificationContentExtensi
                 imageView.image = image
             }
  
-            if let catalogueLabelString = notificationData["attachment-label"]{
+            if let catalogueLabelString = notificationData["attachment-label"] {
                 catalogueNumberLabel.text = catalogueLabelString as? String
             } else {
                 catalogueNumberLabel.text = "No."
             }
             
-            if let catalogueLabelNumber = notificationData["attachment-number"]{
+            if let catalogueLabelNumber = notificationData["attachment-number"] {
                 catalogueNumberNumber.text = catalogueLabelNumber as? String
             } else {
                 catalogueNumberLabel.text = ""

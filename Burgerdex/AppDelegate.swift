@@ -25,23 +25,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
-    func setupNavigationAndStatusBarLayout(){        
+    func setupNavigationAndStatusBarLayout(){
+        let barButtonItemAppearance = UIBarButtonItem.appearance()
+        let colour = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1)
+        
         var preferredStatusBarStyle : UIStatusBarStyle {
             return .lightContent
         }
 
-        let barButtonItemAppearance = UIBarButtonItem.appearance()
         barButtonItemAppearance.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.clear], for: .normal)
+
+        UIApplication.shared.statusBarView?.backgroundColor = colour
         
         UINavigationBar.appearance().barTintColor = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1)
         UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
         UINavigationBar.appearance().shadowImage = UIImage()
-
-        let colour = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1)
-        
         UINavigationBar.appearance().backgroundColor = colour
-        UIApplication.shared.statusBarView?.backgroundColor = colour
-        
         UINavigationBar.appearance().prefersLargeTitles = true
         UINavigationBar.appearance().largeTitleTextAttributes = [
             NSAttributedStringKey.foregroundColor: UIColor.white
@@ -49,7 +48,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearance().titleTextAttributes = [
             NSAttributedStringKey.foregroundColor: UIColor.white
         ]
-        
     }
     
     func registerForPushNotifications() {

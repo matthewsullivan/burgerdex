@@ -26,32 +26,28 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
         self.performSegue(withIdentifier: "searchBurgersSegue", sender: self)
     }
     
-    var selectedBurger: BurgerPreview!
-    var burgerThumbnail: UIImage!
-    
-    var burgers = [BurgerPreview]()
-    var filters = [String]()
-    var selectedFilterIndex = Int()
-    var images: [String] = []
-    
-    var pageIndex = 1
-    var noMoreData = false
-
-    var sbshown: Bool = false
-    var statusBarCorrect: CGFloat = 20.0
-
     let sharedSession = URLSession.shared
     
+    var selectedBurger: BurgerPreview!
+   
+    
+    var burgers = [BurgerPreview]()
+    var burgerSortedArray = [BurgerSort]()
+    var burgerThumbnail: UIImage!
+    var filters = [String]()
+    var noMoreData = false
+    var pageIndex = 1
+    var sbshown: Bool = false
+    var selectedFilterIndex = Int()
+    var statusBarCorrect: CGFloat = 20.0
+    
     struct BurgerSort {
-        
         var sectionName : String!
         var sectionObjects : [BurgerPreview]!
     }
     
-    var burgerSortedArray = [BurgerSort]()
 
     override func viewDidLoad() {
-        
         super.viewDidLoad()
         
         self.title = "Catalogue"
@@ -60,15 +56,14 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
         checkForStatusBars()
         
         hideErrorView()
-        
     }
     
 
-    func hideErrorView(){
+    func hideErrorView() {
          errorContainerView.isHidden = true
     }
     
-    func displayErrorView(errorType: Int){
+    func displayErrorView(errorType: Int) {
         self.errorContainerView.isHidden = false
     
         if errorType == 0 {
@@ -86,7 +81,7 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
         }
     }
     
-    func checkForStatusBars(){
+    func checkForStatusBars() {
         if UIDevice.current.modelName != "iPhone10,3" || UIDevice.current.modelName != "iPhone10,6" {
             if (UIApplication.shared.statusBarFrame.height == 40) {
                 statusBarCorrect = UIApplication.shared.statusBarFrame.height - 20
@@ -98,7 +93,10 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
                 statusBarCorrect = UIApplication.shared.statusBarFrame.height
             }
         
-            NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationDidChangeStatusBarFrame, object: nil, queue: nil, using: statusbarChange)
+            NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationDidChangeStatusBarFrame,
+                                                   object: nil,
+                                                   queue: nil,
+                                                   using: statusbarChange)
         }
     }
     
@@ -133,7 +131,9 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
         
         self.burgers = BurgerPreview.generatePlaceholderBurgers() as! [BurgerPreview]
         
-        self.collectionView.selectItem(at: IndexPath(row: 1, section: 0), animated: false, scrollPosition:UICollectionViewScrollPosition.left)
+        self.collectionView.selectItem(at: IndexPath(row: 1, section: 0),
+                                       animated: false,
+                                       scrollPosition:UICollectionViewScrollPosition.left)
         
         self.collectionView(self.collectionView, didSelectItemAt: IndexPath(item: 1, section: 0))
     }
@@ -152,8 +152,7 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
         noMoreData = false
         
         BurgerPreview.fetchBurgerPreviews(page: page, filter: filter, session: sharedSession ,completion: { (data) in
-            
-            if (data[0] as! Int) == 1{
+            if (data[0] as! Int) == 1 {
                 if (data[1] as AnyObject).count > 0 {
                     self.hideErrorView()
                     
@@ -164,11 +163,13 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
                     
                     self.burgerSortedArray.removeAll()
                     
-                    if self.selectedFilterIndex == 14{
+                    if self.selectedFilterIndex == 14 {
                         let predicate = { (element: BurgerPreview) in
                             return element.kitchen
                         }
+                        
                         let dictionary = Dictionary(grouping: self.burgers, by: predicate)
+
                         let sortedByKeyDictionary = dictionary.sorted { $0.0 < $1.0 }
                         
                         for (key, value) in sortedByKeyDictionary {
@@ -180,7 +181,9 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
                         let predicate = { (element: BurgerPreview) in
                             return element.location
                         }
+
                         let dictionary = Dictionary(grouping: self.burgers, by: predicate)
+
                         let sortedByKeyDictionary = dictionary.sorted { $0.0 < $1.0 }
                         
                         for (key, value) in sortedByKeyDictionary {
@@ -192,11 +195,12 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
                         let predicate = { (element: BurgerPreview) in
                             return element.year
                         }
+
                         let dictionary = Dictionary(grouping: self.burgers, by: predicate)
+
                         let sortedByKeyDictionary = dictionary.sorted { $0.0 < $1.0 }
                         
                         for (key, value) in sortedByKeyDictionary {
-                           
                             self.burgerSortedArray.append(BurgerSort(sectionName: key, sectionObjects: value))
                         }
                     }
@@ -241,7 +245,9 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        if selectedFilterIndex == 14 || selectedFilterIndex == 13 || selectedFilterIndex == 2{
+        if selectedFilterIndex == 14 ||
+           selectedFilterIndex == 13 ||
+           selectedFilterIndex == 2 {
             return burgerSortedArray.count
         } else {
             return 1
@@ -249,7 +255,9 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if selectedFilterIndex == 14 || selectedFilterIndex == 13 || selectedFilterIndex == 2{
+        if selectedFilterIndex == 14 ||
+           selectedFilterIndex == 13 ||
+           selectedFilterIndex == 2 {
             return burgerSortedArray[section].sectionObjects.count
         } else {
             return burgers.count
@@ -264,7 +272,9 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
         
         var burger : BurgerPreview
         
-        if selectedFilterIndex == 14 || selectedFilterIndex == 13 || selectedFilterIndex == 2{
+        if selectedFilterIndex == 14 ||
+           selectedFilterIndex == 13 ||
+           selectedFilterIndex == 2 {
             burger = burgerSortedArray[indexPath.section].sectionObjects[indexPath.row]
         } else {
             burger = burgers[indexPath.row]
@@ -291,7 +301,9 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if selectedFilterIndex == 14 || selectedFilterIndex == 13 || selectedFilterIndex == 2{
+        if selectedFilterIndex == 14 ||
+           selectedFilterIndex == 13 ||
+           selectedFilterIndex == 2 {
             return burgerSortedArray[section].sectionName
         }
 
@@ -302,13 +314,15 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
         let lastElement = burgers.count - 1
         
         if (indexPath.row == lastElement && !noMoreData && self.pageIndex > 1){
-            BurgerPreview.fetchBurgerPreviews(page: self.pageIndex, filter: self.selectedFilterIndex, session: sharedSession ,completion: { (data) in
+            BurgerPreview.fetchBurgerPreviews(page: self.pageIndex,
+                                              filter: self.selectedFilterIndex,
+                                              session: sharedSession,
+                                              completion: { (data) in
                 if (data[1] as AnyObject).count > 0 {
                     self.burgers += data[1] as! [BurgerPreview]
                     self.pageIndex  += 1
                     
                     self.tableView.reloadData()
-                    
                 } else {
                     self.noMoreData = true
                 }
@@ -321,13 +335,14 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
                             withImageURL: String,
                             andImageView: UIImageView,
                             atIndexPath indexPath: IndexPath) {
-        
         let imageView = andImageView
         imageView.image = kLazyLoadPlaceholderImage
         
         var burger : BurgerPreview
         
-        if selectedFilterIndex == 14 || selectedFilterIndex == 13 || selectedFilterIndex == 2{
+        if selectedFilterIndex == 14 ||
+           selectedFilterIndex == 13 ||
+           selectedFilterIndex == 2 {
             burger = burgerSortedArray[indexPath.section].sectionObjects[indexPath.row]
         } else {
             burger = burgers[indexPath.row]
@@ -346,21 +361,28 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        if selectedFilterIndex == 14 || selectedFilterIndex == 13 || selectedFilterIndex == 2{
-            if self.tableView.scrolledToBottom == true{
-                if(self.noMoreData != true){
-                    BurgerPreview.fetchBurgerPreviews(page: self.pageIndex, filter: self.selectedFilterIndex, session: sharedSession ,completion: { (data) in
+        if selectedFilterIndex == 14 ||
+           selectedFilterIndex == 13 ||
+           selectedFilterIndex == 2 {
+            if self.tableView.scrolledToBottom == true {
+                if(self.noMoreData != true) {
+                    BurgerPreview.fetchBurgerPreviews(page: self.pageIndex,
+                                                      filter: self.selectedFilterIndex,
+                                                      session: sharedSession,
+                                                      completion: { (data) in
                         if (data[1] as AnyObject).count > 0 {
                             self.burgers += data[1] as! [BurgerPreview]
                             self.pageIndex  += 1
                             
                             self.burgerSortedArray.removeAll()
                             
-                            if self.selectedFilterIndex == 14{
+                            if self.selectedFilterIndex == 14 {
                                 let predicate = { (element: BurgerPreview) in
                                     return element.kitchen
                                 }
+
                                 let dictionary = Dictionary(grouping: self.burgers, by: predicate)
+
                                 let sortedByKeyDictionary = dictionary.sorted { $0.0 < $1.0 }
                                 
                                 for (key, value) in sortedByKeyDictionary {
@@ -368,11 +390,13 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
                                 }
                             }
                             
-                            if self.selectedFilterIndex == 13{
+                            if self.selectedFilterIndex == 13 {
                                 let predicate = { (element: BurgerPreview) in
                                     return element.location
                                 }
+
                                 let dictionary = Dictionary(grouping: self.burgers, by: predicate)
+
                                 let sortedByKeyDictionary = dictionary.sorted { $0.0 < $1.0 }
                                 
                                 for (key, value) in sortedByKeyDictionary {
@@ -386,6 +410,7 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
                                 }
                                 
                                 let dictionary = Dictionary(grouping: self.burgers, by: predicate)
+
                                 let sortedByKeyDictionary = dictionary.sorted { $0.0 > $1.0 }
                                 
                                 for (key, value) in sortedByKeyDictionary {
@@ -432,7 +457,9 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         var burger : BurgerPreview
         
-        if selectedFilterIndex == 14 || selectedFilterIndex == 13 || selectedFilterIndex == 2{
+        if selectedFilterIndex == 14 ||
+           selectedFilterIndex == 13 ||
+           selectedFilterIndex == 2 {
             burger = burgerSortedArray[indexPath.section].sectionObjects[indexPath.row]
         } else {
             burger = burgers[indexPath.row]
@@ -441,14 +468,14 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
         burgerThumbnail = burger.photo
         selectedBurger = burger
         
-        if(burger.sightings > 1){
+        if(burger.sightings > 1) {
             self.performSegue(withIdentifier: "multipleSightingSegue", sender: self)
         } else {
             self.performSegue(withIdentifier: "burgerSegue", sender: self)
         }
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat{
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 80.0
     }
     
@@ -464,7 +491,7 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
             
             burgerViewController.burger = selectedBurger
             
-         } else if (segue.identifier == "multipleSightingSegue"){
+         } else if (segue.identifier == "multipleSightingSegue") {
             let burgerViewController = segue.destination as! BurgerDashboardVC
 
             if burgerThumbnail.size.width == 0.0 {
@@ -529,13 +556,15 @@ extension CatalogueVC: UICollectionViewDelegate, UICollectionViewDataSource, UIC
         
         collectionView.scrollToItem(at: IndexPath(row: selectedFilterIndex, section: 0), at: .left, animated: true)
 
-        if self.burgers.count == 0{
+        if self.burgers.count == 0 {
             self.burgers = BurgerPreview.generatePlaceholderBurgers() as! [BurgerPreview]
         
             self.tableView.reloadData()
         }
         
-        if selectedFilterIndex == 14 || selectedFilterIndex == 13 || selectedFilterIndex == 2{
+        if selectedFilterIndex == 14 ||
+           selectedFilterIndex == 13 ||
+           selectedFilterIndex == 2 {
             self.burgerSortedArray.removeAll()
             
             let dictionary = ["": self.burgers]
@@ -552,7 +581,9 @@ extension CatalogueVC: UICollectionViewDelegate, UICollectionViewDataSource, UIC
     
         self.hideErrorView()
         
-        if selectedFilterIndex == 14 || selectedFilterIndex == 13 || selectedFilterIndex == 2{
+        if selectedFilterIndex == 14 ||
+           selectedFilterIndex == 13 ||
+           selectedFilterIndex == 2 {
             if  self.burgerSortedArray.count > 0 {
                 self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0),
                                            at: UITableViewScrollPosition.top,

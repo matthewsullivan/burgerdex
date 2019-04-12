@@ -11,21 +11,15 @@ import UIKit
 
 class CameraController: NSObject {
     var captureSession: AVCaptureSession?
-    
     var currentCameraPosition: CameraPosition?
-    
+    var flashMode = AVCaptureDevice.FlashMode.off
     var frontCamera: AVCaptureDevice?
     var frontCameraInput: AVCaptureDeviceInput?
-    
+    var photoCaptureCompletionBlock: ((UIImage?, Error?) -> Void)?
     var photoOutput: AVCapturePhotoOutput?
-    
+    var previewLayer: AVCaptureVideoPreviewLayer?
     var rearCamera: AVCaptureDevice?
     var rearCameraInput: AVCaptureDeviceInput?
-    
-    var previewLayer: AVCaptureVideoPreviewLayer?
-    
-    var flashMode = AVCaptureDevice.FlashMode.off
-    var photoCaptureCompletionBlock: ((UIImage?, Error?) -> Void)?
 }
 
 extension CameraController {
@@ -47,6 +41,7 @@ extension CameraController {
                     self.rearCamera = camera
                     
                     try camera.lockForConfiguration()
+                    
                     camera.focusMode = .continuousAutoFocus
                     camera.unlockForConfiguration()
                 }
@@ -88,6 +83,7 @@ extension CameraController {
         DispatchQueue(label: "prepare").async {
             do {
                 createCaptureSession()
+
                 try configureCaptureDevices()
                 try configureDeviceInputs()
                 try configurePhotoOutput()
@@ -115,11 +111,13 @@ extension CameraController {
         self.previewLayer?.connection?.videoOrientation = .portrait
         
         view.layer.insertSublayer(self.previewLayer!, at: 0)
+
         self.previewLayer?.frame = view.frame
     }
     
     func switchCameras() throws {
-        guard let currentCameraPosition = currentCameraPosition, let captureSession = self.captureSession, captureSession.isRunning else { throw CameraControllerError.captureSessionIsMissing }
+        guard let currentCameraPosition = currentCameraPosition, let captureSession = self.captureSession, captureSession.isRunning
+            else { throw CameraControllerError.captureSessionIsMissing }
         
         captureSession.beginConfiguration()
         
@@ -135,9 +133,7 @@ extension CameraController {
                 captureSession.addInput(self.frontCameraInput!)
                 
                 self.currentCameraPosition = .front
-            }
-                
-            else {
+            } else {
                 throw CameraControllerError.invalidOperation
             }
         }
@@ -154,17 +150,17 @@ extension CameraController {
                 captureSession.addInput(self.rearCameraInput!)
                 
                 self.currentCameraPosition = .rear
+            } else {
+                throw CameraControllerError.invalidOperation
             }
-                
-            else { throw CameraControllerError.invalidOperation }
         }
         
         switch currentCameraPosition {
-        case .front:
-            try switchToRearCamera()
+            case .front:
+                try switchToRearCamera()
             
-        case .rear:
-            try switchToFrontCamera()
+            case .rear:
+                try switchToFrontCamera()
         }
         
         captureSession.commitConfiguration()
@@ -183,19 +179,14 @@ extension CameraController {
 
 
 extension CameraController: AVCapturePhotoCaptureDelegate {
-    
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
-        
-        if let error = error { self.photoCaptureCompletionBlock?(nil, error) }
-        
-        else if let data = photo.fileDataRepresentation(){
-            
+        if let error = error {
+            self.photoCaptureCompletionBlock?(nil, error)
+        } else if let data = photo.fileDataRepresentation(){
             let image = UIImage(data: data)
                 
             self.photoCaptureCompletionBlock?(image, nil)
-                    
         } else {
-            
             self.photoCaptureCompletionBlock?(nil, CameraControllerError.unknown)
         }
     }

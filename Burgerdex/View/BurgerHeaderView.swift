@@ -9,26 +9,40 @@
 import UIKit
 
 class BurgerHeaderView: UIView {
-    
-    var heightLayoutConstraint = NSLayoutConstraint()
     var bottomLayoutConstraint = NSLayoutConstraint()
-    
-    var containerView = UIView()
     var containerLayoutConstraint = NSLayoutConstraint()
+    var heightLayoutConstraint = NSLayoutConstraint()
+    
     var burgerImage = UIImageView()
+    var containerView = UIView()
     
     override init(frame: CGRect) {
-        
         super.init(frame: frame)
         
         self.backgroundColor = UIColor.white
         
         containerView.translatesAutoresizingMaskIntoConstraints = false
+        
         self.addSubview(containerView)
-        self.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[containerView]|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["containerView" : containerView]))
-        self.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[containerView]|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["containerView" : containerView]))
-        containerLayoutConstraint = NSLayoutConstraint(item: containerView, attribute: .height, relatedBy: .equal, toItem: self, attribute: .height, multiplier: 1.0, constant: 0.0)
+        
+        self.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[containerView]|",
+                                                           options: NSLayoutFormatOptions(rawValue: 0),
+                                                           metrics: nil,
+                                                           views: ["containerView" : containerView]))
+        self.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[containerView]|",
+                                                           options: NSLayoutFormatOptions(rawValue: 0),
+                                                           metrics: nil,
+                                                           views: ["containerView" : containerView]))
+        
+        containerLayoutConstraint = NSLayoutConstraint(item: containerView,
+                                                       attribute: .height,
+                                                       relatedBy: .equal,
+                                                       toItem: self,
+                                                       attribute: .height,
+                                                       multiplier: 1.0,
+                                                       constant: 0.0)
         self.addConstraint(containerLayoutConstraint)
+        
         burgerImage = UIImageView.init()
         burgerImage.translatesAutoresizingMaskIntoConstraints = false
         burgerImage.backgroundColor = UIColor.white
@@ -47,7 +61,7 @@ class BurgerHeaderView: UIView {
         let pointB = CGPoint(x: layerWidth, y: layerHeight - 30)
         let pointC = CGPoint(x: layerWidth, y: layerHeight + 1)
         let pointD = CGPoint(x: 0, y: layerHeight + 1)
-
+        
         bezierPath.move(to: pointA)
         bezierPath.addLine(to: pointB)
         bezierPath.addLine(to: pointC)
@@ -56,16 +70,34 @@ class BurgerHeaderView: UIView {
         
         let shapeLayer = CAShapeLayer()
         shapeLayer.path = bezierPath.cgPath
+        
         layer.mask = shapeLayer
-        
         shapeLayer.fillColor = UIColor.white.cgColor
-        containerView.layer.addSublayer(shapeLayer)
-        containerView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[imageView]|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["imageView" : burgerImage]))
-        bottomLayoutConstraint = NSLayoutConstraint(item: burgerImage, attribute: .bottom, relatedBy: .equal, toItem: containerView, attribute: .bottom, multiplier: 1.0, constant: 0.0)
-        containerView.addConstraint(bottomLayoutConstraint)
-        heightLayoutConstraint = NSLayoutConstraint(item: burgerImage, attribute: .height, relatedBy: .equal, toItem: containerView, attribute: .height, multiplier: 1.0, constant: 0.0)
-        containerView.addConstraint(heightLayoutConstraint)
         
+        containerView.layer.addSublayer(shapeLayer)
+        
+        containerView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[imageView]|",
+                                                                    options: NSLayoutFormatOptions(rawValue: 0),
+                                                                    metrics: nil,
+                                                                    views: ["imageView" : burgerImage]))
+        
+        bottomLayoutConstraint = NSLayoutConstraint(item: burgerImage,
+                                                    attribute: .bottom,
+                                                    relatedBy: .equal,
+                                                    toItem: containerView,
+                                                    attribute: .bottom,
+                                                    multiplier: 1.0,
+                                                    constant: 0.0)
+        heightLayoutConstraint = NSLayoutConstraint(item: burgerImage,
+                                                    attribute: .height,
+                                                    relatedBy: .equal,
+                                                    toItem: containerView,
+                                                    attribute: .height,
+                                                    multiplier: 1.0,
+                                                    constant: 0.0)
+        
+        containerView.addConstraint(bottomLayoutConstraint)
+        containerView.addConstraint(heightLayoutConstraint)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -73,12 +105,12 @@ class BurgerHeaderView: UIView {
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
-        containerLayoutConstraint.constant = scrollView.contentInset.top
-        
         let offsetY = -(scrollView.contentOffset.y + scrollView.contentInset.top)
-        
+
         containerView.clipsToBounds = offsetY <= 0
+
         bottomLayoutConstraint.constant = offsetY >= 0 ? 0 : -offsetY / 2
+        containerLayoutConstraint.constant = scrollView.contentInset.top
         heightLayoutConstraint.constant = max(offsetY + scrollView.contentInset.top, scrollView.contentInset.top)
     }
 }

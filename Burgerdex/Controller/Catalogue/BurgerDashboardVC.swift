@@ -10,17 +10,14 @@ import UIKit
 class BurgerDashboardVC: UITableViewController {
     private let kLazyLoadCollectionCellImage = 1
     
+    var badges = [Badge]()
     var burger: BurgerPreview!
     var burgerAttr = [Array<BurgerObject>]()
-    var badges = [Badge]()
-    var sightingsBurgers = [BurgerPreview]()
     var burgerThumbnail : UIImage!
-    
-    var scrollSize: CGFloat = 0.0
-    
-    var selectedBurger: BurgerPreview!
-    
     var carousel: ZKCarousel! = ZKCarousel()
+    var scrollSize: CGFloat = 0.0
+    var selectedBurger: BurgerPreview!
+    var sightingsBurgers = [BurgerPreview]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +30,7 @@ class BurgerDashboardVC: UITableViewController {
     let statusBarBgView = { () -> UIView in
         let statusBarWindow: UIView = UIApplication.shared.value(forKey: "statusBarWindow") as! UIView
         let statusBarBgView = UIView(frame: (statusBarWindow.statusBar?.bounds)!)
+
         return statusBarBgView
     }()
     
@@ -45,23 +43,26 @@ class BurgerDashboardVC: UITableViewController {
         
         let navigationBar = self.navigationController?.navigationBar
         let colour = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1)
+        
         self.statusBarBgView.backgroundColor = colour
+
         navigationBar?.superview?.insertSubview(self.statusBarBgView, aboveSubview: navigationBar!)
     }
     
     func layoutBurgerView(){
+        badges.removeAll()
         burgerAttr.removeAll()
         sightingsBurgers.removeAll()
-        badges.removeAll()
         
         let burgerHeaderView = BurgerHeaderView.init(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 200))
+        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
         
-        self.tableView.tableHeaderView  = burgerHeaderView
+        var burgerInfo = Burger.generateBurgerPlaceholderInformation()
         
         burgerHeaderView.burgerImage.image =  burgerThumbnail
         
-        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        self.tableView.tableHeaderView  = burgerHeaderView
 
         blurEffectView.frame = burgerHeaderView.burgerImage.bounds
         blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -71,8 +72,6 @@ class BurgerDashboardVC: UITableViewController {
     
         tableView.estimatedRowHeight = 85.0
         tableView.rowHeight = UITableViewAutomaticDimension
-        
-        var burgerInfo = Burger.generateBurgerPlaceholderInformation()
         
         self.burgerAttr.append([burgerInfo as BurgerObject])
     
@@ -114,17 +113,17 @@ class BurgerDashboardVC: UITableViewController {
                         
                         guard let burgerPreview = BurgerPreview.init(displayTag: displayTag!,
                                                                      displayText: displayText!,
-                                                                   name: name!,
-                                                                   kitchen: kitchen!,
-                                                                   location: location!,
-                                                                   year: year!,
-                                                                   catalogueNumber: catalogueNumber!,
-                                                                   photoUrl: pattyImagePath,
-                                                                   thumbUrl: thumbPattyPath,
-                                                                   photo: UIImage(),
-                                                                   burgerID: catalogueNumber!,
-                                                                   recordID: recordNumber!,
-                                                                   sightings: totalSightings!)
+                                                                     name: name!,
+                                                                     kitchen: kitchen!,
+                                                                     location: location!,
+                                                                     year: year!,
+                                                                     catalogueNumber: catalogueNumber!,
+                                                                     photoUrl: pattyImagePath,
+                                                                     thumbUrl: thumbPattyPath,
+                                                                     photo: UIImage(),
+                                                                     burgerID: catalogueNumber!,
+                                                                     recordID: recordNumber!,
+                                                                     sightings: totalSightings!)
                         else {
                             fatalError("Unable to instantiate burgerPreview")
                         }
@@ -134,8 +133,9 @@ class BurgerDashboardVC: UITableViewController {
                         let url = URL(string: burgerPreview.photoUrl)
                         
                         URLSession.shared.dataTask(with: url!, completionHandler: { (data, response, error) in
-                            
-                            if error != nil { return }
+                            if error != nil {
+                                return
+                            }
 
                             DispatchQueue.main.async(execute: {
                                 UIView.animate(withDuration: 0.5, animations: {
@@ -316,41 +316,33 @@ class BurgerDashboardVC: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
          if indexPath.section == 0 {
+            let burger = burgerAttr[indexPath.section][indexPath.row] as! Burger
             let cellIdentifier = "BurgerInfoCell"
-            
+            let ingredients = "• " + burger.ingredients.replacingOccurrences(of: ",", with: "\n\n• ")
+            let locationTitle = burger.locationCount > 1 ? " locations" : " location"
+            let sightingsTotal : Int = burger.sightings.count
+            let totalSightings = String(sightingsTotal)
+        
             guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? BurgerDashboardTableViewCell
             else {
                 fatalError("The dequeued cell is not an instance of BurgerTableViewCell.")
             }
             
-            let burger = burgerAttr[indexPath.section][indexPath.row] as! Burger
-            
-            let sightingsTotal : Int = burger.sightings.count
-            let totalSightings = String(sightingsTotal)
-            
-            var locationTitle = " location"
-            
-            if burger.locationCount > 1 {locationTitle = " locations"}
-            
             cell.averagePrice.text = burger.averagePrice
             cell.sightings.text = "Catalogued " + totalSightings + " times"
             cell.locations.text = String(burger.locationCount) + locationTitle + " documented"
-           
-            let ingredients = "• " + burger.ingredients.replacingOccurrences(of: ",", with: "\n\n• ")
-            
             cell.ingredients.text = ingredients
         
             return cell
          } else {
+            let burger = burgerAttr[indexPath.section][indexPath.row] as! BurgerPreview
             let cellIdentifier = "CatalogueTableViewCell"
             
             guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? CatalogueTableViewCell
             else {
                 fatalError("The dequeued cell is not an instance of CatalogueTableViewCell.")
             }
-            
-            let burger = burgerAttr[indexPath.section][indexPath.row] as! BurgerPreview
-            
+
             cell.burgerName.text = burger.name
             cell.kitchenName.text = burger.kitchen
             cell.catalogueNumberLabel.text = burger.displayTag
@@ -384,13 +376,12 @@ class BurgerDashboardVC: UITableViewController {
                             withImageURL: String,
                             andImageView: UIImageView,
                             atIndexPath indexPath: IndexPath) {
-        
-        let imageView = andImageView
-        imageView.image = kLazyLoadPlaceholderImage
-        
         let burger = burgerAttr[indexPath.section][indexPath.row] as! BurgerPreview
+        let imageView = andImageView
         let imageURL = burger.photoUrl
-        
+
+        imageView.image = kLazyLoadPlaceholderImage
+
         ImageManager.sharedInstance.downloadImageFromURL(imageURL) { (success, image) -> Void in
             if success && image != nil {
                 if (tableView.indexPath(for: cell) as NSIndexPath?)?.row == (indexPath as NSIndexPath).row {
@@ -404,7 +395,7 @@ class BurgerDashboardVC: UITableViewController {
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
          if section == 0 {
-            let  cell = tableView.dequeueReusableCell(withIdentifier: "BurgerHeaderCell") as! BurgerDashboardHeaderTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "BurgerHeaderCell") as! BurgerDashboardHeaderTableViewCell
             
             cell.burgerName.text = burger.name
             cell.kitchenName.text = burger.kitchen
@@ -524,4 +515,3 @@ extension BurgerDashboardVC: UICollectionViewDelegate, UICollectionViewDataSourc
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {}
 }
-

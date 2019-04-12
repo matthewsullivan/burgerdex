@@ -8,11 +8,10 @@
 
 import UIKit
 
-class SearchBurgerVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
-    
-    var burgers = [BurgerPreview]()
-    var originalSetOfBurgers = [BurgerPreview]()
-    
+class SearchBurgerVC: UIViewController,
+                      UITableViewDelegate,
+                      UITableViewDataSource,
+                      UISearchBarDelegate {
     @IBOutlet weak var errorButton: UIButton!
     @IBOutlet weak var errorContainerView: UIView!
     @IBOutlet weak var errorHeaderLabel: UILabel!
@@ -20,10 +19,20 @@ class SearchBurgerVC: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet weak var errorImageContainer: UIImageView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
-
+    
+    let sharedSession = URLSession.shared
+    
+    var burgers = [BurgerPreview]()
+    var burgerThumbnail: UIImage!
+    var lastContentOffset: CGFloat = 0
+    var originalSetOfBurgers = [BurgerPreview]()
+    var sbshown: Bool = false
+    var selectedBurger: BurgerPreview!
+    var statusBarCorrect: CGFloat = 20.0
+    
     @IBAction func errorButtonLabel(_ sender: Any) {
         searchBar.text = ""
-                
+        
         TableLoader.removeLoaderFrom(self.tableView)
         
         self.tableView.reloadData()
@@ -34,15 +43,7 @@ class SearchBurgerVC: UIViewController, UITableViewDelegate, UITableViewDataSour
         self.dismiss(animated: true, completion: nil)
     }
     
-    let sharedSession = URLSession.shared
-    
-    var selectedBurger: BurgerPreview!
-    var burgerThumbnail: UIImage!
-    var sbshown: Bool = false
-    var statusBarCorrect: CGFloat = 20.0
-    var lastContentOffset: CGFloat = 0
-    
-    func checkForStatusBars(){
+    func checkForStatusBars() {
         if UIDevice.current.modelName != "iPhone10,3" || UIDevice.current.modelName != "iPhone10,6" {
             if (UIApplication.shared.statusBarFrame.height == 40) {
                 statusBarCorrect = UIApplication.shared.statusBarFrame.height - 20
@@ -71,6 +72,7 @@ class SearchBurgerVC: UIViewController, UITableViewDelegate, UITableViewDataSour
         super.viewDidLoad()
         
         setUpSearchBar()
+
         self.title = "Search Burgers"
         
         originalSetOfBurgers = burgers
@@ -85,7 +87,7 @@ class SearchBurgerVC: UIViewController, UITableViewDelegate, UITableViewDataSour
         checkPassedBurgers()
     }
     
-    func checkPassedBurgers(){
+    func checkPassedBurgers() {
         if burgers.count > 0 {
             hideErrorView()
         } else {
@@ -93,7 +95,7 @@ class SearchBurgerVC: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
     }
     
-    func setUpSearchBar(){
+    func setUpSearchBar() {
         searchBar.keyboardAppearance = .dark
         searchBar.delegate = self
         searchBar.enablesReturnKeyAutomatically = true
@@ -107,17 +109,18 @@ class SearchBurgerVC: UIViewController, UITableViewDelegate, UITableViewDataSour
         NotificationCenter.default.addObserver(self, selector: #selector(SearchBurgerVC.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
-    func hideErrorView(){
+    func hideErrorView() {
         errorContainerView.isHidden = true
         
         TableLoader.removeLoaderFrom(self.tableView)
         
         self.tableView.allowsSelection = true
         self.tableView.isScrollEnabled = true
+
         view.endEditing(true)
     }
     
-    func displayErrorView(errorType: Int){
+    func displayErrorView(errorType: Int) {
         self.errorContainerView.isHidden = false
         
         searchBar.resignFirstResponder()
@@ -143,8 +146,10 @@ class SearchBurgerVC: UIViewController, UITableViewDelegate, UITableViewDataSour
         self.tableView.allowsSelection = false
         self.tableView.isScrollEnabled = false
         
-        BurgerPreview.searchForBurgers(searchString: searchBar.text!, session: sharedSession ,completion: { (data) in
-            if (data[0] as! Int) == 1{
+        BurgerPreview.searchForBurgers(searchString: searchBar.text!,
+                                       session: sharedSession,
+                                       completion: { (data) in
+            if (data[0] as! Int) == 1 {
                 if (data[1] as AnyObject).count > 0 {
                     self.hideErrorView()
                     
@@ -197,12 +202,12 @@ class SearchBurgerVC: UIViewController, UITableViewDelegate, UITableViewDataSour
         view.endEditing(true)
     }
     
-    @objc func keyboardWillShow(notification: NSNotification){
+    @objc func keyboardWillShow(notification: NSNotification) {
+        var contentInset:UIEdgeInsets = self.tableView.contentInset
         var userInfo = notification.userInfo!
         var keyboardFrame:CGRect = (userInfo[UIKeyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
         keyboardFrame = self.view.convert(keyboardFrame, from: nil)
         
-        var contentInset:UIEdgeInsets = self.tableView.contentInset
         contentInset.bottom = keyboardFrame.size.height
 
         self.tableView.contentInset = contentInset
@@ -237,7 +242,7 @@ class SearchBurgerVC: UIViewController, UITableViewDelegate, UITableViewDataSour
         cell.catalogueNumberNumber.text = burger.displayText
         cell.burgerID = burger.burgerID
         
-        if burger.catalogueNumber != 0{
+        if burger.catalogueNumber != 0 {
             updateImageForCell(cell,
                                inTableView: tableView,
                                withImageURL: burger.thumbUrl,
@@ -258,14 +263,13 @@ class SearchBurgerVC: UIViewController, UITableViewDelegate, UITableViewDataSour
                             withImageURL: String,
                             andImageView: UIImageView,
                             atIndexPath indexPath: IndexPath) {
-        
+        let imageURL = burger.thumbUrl
         let imageView = andImageView
-        imageView.image = kLazyLoadPlaceholderImage
         
         var burger : BurgerPreview
-        burger = burgers[indexPath.row]
         
-        let imageURL = burger.thumbUrl
+        imageView.image = kLazyLoadPlaceholderImage
+        burger = burgers[indexPath.row]
 
         ImageManager.sharedInstance.downloadImageFromURL(imageURL) { (success, image) -> Void in
             if success && image != nil {
@@ -279,19 +283,20 @@ class SearchBurgerVC: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         var burger : BurgerPreview
+
         burger = burgers[indexPath.row]
 
         burgerThumbnail = burger.photo
         selectedBurger = burger
         
-        if(burger.sightings > 1){
+        if(burger.sightings > 1) {
             self.performSegue(withIdentifier: "searchMultipleSightingSegue", sender: self)
         } else {
             self.performSegue(withIdentifier: "burgerDetailSegue", sender: self)
         }
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat{
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 80.0
     }
     
@@ -322,6 +327,7 @@ class SearchBurgerVC: UIViewController, UITableViewDelegate, UITableViewDataSour
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "burgerDetailSegue") {
             let burgerViewController = segue.destination as! BurgerVC
+
             if burgerThumbnail.size.width == 0.0 {
                 burgerViewController.burgerThumbnail = UIImage(named:"baconBeast")
             } else {
