@@ -10,10 +10,10 @@ import UIKit
 import Photos
 
 class UploadBurgerVC: UIViewController, UploadBurgerDelegate {
+    @IBOutlet weak var errorBodyLabel: UILabel!
     @IBOutlet weak var errorButton: UIButton!
     @IBOutlet weak var errorContainerView: UIView!
     @IBOutlet weak var errorHeaderLabel: UILabel!
-    @IBOutlet weak var errorBodyLabel: UILabel!
     @IBOutlet weak var errorImageContainer: UIImageView!
     @IBOutlet weak var cameraBtn: UIBarButtonItem!
     @IBOutlet fileprivate weak var collectionView: UICollectionView!
@@ -22,12 +22,12 @@ class UploadBurgerVC: UIViewController, UploadBurgerDelegate {
         self.performSegue(withIdentifier: "burgerCameraSegue", sender: self)
     }
     
-    var selectedPhoto : UIImage!
     var firstLoad = 0
+    var selectedPhoto : UIImage!
     
     fileprivate let kCellReuseIdentifier = "PhotoCell"
-    fileprivate let kColumnCnt: Int = 3
     fileprivate let kCellSpacing: CGFloat = 2
+    fileprivate let kColumnCnt: Int = 3
     fileprivate var fetchResult: PHFetchResult<PHAsset>!
     fileprivate var imageManager = PHCachingImageManager()
     fileprivate var targetSize = CGSize.zero
@@ -67,27 +67,25 @@ class UploadBurgerVC: UIViewController, UploadBurgerDelegate {
                         self.loadPhotos()
                     }
                 }
-            
+                break
             case PHAuthorizationStatus.authorized:
                 self.errorContainerView.isHidden = true
                 
                 initView()
                 loadPhotos()
-        
                 break
             case PHAuthorizationStatus.restricted, PHAuthorizationStatus.denied:
                 self.errorContainerView.isHidden = false
                 self.displayErrorView(errorType: 0)
                 
                 cameraBtn.isEnabled = false
-                
                 break
         }
         
         self.collectionView.reloadData()
     }
     
-    func displayErrorView(errorType: Int){
+    func displayErrorView(errorType: Int) {
         self.errorContainerView.isHidden = false
         
         if errorType == 0 {
@@ -102,7 +100,7 @@ class UploadBurgerVC: UIViewController, UploadBurgerDelegate {
         super.didReceiveMemoryWarning()
     }
     
-    func performBurgerInformationSegue(photo : UIImage){
+    func performBurgerInformationSegue(photo : UIImage) {
         selectedPhoto = photo
         
         self.performSegue(withIdentifier: "uploadBurgerInfoSegue", sender: self)
@@ -129,14 +127,15 @@ fileprivate extension UploadBurgerVC {
         self.collectionView.reloadData()
     
         let imgWidth = (collectionView.frame.width - (kCellSpacing * (CGFloat(kColumnCnt) - 1))) / CGFloat(kColumnCnt)
+        let layout = UICollectionViewFlowLayout()
+        
         targetSize = CGSize(width: imgWidth, height: imgWidth)
         
-        let layout = UICollectionViewFlowLayout()
         layout.itemSize = targetSize
         layout.minimumInteritemSpacing = kCellSpacing
         layout.minimumLineSpacing = kCellSpacing
+
         collectionView.collectionViewLayout = layout
-        
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: kCellReuseIdentifier)
     }
     
@@ -156,9 +155,11 @@ extension UploadBurgerVC: UICollectionViewDataSource {
         let photoAsset = fetchResult.object(at: indexPath.item)
         imageManager.requestImage(for: photoAsset, targetSize: targetSize, contentMode: .aspectFill, options: nil) { (image, info) -> Void in
             let imageView = UIImageView(image: image)
+            
             imageView.frame.size = cell.frame.size
             imageView.contentMode = .scaleAspectFill
             imageView.clipsToBounds = true
+
             cell.contentView.addSubview(imageView)
         }
     
@@ -204,7 +205,9 @@ extension UploadBurgerVC: UICollectionViewDelegate {
     func getAssetThumbnail(asset: PHAsset) -> UIImage {
         let manager = PHImageManager.default()
         let option = PHImageRequestOptions()
+
         var thumbnail = UIImage()
+
         option.isSynchronous = true
         manager.requestImage(for: asset, targetSize: CGSize(width: self.view.bounds.width, height: 200), contentMode: .aspectFill, options: option, resultHandler: {(result, info)->Void in
             thumbnail = result!

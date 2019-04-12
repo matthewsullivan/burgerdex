@@ -8,27 +8,27 @@
 
 import UIKit
 
-private let versionNumber = "1.2.0"
 private let kUploadToken = "https://www.app.burgerdex.ca/services/ios/apns/send_token.php"
+private let versionNumber = "1.2.0"
 
 class Account  {
-    class func insertToken(token: String, session: URLSession,completion:@escaping (_ resultPatties:Array<Any>)->Void){
+    class func insertToken(token: String, session: URLSession,completion:@escaping (_ resultPatties:Array<Any>)->Void) {
         session.invalidateAndCancel()
         
-        var tokenResponseData = [0,"Error"] as [Any]
-    
         let url = kUploadToken
+        let parameters: [String: Any] = ["action": "insert-token", "token": String(token)]
+        
         var postRequest = URLRequest(url: URL(string:url)!,
                                      cachePolicy: .reloadIgnoringCacheData,
                                      timeoutInterval: 60.0)
-        
-        let parameters: [String: Any] = ["action": "insert-token", "token": String(token)]
+        var tokenResponseData = [0,"Error"] as [Any]
         
         do {
             let jsonParams = try JSONSerialization.data(withJSONObject: parameters, options:[])
-            
             postRequest.httpBody = jsonParams
-        } catch {}
+        } catch {
+            return
+        }
         
         postRequest.httpMethod = "POST"
         postRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
