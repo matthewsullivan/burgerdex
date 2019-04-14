@@ -55,7 +55,7 @@ class BurgerDashboardVC: UITableViewController {
         sightingsBurgers.removeAll()
         
         let burgerHeaderView = BurgerHeaderView.init(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 200))
-        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
+        let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.light)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
         
         var burgerInfo = Burger.generateBurgerPlaceholderInformation()
@@ -71,7 +71,7 @@ class BurgerDashboardVC: UITableViewController {
         burgerHeaderView.burgerImage.addSubview(blurEffectView)
     
         tableView.estimatedRowHeight = 85.0
-        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.rowHeight = UITableView.automaticDimension
         
         self.burgerAttr.append([burgerInfo as BurgerObject])
     
@@ -454,7 +454,7 @@ class BurgerDashboardVC: UITableViewController {
         super.viewWillDisappear(animated)
         
         self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0),
-                                   at: UITableViewScrollPosition.top,
+                                   at: UITableView.ScrollPosition.top,
                                    animated: false)
         
         self.statusBarBgView.removeFromSuperview()

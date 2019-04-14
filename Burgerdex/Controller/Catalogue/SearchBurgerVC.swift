@@ -54,7 +54,7 @@ class SearchBurgerVC: UIViewController,
                 
                 statusBarCorrect = UIApplication.shared.statusBarFrame.height
             }
-            NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationDidChangeStatusBarFrame, object: nil, queue: nil, using: statusbarChange)
+            NotificationCenter.default.addObserver(forName: UIApplication.didChangeStatusBarFrameNotification, object: nil, queue: nil, using: statusbarChange)
         }
     }
     
@@ -105,8 +105,8 @@ class SearchBurgerVC: UIViewController,
         
         view.addGestureRecognizer(tap)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(SearchBurgerVC.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SearchBurgerVC.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SearchBurgerVC.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SearchBurgerVC.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     func hideErrorView() {
@@ -205,7 +205,7 @@ class SearchBurgerVC: UIViewController,
     @objc func keyboardWillShow(notification: NSNotification) {
         var contentInset:UIEdgeInsets = self.tableView.contentInset
         var userInfo = notification.userInfo!
-        var keyboardFrame:CGRect = (userInfo[UIKeyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
+        var keyboardFrame:CGRect = (userInfo[UIResponder.keyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
         keyboardFrame = self.view.convert(keyboardFrame, from: nil)
         
         contentInset.bottom = keyboardFrame.size.height

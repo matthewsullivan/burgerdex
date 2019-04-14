@@ -58,7 +58,7 @@ class BurgerCameraVC: UIViewController {
         UINavigationBar.appearance().prefersLargeTitles = false
 
         let barButtonItemAppearance = UIBarButtonItem.appearance()
-        barButtonItemAppearance.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.white], for: .normal)
+        barButtonItemAppearance.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .normal)
         
         func styleCaptureButton() {
             captureButton.layer.borderColor = UIColor.black.cgColor
@@ -80,7 +80,7 @@ class BurgerCameraVC: UIViewController {
         UINavigationBar.appearance().prefersLargeTitles = true
         
         let barButtonItemAppearance = UIBarButtonItem.appearance()
-        barButtonItemAppearance.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.clear], for: .normal)
+        barButtonItemAppearance.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.clear], for: .normal)
     }
 
     override func didReceiveMemoryWarning() {

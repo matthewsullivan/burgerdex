@@ -494,7 +494,7 @@ class BurgerSubmit{
         r.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
         r.httpBody = createBody(parameters: details  as! [String : String],
                                 boundary: boundary,
-                                data: UIImageJPEGRepresentation(image, 0.1)!,
+                                data: image.jpegData(compressionQuality: 0.1)!,
                                 mimeType: "image/jpg",
                                 filename: "burger.jpg")
         
