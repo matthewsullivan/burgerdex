@@ -62,4 +62,4 @@ Uploading a new burger is a breeze. Like one found on a warm summers day standin
 > Minor enhancements.
 
 ### Tech
-* Swift 4.0
+* Swift 5.0
