@@ -26,12 +26,12 @@ class TabBarVC: UITabBarController {
             if hasTopNotch{
                 paddingHeight = 34.0
                 
-                UITabBarItem.appearance().titlePositionAdjustment = UIOffsetMake(0.0, 10.0)
+                UITabBarItem.appearance().titlePositionAdjustment = UIOffset.init(horizontal: 0.0, vertical: 10.0)
                 
                 tabBar.items?[0].title = "Catalogue"
                 tabBar.items?[1].title = "New Discovery"
             } else {
-                UITabBarItem.appearance().setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.clear], for: .normal)
+                UITabBarItem.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.clear], for: .normal)
             }
         } else {
             tabBar.items?[0].title = "Catalogue"

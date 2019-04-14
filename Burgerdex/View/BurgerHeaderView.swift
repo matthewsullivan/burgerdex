@@ -26,11 +26,11 @@ class BurgerHeaderView: UIView {
         self.addSubview(containerView)
         
         self.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[containerView]|",
-                                                           options: NSLayoutFormatOptions(rawValue: 0),
+                                                           options: NSLayoutConstraint.FormatOptions(rawValue: 0),
                                                            metrics: nil,
                                                            views: ["containerView" : containerView]))
         self.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[containerView]|",
-                                                           options: NSLayoutFormatOptions(rawValue: 0),
+                                                           options: NSLayoutConstraint.FormatOptions(rawValue: 0),
                                                            metrics: nil,
                                                            views: ["containerView" : containerView]))
         
@@ -77,7 +77,7 @@ class BurgerHeaderView: UIView {
         containerView.layer.addSublayer(shapeLayer)
         
         containerView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[imageView]|",
-                                                                    options: NSLayoutFormatOptions(rawValue: 0),
+                                                                    options: NSLayoutConstraint.FormatOptions(rawValue: 0),
                                                                     metrics: nil,
                                                                     views: ["imageView" : burgerImage]))
         

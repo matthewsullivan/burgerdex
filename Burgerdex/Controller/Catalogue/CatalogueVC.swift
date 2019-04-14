@@ -93,7 +93,7 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
                 statusBarCorrect = UIApplication.shared.statusBarFrame.height
             }
         
-            NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationDidChangeStatusBarFrame,
+            NotificationCenter.default.addObserver(forName: UIApplication.didChangeStatusBarFrameNotification,
                                                    object: nil,
                                                    queue: nil,
                                                    using: statusbarChange)
@@ -133,7 +133,7 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
         
         self.collectionView.selectItem(at: IndexPath(row: 1, section: 0),
                                        animated: false,
-                                       scrollPosition:UICollectionViewScrollPosition.left)
+                                       scrollPosition:UICollectionView.ScrollPosition.left)
         
         self.collectionView(self.collectionView, didSelectItemAt: IndexPath(item: 1, section: 0))
     }
@@ -544,7 +544,7 @@ extension CatalogueVC: UICollectionViewDelegate, UICollectionViewDataSource, UIC
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        let size: CGSize = filters[indexPath.row].size(withAttributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14.0)])
+        let size: CGSize = filters[indexPath.row].size(withAttributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14.0)])
 
         return CGSize(width: size.width + 25.0, height: collectionView.bounds.size.height)
     }
@@ -586,13 +586,13 @@ extension CatalogueVC: UICollectionViewDelegate, UICollectionViewDataSource, UIC
            selectedFilterIndex == 2 {
             if  self.burgerSortedArray.count > 0 {
                 self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0),
-                                           at: UITableViewScrollPosition.top,
+                                           at: UITableView.ScrollPosition.top,
                                            animated: false)
             }
         } else {
             if self.burgers.count > 0 {
                 self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0),
-                                           at: UITableViewScrollPosition.top,
+                                           at: UITableView.ScrollPosition.top,
                                            animated: false)
             }
         }

@@ -80,6 +80,8 @@ class UploadBurgerVC: UIViewController, UploadBurgerDelegate {
                 
                 cameraBtn.isEnabled = false
                 break
+        @unknown default:
+            break
         }
         
         self.collectionView.reloadData()

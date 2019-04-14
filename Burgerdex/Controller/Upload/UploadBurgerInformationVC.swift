@@ -121,7 +121,7 @@ class UploadBurgerInformationVC: UITableViewController,
         submit.submitBurger(details: details, image:photo, completion: { (data) in
             if (data[0] as! Int) == 0 {
                 self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0),
-                                           at: UITableViewScrollPosition.top,
+                                           at: UITableView.ScrollPosition.top,
                                            animated: false)
                 
                 UINotificationFeedbackGenerator().notificationOccurred(.success)
@@ -134,7 +134,7 @@ class UploadBurgerInformationVC: UITableViewController,
                 })
             } else {
                 self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0),
-                                           at: UITableViewScrollPosition.top,
+                                           at: UITableView.ScrollPosition.top,
                                            animated: false)
                 
                 let response = data[1]
@@ -214,7 +214,7 @@ class UploadBurgerInformationVC: UITableViewController,
         burgerHeaderView.burgerImage.image =   photo
         
         tableView.estimatedRowHeight = 405.0
-        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.rowHeight = UITableView.automaticDimension
                 
         guard let fusionBadge = Badge.init(ratingTitle: "",
                                            badgeTitle: "fusion",
@@ -306,11 +306,11 @@ class UploadBurgerInformationVC: UITableViewController,
         
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(UploadBurgerInformationVC.keyboardWillShow),
-                                               name: NSNotification.Name.UIKeyboardWillShow,
+                                               name: UIResponder.keyboardWillShowNotification,
                                                object: nil)
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(UploadBurgerInformationVC.keyboardWillHide),
-                                               name: NSNotification.Name.UIKeyboardWillHide,
+                                               name: UIResponder.keyboardWillHideNotification,
                                                object: nil)
     }
     
@@ -373,7 +373,7 @@ class UploadBurgerInformationVC: UITableViewController,
         var contentInset:UIEdgeInsets = self.tableView.contentInset
         var userInfo = notification.userInfo!
         
-        var keyboardFrame:CGRect = (userInfo[UIKeyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
+        var keyboardFrame:CGRect = (userInfo[UIResponder.keyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
         
         
         keyboardFrame = self.view.convert(keyboardFrame, from: nil)
@@ -450,7 +450,7 @@ class UploadBurgerInformationVC: UITableViewController,
         cell.newIngredientTextField.resignFirstResponder()
         
         flowLayout = cell.flowLayout
-        flowLayout.sectionInset = UIEdgeInsetsMake(8, 8, 8, 8)
+        flowLayout.sectionInset = UIEdgeInsets.init(top: 8, left: 8, bottom: 8, right: 8)
 
         ingredientCollectionView = cell.ingredientCollectionView
 
@@ -580,7 +580,7 @@ class UploadBurgerInformationVC: UITableViewController,
     }
     
     func tableView(_: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return UITableViewAutomaticDimension
+        return UITableView.automaticDimension
     }
     
     func textViewDidChange(_ textView: UITextView) {
@@ -686,7 +686,7 @@ class UploadBurgerInformationVC: UITableViewController,
         NotificationCenter.default.removeObserver(self)
         
         self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0),
-                                   at: UITableViewScrollPosition.top,
+                                   at: UITableView.ScrollPosition.top,
                                    animated: false)
         
         
@@ -768,7 +768,7 @@ extension UploadBurgerInformationVC: UICollectionViewDelegate,
         if collectionView == self.ingredientCollectionView {
             self.configureCell(cell: self.sizingCell!, forIndexPath: indexPath as NSIndexPath)
             
-            return self.sizingCell!.systemLayoutSizeFitting(UILayoutFittingCompressedSize)
+            return self.sizingCell!.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
         } else {
             let cellSize = CGSize(width: 65, height: 85);
             
@@ -827,7 +827,7 @@ extension UploadBurgerInformationVC: UICollectionViewDelegate,
                 ingredients.append(tag.name!)
             }
         } else {
-            if let index = ingredients.index(of: tag.name!) {
+            if let index = ingredients.firstIndex(of: tag.name!) {
                 ingredients.remove(at: index)
             }
         }
