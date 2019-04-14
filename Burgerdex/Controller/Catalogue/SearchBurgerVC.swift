@@ -263,13 +263,13 @@ class SearchBurgerVC: UIViewController,
                             withImageURL: String,
                             andImageView: UIImageView,
                             atIndexPath indexPath: IndexPath) {
+        var burger : BurgerPreview
+        burger = burgers[indexPath.row]
+
         let imageURL = burger.thumbUrl
         let imageView = andImageView
         
-        var burger : BurgerPreview
-        
         imageView.image = kLazyLoadPlaceholderImage
-        burger = burgers[indexPath.row]
 
         ImageManager.sharedInstance.downloadImageFromURL(imageURL) { (success, image) -> Void in
             if success && image != nil {
