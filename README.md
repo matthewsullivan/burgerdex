@@ -18,7 +18,7 @@ Uploading a new burger is a breeze. Like one found on a warm summers day standin
 > Version 1.6.0 
 >
 > Enhanced layout compatibility.
->  
+
 > Version 1.5.1 
 >
 > Fixed an issue where the burger catalogue number overlapped it's trailing text.
