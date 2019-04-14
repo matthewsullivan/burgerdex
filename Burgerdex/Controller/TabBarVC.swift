@@ -17,7 +17,13 @@ class TabBarVC: UITabBarController {
         let width = CGFloat(tabBar.frame.width) / CGFloat((self.tabBar.items?.count)!)
        
         if(UIDevice.current.userInterfaceIdiom != .pad){
-            if UIDevice.current.modelName == "iPhone10,3" || UIDevice.current.modelName == "iPhone10,6" {
+            var hasTopNotch: Bool {
+                if #available(iOS 11.0, *) {
+                    return UIApplication.shared.delegate?.window??.safeAreaInsets.top ?? 0 > 20
+                }
+                return false
+            }
+            if hasTopNotch{
                 paddingHeight = 34.0
                 
                 UITabBarItem.appearance().titlePositionAdjustment = UIOffsetMake(0.0, 10.0)
@@ -25,7 +31,7 @@ class TabBarVC: UITabBarController {
                 tabBar.items?[0].title = "Catalogue"
                 tabBar.items?[1].title = "New Discovery"
             } else {
-                 UITabBarItem.appearance().setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.clear], for: .normal)
+                UITabBarItem.appearance().setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.clear], for: .normal)
             }
         } else {
             tabBar.items?[0].title = "Catalogue"
