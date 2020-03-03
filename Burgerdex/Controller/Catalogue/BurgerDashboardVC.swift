@@ -23,14 +23,14 @@ class BurgerDashboardVC: UITableViewController {
         super.viewDidLoad()
         
         scrollSize = view.frame.size.width;
-
+        
         layoutBurgerView()
     }
     
     let statusBarBgView = { () -> UIView in
         let statusBarWindow: UIView = UIApplication.shared.value(forKey: "statusBarWindow") as! UIView
         let statusBarBgView = UIView(frame: (statusBarWindow.statusBar?.bounds)!)
-
+        
         return statusBarBgView
     }()
     
@@ -45,7 +45,7 @@ class BurgerDashboardVC: UITableViewController {
         let colour = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1)
         
         self.statusBarBgView.backgroundColor = colour
-
+        
         navigationBar?.superview?.insertSubview(self.statusBarBgView, aboveSubview: navigationBar!)
     }
     
@@ -63,18 +63,18 @@ class BurgerDashboardVC: UITableViewController {
         burgerHeaderView.burgerImage.image =  burgerThumbnail
         
         self.tableView.tableHeaderView  = burgerHeaderView
-
+        
         blurEffectView.frame = burgerHeaderView.burgerImage.bounds
         blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         blurEffectView.alpha = 0.9
         
         burgerHeaderView.burgerImage.addSubview(blurEffectView)
-    
+        
         tableView.estimatedRowHeight = 85.0
         tableView.rowHeight = UITableView.automaticDimension
         
         self.burgerAttr.append([burgerInfo as BurgerObject])
-    
+        
         self.tableView.allowsSelection = false
         self.tableView.isScrollEnabled = false
         self.tableView.reloadData()
@@ -124,8 +124,8 @@ class BurgerDashboardVC: UITableViewController {
                                                                      burgerID: catalogueNumber!,
                                                                      recordID: recordNumber!,
                                                                      sightings: totalSightings!)
-                        else {
-                            fatalError("Unable to instantiate burgerPreview")
+                            else {
+                                fatalError("Unable to instantiate burgerPreview")
                         }
                         
                         self.sightingsBurgers += [burgerPreview]
@@ -136,14 +136,14 @@ class BurgerDashboardVC: UITableViewController {
                             if error != nil {
                                 return
                             }
-
+                            
                             DispatchQueue.main.async(execute: {
                                 UIView.animate(withDuration: 0.5, animations: {
                                     blurEffectView.alpha = 0.0
                                 }, completion: { _ in
                                     let title = burgerPreview.displayTag + " " + burgerPreview.displayText
                                     let slide = ZKCarouselSlide(image: UIImage(data: data!)!, title:title, description: descript)
-                                   
+                                    
                                     self.carousel.slides.append(slide)
                                     
                                     if imageCount == burgerInfo.sightings.count{
@@ -151,7 +151,7 @@ class BurgerDashboardVC: UITableViewController {
                                         self.setupCarousel()
                                     }
                                     
-                                   imageCount = imageCount + 1
+                                    imageCount = imageCount + 1
                                 })
                             })
                         }).resume()
@@ -160,7 +160,7 @@ class BurgerDashboardVC: UITableViewController {
                 
                 self.tableView.allowsSelection = true
                 self.tableView.isScrollEnabled = true
-
+                
                 TableLoader.removeLoaderFrom(self.tableView)
                 
                 self.burgerAttr[0] = [burgerInfo as BurgerObject]
@@ -169,8 +169,8 @@ class BurgerDashboardVC: UITableViewController {
                 guard let ratingBadge = Badge.init(ratingTitle: burgerInfo.rating,
                                                    badgeTitle: "rating",
                                                    badgeIcon: UIImage(named: "rating")!)
-                else {
-                    fatalError("Unable to instantiate rating badge")
+                    else {
+                        fatalError("Unable to instantiate rating badge")
                 }
                 
                 self.badges += [ratingBadge]
@@ -179,8 +179,8 @@ class BurgerDashboardVC: UITableViewController {
                     guard let fusionBadge = Badge.init(ratingTitle: "",
                                                        badgeTitle: "fusion",
                                                        badgeIcon: UIImage(named: "fusion")!)
-                    else {
-                        fatalError("Unable to instantiate fusion badge")
+                        else {
+                            fatalError("Unable to instantiate fusion badge")
                     }
                     
                     self.badges += [fusionBadge]
@@ -190,8 +190,8 @@ class BurgerDashboardVC: UITableViewController {
                     guard let veggieBadge = Badge.init(ratingTitle: "",
                                                        badgeTitle: "veggie",
                                                        badgeIcon: UIImage(named: "veggie")!)
-                    else {
-                        fatalError("Unable to instantiate veggie badge")
+                        else {
+                            fatalError("Unable to instantiate veggie badge")
                     }
                     
                     self.badges += [veggieBadge]
@@ -201,8 +201,8 @@ class BurgerDashboardVC: UITableViewController {
                     guard let spicyBadge = Badge.init(ratingTitle: "",
                                                       badgeTitle: "spicy",
                                                       badgeIcon: UIImage(named: "spicy")!)
-                    else {
-                        fatalError("Unable to instantiate spicy badge")
+                        else {
+                            fatalError("Unable to instantiate spicy badge")
                     }
                     
                     self.badges += [spicyBadge]
@@ -212,8 +212,8 @@ class BurgerDashboardVC: UITableViewController {
                     guard let extinctBadge = Badge.init(ratingTitle: "",
                                                         badgeTitle: "extinct",
                                                         badgeIcon: UIImage(named: "available")!)
-                    else {
-                        fatalError("Unable to instantiate extinct badge")
+                        else {
+                            fatalError("Unable to instantiate extinct badge")
                     }
                     
                     self.badges += [extinctBadge]
@@ -223,8 +223,8 @@ class BurgerDashboardVC: UITableViewController {
                     guard let seasonalBadge = Badge.init(ratingTitle: "",
                                                          badgeTitle: "limited",
                                                          badgeIcon: UIImage(named: "seasonal")!)
-                    else {
-                        fatalError("Unable to instantiate seasonal badge")
+                        else {
+                            fatalError("Unable to instantiate seasonal badge")
                     }
                     
                     self.badges += [seasonalBadge]
@@ -234,8 +234,8 @@ class BurgerDashboardVC: UITableViewController {
                     guard let hasChallengeBadge = Badge.init(ratingTitle: "",
                                                              badgeTitle: "challenge",
                                                              badgeIcon: UIImage(named: "hasChallenge")!)
-                    else {
-                        fatalError("Unable to instantiate hasChallenge badge")
+                        else {
+                            fatalError("Unable to instantiate hasChallenge badge")
                     }
                     
                     self.badges += [hasChallengeBadge]
@@ -245,8 +245,8 @@ class BurgerDashboardVC: UITableViewController {
                     guard let hasModsBadge = Badge.init(ratingTitle: "",
                                                         badgeTitle: "mods",
                                                         badgeIcon: UIImage(named: "hasMods")!)
-                    else {
-                        fatalError("Unable to instantiate hasChallege badge")
+                        else {
+                            fatalError("Unable to instantiate hasChallege badge")
                     }
                     
                     self.badges += [hasModsBadge]
@@ -255,8 +255,8 @@ class BurgerDashboardVC: UITableViewController {
                 guard let sightingsBadge = Badge.init(ratingTitle: String(burgerInfo.sightings.count),
                                                       badgeTitle: "sightings",
                                                       badgeIcon: UIImage(named: "sightings")!)
-                else {
-                    fatalError("Unable to instantiate fusion badge")
+                    else {
+                        fatalError("Unable to instantiate fusion badge")
                 }
                 
                 self.badges += [sightingsBadge]
@@ -264,13 +264,13 @@ class BurgerDashboardVC: UITableViewController {
                 var locationTitle = "location"
                 
                 if burgerInfo.locationCount > 1 { locationTitle = "locations" }
-
-                    guard let locationsBadge = Badge.init(ratingTitle: String(burgerInfo.locationCount),
-                                                   badgeTitle: locationTitle,
-                                                   badgeIcon: UIImage(named: "locations")!)
+                
+                guard let locationsBadge = Badge.init(ratingTitle: String(burgerInfo.locationCount),
+                                                      badgeTitle: locationTitle,
+                                                      badgeIcon: UIImage(named: "locations")!)
                     else {
                         fatalError("Unable to instantiate fusion badge")
-                    }
+                }
                 
                 self.badges += [locationsBadge]
                 
@@ -281,12 +281,12 @@ class BurgerDashboardVC: UITableViewController {
     
     func setupCarousel(){
         let burgerHeaderView = self.tableView.tableHeaderView as! BurgerHeaderView
-    
+        
         self.carousel.frame = burgerHeaderView.burgerImage.frame
         self.carousel.contentMode = .scaleAspectFill
         self.carousel.pageControl.numberOfPages = self.carousel.slides.count
         self.carousel.alpha = 0.0
-
+        
         burgerHeaderView.containerView.addSubview(self.carousel)
         
         UIView.animate(withDuration: 0.5, animations: {
@@ -315,34 +315,34 @@ class BurgerDashboardVC: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-         if indexPath.section == 0 {
+        if indexPath.section == 0 {
             let burger = burgerAttr[indexPath.section][indexPath.row] as! Burger
             let cellIdentifier = "BurgerInfoCell"
             let ingredients = "• " + burger.ingredients.replacingOccurrences(of: ",", with: "\n\n• ")
             let locationTitle = burger.locationCount > 1 ? " locations" : " location"
             let sightingsTotal : Int = burger.sightings.count
             let totalSightings = String(sightingsTotal)
-        
+            
             guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? BurgerDashboardTableViewCell
-            else {
-                fatalError("The dequeued cell is not an instance of BurgerTableViewCell.")
+                else {
+                    fatalError("The dequeued cell is not an instance of BurgerTableViewCell.")
             }
             
             cell.averagePrice.text = burger.averagePrice
             cell.sightings.text = "Catalogued " + totalSightings + " times"
             cell.locations.text = String(burger.locationCount) + locationTitle + " documented"
             cell.ingredients.text = ingredients
-        
+            
             return cell
-         } else {
+        } else {
             let burger = burgerAttr[indexPath.section][indexPath.row] as! BurgerPreview
             let cellIdentifier = "CatalogueTableViewCell"
             
             guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? CatalogueTableViewCell
-            else {
-                fatalError("The dequeued cell is not an instance of CatalogueTableViewCell.")
+                else {
+                    fatalError("The dequeued cell is not an instance of CatalogueTableViewCell.")
             }
-
+            
             cell.burgerName.text = burger.name
             cell.kitchenName.text = burger.kitchen
             cell.catalogueNumberLabel.text = burger.displayTag
@@ -361,11 +361,11 @@ class BurgerDashboardVC: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-         if indexPath.section != 0 {
+        if indexPath.section != 0 {
             let patty = burgerAttr[indexPath.section][indexPath.row] as! BurgerPreview
             
             selectedBurger = patty
-        
+            
             self.performSegue(withIdentifier: "sightingBurgerDetails", sender: self)
         }
     }
@@ -379,22 +379,22 @@ class BurgerDashboardVC: UITableViewController {
         let burger = burgerAttr[indexPath.section][indexPath.row] as! BurgerPreview
         let imageView = andImageView
         let imageURL = burger.photoUrl
-
+        
         imageView.image = kLazyLoadPlaceholderImage
-
+        
         ImageManager.sharedInstance.downloadImageFromURL(imageURL) { (success, image) -> Void in
             if success && image != nil {
                 if (tableView.indexPath(for: cell) as NSIndexPath?)?.row == (indexPath as NSIndexPath).row {
                     imageView.image = image
-
+                    
                     burger.photo = imageView.image!
                 }
             }
         }
     }
-
+    
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-         if section == 0 {
+        if section == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "BurgerHeaderCell") as! BurgerDashboardHeaderTableViewCell
             
             cell.burgerName.text = burger.name
@@ -403,7 +403,7 @@ class BurgerDashboardVC: UITableViewController {
             cell.catalogueNumberNumber.text = String(burger.catalogueNumber)
             
             return cell
-         } else {
+        } else {
             return nil
         }
     }
@@ -459,7 +459,7 @@ class BurgerDashboardVC: UITableViewController {
         
         self.statusBarBgView.removeFromSuperview()
     }
-        
+    
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 1 {
@@ -476,7 +476,7 @@ class BurgerDashboardVC: UITableViewController {
             return 80.0
         }
     }
-
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "sightingBurgerDetails") {
             let burgerViewController = segue.destination as! BurgerVC
@@ -502,8 +502,8 @@ extension BurgerDashboardVC: UICollectionViewDelegate, UICollectionViewDataSourc
         let burgerBadge = badges[indexPath.row]
         
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BadgeCell", for: indexPath) as? BurgerBadgeCollectionViewCell
-        else {
-            fatalError("The dequeued cell is not an instance of BurgerTableViewCell.")
+            else {
+                fatalError("The dequeued cell is not an instance of BurgerTableViewCell.")
         }
         
         cell.ratingLabel.text = burgerBadge.ratingTitle

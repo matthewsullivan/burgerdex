@@ -48,13 +48,13 @@ class BurgerPreview : BurgerObject {
           sightings: Int) {
         
         if displayTag.isEmpty ||
-           displayText.isEmpty ||
-           name.isEmpty ||
-           kitchen.isEmpty ||
-           catalogueNumber < 0 ||
-           burgerID < 0 ||
-           location.isEmpty  ||
-           year.isEmpty {
+            displayText.isEmpty ||
+            name.isEmpty ||
+            kitchen.isEmpty ||
+            catalogueNumber < 0 ||
+            burgerID < 0 ||
+            location.isEmpty  ||
+            year.isEmpty {
             return nil
         }
         
@@ -90,7 +90,7 @@ class BurgerPreview : BurgerObject {
                                                              burgerID: 0,
                                                              recordID: 0,
                                                              sightings: 1)
-            else {
+                else {
                     fatalError("Unable to instantiate burgerPreview")
             }
             
@@ -112,8 +112,8 @@ class BurgerPreview : BurgerObject {
         var patties = [BurgerPreview]()
         var burgerPreviewSuccess = [0,patties] as [Any]
         var postRequest = URLRequest(url: URL(string:url)!,
-                            cachePolicy: .reloadIgnoringCacheData,
-                        timeoutInterval: 60.0)
+                                     cachePolicy: .reloadIgnoringCacheData,
+                                     timeoutInterval: 60.0)
         
         do {
             let jsonParams = try JSONSerialization.data(withJSONObject: parameters, options:[])
@@ -121,7 +121,7 @@ class BurgerPreview : BurgerObject {
         } catch {
             return
         }
-
+        
         postRequest.httpMethod = "POST"
         postRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         postRequest.setValue("application/json", forHTTPHeaderField: "Accept")
@@ -162,17 +162,17 @@ class BurgerPreview : BurgerObject {
                                                                                  burgerID: catalogueNumber!,
                                                                                  recordID:recordNumber!,
                                                                                  sightings: totalSightings!)
-                                    else {
-                                        fatalError("Unable to instantiate burgerPreview")
+                                        else {
+                                            fatalError("Unable to instantiate burgerPreview")
                                     }
                                     patties += [burgerPreview]
                                 }
-                                 burgerPreviewSuccess[0] = 1
-                                 burgerPreviewSuccess[1] = patties
+                                burgerPreviewSuccess[0] = 1
+                                burgerPreviewSuccess[1] = patties
                                 
                                 completion(burgerPreviewSuccess)
                             }
-                        } as @convention(block) () -> Void)
+                            } as @convention(block) () -> Void)
                     }
                 } catch {
                     burgerPreviewSuccess[0] = 0
@@ -212,7 +212,7 @@ class BurgerPreview : BurgerObject {
         } catch {
             return
         }
-
+        
         postRequest.httpMethod = "POST"
         postRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         postRequest.setValue("application/json", forHTTPHeaderField: "Accept")
@@ -252,8 +252,8 @@ class BurgerPreview : BurgerObject {
                                                                                  burgerID: catalogueNumber!,
                                                                                  recordID: recordNumber!,
                                                                                  sightings: totalSightings!)
-                                    else {
-                                        fatalError("Unable to instantiate burgerPreview")
+                                        else {
+                                            fatalError("Unable to instantiate burgerPreview")
                                     }
                                     
                                     patties += [burgerPreview]
@@ -264,7 +264,7 @@ class BurgerPreview : BurgerObject {
                                 
                                 completion(burgerPreviewSuccess)
                             }
-                        } as @convention(block) () -> Void)
+                            } as @convention(block) () -> Void)
                     }
                 } catch {
                     burgerPreviewSuccess[0] = 0
@@ -310,27 +310,27 @@ class Burger : BurgerObject{
     var dateCaptured: String
     
     init?(name: String,
-         kitchen: String,
-         catalogueNumber: Int,
-         descript: String,
-         burgerID: Int,
-         location: String,
-         rating: String,
-         price: String,
-  averagePrice: String,
-         ingredients: String,
-         fusion: Bool,
-         fused: [Dictionary<String, AnyObject>],
-         sightings: [Dictionary<String, AnyObject>],
-     locationCount: Int,
-         veggie: Bool,
-         spicy: Bool,
-         extinct: Bool,
-         seasonal: Bool,
-         hasChallenge: Bool,
-         hasMods: Bool,
-         dateCaptured: String) {
-
+          kitchen: String,
+          catalogueNumber: Int,
+          descript: String,
+          burgerID: Int,
+          location: String,
+          rating: String,
+          price: String,
+          averagePrice: String,
+          ingredients: String,
+          fusion: Bool,
+          fused: [Dictionary<String, AnyObject>],
+          sightings: [Dictionary<String, AnyObject>],
+          locationCount: Int,
+          veggie: Bool,
+          spicy: Bool,
+          extinct: Bool,
+          seasonal: Bool,
+          hasChallenge: Bool,
+          hasMods: Bool,
+          dateCaptured: String) {
+        
         self.name = name
         self.kitchen = kitchen
         self.catalogueNumber = catalogueNumber
@@ -356,28 +356,28 @@ class Burger : BurgerObject{
     
     class func generateBurgerPlaceholderInformation() ->Burger{
         guard let burgerPlaceholder = Burger.init(name: "Bacon Beast",
-                                           kitchen: "Burger Delight",
-                                           catalogueNumber: 0,
-                                           descript: "Best burger in Clarington, hands down. The bacon on this burger is the best bacon I have ever eaten. You have to try this burger.\n\n \n\n$17 CAD because of poutine combo.",
-                                           burgerID: 0,
-                                           location: "Clarington",
-                                           rating: "9.2",
-                                           price: "CAD $17.00",
-                                           averagePrice: "$17.00",
-                                           ingredients: "BBQ Sauce \n\n Fresh (never frozen, delivered that day) double patty \n\n Bacon \n\n Cheese \n\n standard toppings of your choice.",
-                                           fusion: false,
-                                           fused: [],
-                                           sightings: [],
-                                           locationCount: 1,
-                                           veggie: false,
-                                           spicy: false,
-                                           extinct: false,
-                                           seasonal: false,
-                                           hasChallenge: false,
-                                           hasMods: false,
-                                           dateCaptured: "2017-10-18 08:08:59")
-        else {
-            fatalError("Unable to instantiate burger")
+                                                  kitchen: "Burger Delight",
+                                                  catalogueNumber: 0,
+                                                  descript: "Best burger in Clarington, hands down. The bacon on this burger is the best bacon I have ever eaten. You have to try this burger.\n\n \n\n$17 CAD because of poutine combo.",
+                                                  burgerID: 0,
+                                                  location: "Clarington",
+                                                  rating: "9.2",
+                                                  price: "CAD $17.00",
+                                                  averagePrice: "$17.00",
+                                                  ingredients: "BBQ Sauce \n\n Fresh (never frozen, delivered that day) double patty \n\n Bacon \n\n Cheese \n\n standard toppings of your choice.",
+                                                  fusion: false,
+                                                  fused: [],
+                                                  sightings: [],
+                                                  locationCount: 1,
+                                                  veggie: false,
+                                                  spicy: false,
+                                                  extinct: false,
+                                                  seasonal: false,
+                                                  hasChallenge: false,
+                                                  hasMods: false,
+                                                  dateCaptured: "2017-10-18 08:08:59")
+            else {
+                fatalError("Unable to instantiate burger")
         }
         
         return burgerPlaceholder
@@ -397,7 +397,7 @@ class Burger : BurgerObject{
         } catch {
             return
         }
-
+        
         postRequest.httpMethod = "POST"
         postRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         postRequest.setValue("application/json", forHTTPHeaderField: "Accept")
@@ -453,8 +453,8 @@ class Burger : BurgerObject{
                                                                        hasChallenge: hasChallenge!,
                                                                        hasMods: hasMods!,
                                                                        dateCaptured: dateCaptured!)
-                                    else {
-                                        fatalError("Unable to instantiate burger")
+                                        else {
+                                            fatalError("Unable to instantiate burger")
                                     }
                                     
                                     patty.append(burgerInfo)
@@ -462,7 +462,7 @@ class Burger : BurgerObject{
                                     completion(patty)
                                 }
                             }
-                        } as @convention(block) () -> Void)
+                            } as @convention(block) () -> Void)
                     }
                 } catch {
                     completion(patty)
@@ -485,11 +485,11 @@ class BurgerSubmit{
                       image: UIImage,
                       completion:@escaping (_ requestResponse:Array<Any>)->Void) {
         let boundary = "Boundary-\(UUID().uuidString)"
-
+        
         var message = [Any]()
         var responseCode = [0,message] as [Any]
         var r  = URLRequest(url: URL(string: kSubmitBurger)!)
-
+        
         r.httpMethod = "POST"
         r.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
         r.httpBody = createBody(parameters: details  as! [String : String],
@@ -521,12 +521,12 @@ class BurgerSubmit{
                                 completion(responseCode)
                             }
                             
-                        } as @convention(block) () -> Void)
+                            } as @convention(block) () -> Void)
                     }
                 } catch {
                     responseCode[0] = 1
                     responseCode[1] = message
-
+                    
                     DispatchQueue.main.async(execute: {
                         completion(responseCode)
                     })
@@ -583,7 +583,7 @@ class Badge : BurgerObject{
     init?(ratingTitle: String,
           badgeTitle: String,
           badgeIcon: UIImage) {
-
+        
         self.ratingTitle = ratingTitle
         self.badgeTitle = badgeTitle
         self.badgeIcon = badgeIcon

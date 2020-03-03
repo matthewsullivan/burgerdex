@@ -22,7 +22,6 @@ class CatalogueTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
         
         let mask = CAGradientLayer()
         mask.startPoint = CGPoint(x: 0, y: 0.5)
@@ -34,11 +33,8 @@ class CatalogueTableViewCell: UITableViewCell {
         burgerImage.layer.mask = mask
         
     }
-
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
-
 }

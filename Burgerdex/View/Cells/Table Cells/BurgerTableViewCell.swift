@@ -9,7 +9,6 @@
 import UIKit
 
 class BurgerTableViewCell: UITableViewCell {
-
     @IBOutlet weak var discoveryDate: UILabel!
     @IBOutlet weak var region: UILabel!
     @IBOutlet weak var price: UILabel!
@@ -20,14 +19,10 @@ class BurgerTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
-       
     }
-
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
     
     func setCollectionViewDataSourceDelegate<D: UICollectionViewDataSource & UICollectionViewDelegate>(_ dataSourceDelegate: D, forRow row: Int) {
@@ -43,5 +38,5 @@ class BurgerTableViewCell: UITableViewCell {
         set { self.collectionView.contentOffset.x = newValue }
         get { return self.collectionView.contentOffset.x }
     }
-
+    
 }

@@ -110,7 +110,7 @@ public extension UIImageView {
         }
         set {
             let new:Any = newValue as Any
-
+            
             objc_setAssociatedObject(self,&CompletedBlock,new,.OBJC_ASSOCIATION_RETAIN)
         }
     }

@@ -13,9 +13,9 @@ class TabBarVC: UITabBarController {
         super.viewDidLoad()
         
         var paddingHeight = 0.0
-
+        
         let width = CGFloat(tabBar.frame.width) / CGFloat((self.tabBar.items?.count)!)
-       
+        
         if(UIDevice.current.userInterfaceIdiom != .pad){
             var hasTopNotch: Bool {
                 if #available(iOS 11.0, *) {
@@ -23,6 +23,7 @@ class TabBarVC: UITabBarController {
                 }
                 return false
             }
+            
             if hasTopNotch{
                 paddingHeight = 34.0
                 
@@ -33,18 +34,18 @@ class TabBarVC: UITabBarController {
             } else {
                 UITabBarItem.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.clear], for: .normal)
             }
+            
         } else {
             tabBar.items?[0].title = "Catalogue"
             tabBar.items?[1].title = "New Discovery"
         }
-        
         
         UITabBar.appearance().shadowImage = nil
         UITabBar.appearance().isTranslucent = false
         UITabBar.appearance().tintColor = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1)
         UITabBar.appearance().unselectedItemTintColor = UIColor.white
         UITabBar.appearance().barTintColor = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1)
-  
+        
         UITabBar.appearance().selectionIndicatorImage = UIImage().makeImageWithColorAndSize(color: UIColor(red: 222/255,
                                                                                                            green: 173/255,
                                                                                                            blue: 107/255,

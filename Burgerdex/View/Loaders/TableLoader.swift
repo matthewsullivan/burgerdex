@@ -41,7 +41,7 @@ extension UIColor {
 extension UIView{
     func boundInside(_ superView: UIView){
         self.translatesAutoresizingMaskIntoConstraints = false
-
+        
         superView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[subview]-0-|", options: NSLayoutConstraint.FormatOptions(), metrics:nil, views:["subview":self]))
         superView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[subview]-0-|", options: NSLayoutConstraint.FormatOptions(), metrics:nil, views:["subview":self]))
     }
@@ -124,7 +124,7 @@ extension UIView {
     public func ld_addLoader() {
         let gradient: CAGradientLayer = CAGradientLayer()
         gradient.frame = CGRect(x: 0, y: 0, width: self.bounds.size.width , height: self.bounds.size.height)
-
+        
         self.layer.insertSublayer(gradient, at:0)
         
         self.configureAndAddAnimationToGradient(gradient)
@@ -178,7 +178,7 @@ extension UIView {
         cutout.backgroundColor = UIColor.clear
         
         self.addSubview(cutout)
-
+        
         cutout.setNeedsDisplay()
         cutout.boundInside(self)
         

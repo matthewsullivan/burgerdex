@@ -14,16 +14,13 @@ class BurgerHeaderTableViewCell: UITableViewCell {
     @IBOutlet weak var kitchenName: UILabel!
     @IBOutlet weak var catalogueNumberLabel: UILabel!
     @IBOutlet weak var catalogueNumberNumber: UILabel!
-   
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
-
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
-
+    
 }

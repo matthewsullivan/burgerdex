@@ -17,15 +17,15 @@ class ImageManager: NSObject {
     var imageCache = [String: UIImage]()
     
     static var sharedInstance: ImageManager { return _singletonInstance }
-
+    
     func cacheImage(_ image: UIImage, forURL url: String) {
         if imageCache.count > kLazyLoadMaxCacheImageSize {
             imageCache.remove(at: imageCache.startIndex)
         }
-
+        
         imageCache[url] = image
     }
-
+    
     func cachedImageForURL(_ url: String) -> UIImage? {
         return imageCache[url]
     }
@@ -47,7 +47,7 @@ class ImageManager: NSObject {
                     if let data = try? Data(contentsOf: retrievedURL!) {
                         if let image = UIImage(data: data) {
                             found = true
-
+                            
                             self.cacheImage(image, forURL: url.absoluteString)
                             
                             DispatchQueue.main.async(execute: {

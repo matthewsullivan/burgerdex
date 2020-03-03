@@ -43,25 +43,25 @@ class Account  {
                             
                             if  successCode == 0 {
                                 tokenResponseData[0] = 0
-                
+                                
                                 completion(tokenResponseData)
                             } else {
                                 tokenResponseData[0] = 1
                                 
                                 completion(tokenResponseData)
                             }
-                        } as @convention(block) () -> Void)
+                            } as @convention(block) () -> Void)
                     }
                 } catch {
                     tokenResponseData[0] = 0
-            
+                    
                     DispatchQueue.main.async(execute: {
                         completion(tokenResponseData)
                     })
                 }
             } else {
                 tokenResponseData[0] = 1
-        
+                
                 DispatchQueue.main.async(execute: {
                     completion(tokenResponseData)
                 })

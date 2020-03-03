@@ -83,7 +83,7 @@ extension CameraController {
         DispatchQueue(label: "prepare").async {
             do {
                 createCaptureSession()
-
+                
                 try configureCaptureDevices()
                 try configureDeviceInputs()
                 try configurePhotoOutput()
@@ -111,7 +111,7 @@ extension CameraController {
         self.previewLayer?.connection?.videoOrientation = .portrait
         
         view.layer.insertSublayer(self.previewLayer!, at: 0)
-
+        
         self.previewLayer?.frame = view.frame
     }
     
@@ -156,11 +156,11 @@ extension CameraController {
         }
         
         switch currentCameraPosition {
-            case .front:
-                try switchToRearCamera()
+        case .front:
+            try switchToRearCamera()
             
-            case .rear:
-                try switchToFrontCamera()
+        case .rear:
+            try switchToFrontCamera()
         }
         
         captureSession.commitConfiguration()
@@ -184,7 +184,7 @@ extension CameraController: AVCapturePhotoCaptureDelegate {
             self.photoCaptureCompletionBlock?(nil, error)
         } else if let data = photo.fileDataRepresentation(){
             let image = UIImage(data: data)
-                
+            
             self.photoCaptureCompletionBlock?(image, nil)
         } else {
             self.photoCaptureCompletionBlock?(nil, CameraControllerError.unknown)

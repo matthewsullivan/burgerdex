@@ -9,9 +9,9 @@
 import UIKit
 
 class SearchBurgerVC: UIViewController,
-                      UITableViewDelegate,
-                      UITableViewDataSource,
-                      UISearchBarDelegate {
+    UITableViewDelegate,
+    UITableViewDataSource,
+UISearchBarDelegate {
     @IBOutlet weak var errorButton: UIButton!
     @IBOutlet weak var errorContainerView: UIView!
     @IBOutlet weak var errorHeaderLabel: UILabel!
@@ -72,7 +72,7 @@ class SearchBurgerVC: UIViewController,
         super.viewDidLoad()
         
         setUpSearchBar()
-
+        
         self.title = "Search Burgers"
         
         originalSetOfBurgers = burgers
@@ -99,7 +99,7 @@ class SearchBurgerVC: UIViewController,
         searchBar.keyboardAppearance = .dark
         searchBar.delegate = self
         searchBar.enablesReturnKeyAutomatically = true
-
+        
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tap.cancelsTouchesInView = false
         
@@ -116,7 +116,7 @@ class SearchBurgerVC: UIViewController,
         
         self.tableView.allowsSelection = true
         self.tableView.isScrollEnabled = true
-
+        
         view.endEditing(true)
     }
     
@@ -149,46 +149,46 @@ class SearchBurgerVC: UIViewController,
         BurgerPreview.searchForBurgers(searchString: searchBar.text!,
                                        session: sharedSession,
                                        completion: { (data) in
-            if (data[0] as! Int) == 1 {
-                if (data[1] as AnyObject).count > 0 {
-                    self.hideErrorView()
-                    
-                    self.burgers.removeAll()
-                
-                    self.burgers = data[1] as! [BurgerPreview]
-                    
-                    searchBar.resignFirstResponder()
-                    
-                    self.tableView.allowsSelection = true
-                    self.tableView.isScrollEnabled = true
-                    
-                    self.tableView.reloadData()
-                    
-                    TableLoader.removeLoaderFrom(self.tableView)
-                } else {
-                    self.displayErrorView(errorType: 0)
-                    
-                    self.burgers = self.originalSetOfBurgers
-                    
-                    TableLoader.removeLoaderFrom(self.tableView)
-                    
-                    self.tableView.allowsSelection = true
-                    self.tableView.isScrollEnabled = true
-                    
-                    self.tableView.reloadData()
-                   
-                    searchBar.resignFirstResponder()
-                }
-            } else {
-                self.displayErrorView(errorType: 1)
-                
-                TableLoader.removeLoaderFrom(self.tableView)
-                
-                searchBar.resignFirstResponder()
-                
-                self.tableView.allowsSelection = true
-                self.tableView.isScrollEnabled = true
-            }
+                                        if (data[0] as! Int) == 1 {
+                                            if (data[1] as AnyObject).count > 0 {
+                                                self.hideErrorView()
+                                                
+                                                self.burgers.removeAll()
+                                                
+                                                self.burgers = data[1] as! [BurgerPreview]
+                                                
+                                                searchBar.resignFirstResponder()
+                                                
+                                                self.tableView.allowsSelection = true
+                                                self.tableView.isScrollEnabled = true
+                                                
+                                                self.tableView.reloadData()
+                                                
+                                                TableLoader.removeLoaderFrom(self.tableView)
+                                            } else {
+                                                self.displayErrorView(errorType: 0)
+                                                
+                                                self.burgers = self.originalSetOfBurgers
+                                                
+                                                TableLoader.removeLoaderFrom(self.tableView)
+                                                
+                                                self.tableView.allowsSelection = true
+                                                self.tableView.isScrollEnabled = true
+                                                
+                                                self.tableView.reloadData()
+                                                
+                                                searchBar.resignFirstResponder()
+                                            }
+                                        } else {
+                                            self.displayErrorView(errorType: 1)
+                                            
+                                            TableLoader.removeLoaderFrom(self.tableView)
+                                            
+                                            searchBar.resignFirstResponder()
+                                            
+                                            self.tableView.allowsSelection = true
+                                            self.tableView.isScrollEnabled = true
+                                        }
         })
     }
     
@@ -203,19 +203,20 @@ class SearchBurgerVC: UIViewController,
     }
     
     @objc func keyboardWillShow(notification: NSNotification) {
+        let userInfo = notification.userInfo!
+        
         var contentInset:UIEdgeInsets = self.tableView.contentInset
-        var userInfo = notification.userInfo!
         var keyboardFrame:CGRect = (userInfo[UIResponder.keyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
         keyboardFrame = self.view.convert(keyboardFrame, from: nil)
         
         contentInset.bottom = keyboardFrame.size.height
-
+        
         self.tableView.contentInset = contentInset
     }
     
     @objc func keyboardWillHide(notification: NSNotification) {
         let contentInset:UIEdgeInsets = UIEdgeInsets.zero
-
+        
         self.tableView.contentInset = contentInset
     }
     
@@ -233,7 +234,7 @@ class SearchBurgerVC: UIViewController,
         
         var burger : BurgerPreview
         burger = burgers[indexPath.row]
-
+        
         cell.selectionStyle = .none
         
         cell.burgerName.text = burger.name
@@ -265,12 +266,12 @@ class SearchBurgerVC: UIViewController,
                             atIndexPath indexPath: IndexPath) {
         var burger : BurgerPreview
         burger = burgers[indexPath.row]
-
+        
         let imageURL = burger.thumbUrl
         let imageView = andImageView
         
         imageView.image = kLazyLoadPlaceholderImage
-
+        
         ImageManager.sharedInstance.downloadImageFromURL(imageURL) { (success, image) -> Void in
             if success && image != nil {
                 if (tableView.indexPath(for: cell) as NSIndexPath?)?.row == (indexPath as NSIndexPath).row {
@@ -283,9 +284,9 @@ class SearchBurgerVC: UIViewController,
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         var burger : BurgerPreview
-
+        
         burger = burgers[indexPath.row]
-
+        
         burgerThumbnail = burger.photo
         selectedBurger = burger
         
@@ -303,11 +304,11 @@ class SearchBurgerVC: UIViewController,
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if let _ = scrollView as? UITableView {
             self.searchBar.frame = CGRect(x:self.searchBar.frame.origin.x,
-                                               y: (self.navigationController?.navigationBar.frame.size.height)! + statusBarCorrect - 1,
-                                               width:self.searchBar.frame.width,
-                                               height:self.searchBar.frame.height
+                                          y: (self.navigationController?.navigationBar.frame.size.height)! + statusBarCorrect - 1,
+                                          width:self.searchBar.frame.width,
+                                          height:self.searchBar.frame.height
             )
-
+            
             self.lastContentOffset = scrollView.contentOffset.y
         }
     }
@@ -315,9 +316,9 @@ class SearchBurgerVC: UIViewController,
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         if let _ = scrollView as? UITableView {
             self.searchBar.frame = CGRect(x:self.searchBar.frame.origin.x,
-                                               y: (self.navigationController?.navigationBar.frame.size.height)! + statusBarCorrect - 1,
-                                               width:self.searchBar.frame.width,
-                                               height:self.searchBar.frame.height
+                                          y: (self.navigationController?.navigationBar.frame.size.height)! + statusBarCorrect - 1,
+                                          width:self.searchBar.frame.width,
+                                          height:self.searchBar.frame.height
             )
             
             self.lastContentOffset = scrollView.contentOffset.y
@@ -327,7 +328,7 @@ class SearchBurgerVC: UIViewController,
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "burgerDetailSegue") {
             let burgerViewController = segue.destination as! BurgerVC
-
+            
             if burgerThumbnail.size.width == 0.0 {
                 burgerViewController.burgerThumbnail = UIImage(named:"baconBeast")
             } else {

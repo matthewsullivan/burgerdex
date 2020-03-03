@@ -21,7 +21,7 @@ public class ActivityIndicator: UIView, CAAnimationDelegate {
             setProgressLayerPath()
         }
     }
-        
+    
     @IBInspectable public var strokeColor: UIColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 1.0){
         didSet{
             progressLayer.strokeColor = strokeColor.cgColor
@@ -113,7 +113,7 @@ public class ActivityIndicator: UIView, CAAnimationDelegate {
         }
         
         status = .Loading
-       
+        
         progressLabel.isHidden = true
         progressLabel.text = "0"
         _progress = 0
@@ -311,7 +311,7 @@ public class ActivityIndicator: UIView, CAAnimationDelegate {
         let ySpace = 3.2 * oneTenth
         let point = correctJoinPoint()
         
-
+        
         let path = CGMutablePath()
         path.move(to: CGPoint(x:point.x, y:point.y))
         path.addLine(to: CGPoint(x:point.x, y:point.y))
@@ -333,7 +333,7 @@ public class ActivityIndicator: UIView, CAAnimationDelegate {
         let space = square/3
         let point = errorJoinPoint()
         
-
+        
         let path = CGMutablePath()
         path.move(to: CGPoint(x:point.x, y:point.y))
         path.addLine(to: CGPoint(x:2 * b - space, y: 2 * b - space))

@@ -18,7 +18,7 @@ class TagCell: UICollectionViewCell {
         self.tagName.textColor = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1)
         
         self.layer.cornerRadius = 4
-    
+        
         self.tagNameMaxWidthConstraint.constant = UIScreen.main.bounds.width - 8 * 2 - 8 * 2
     }
 }

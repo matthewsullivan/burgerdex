@@ -11,9 +11,9 @@ import UIKit
 class FlowLayout: UICollectionViewFlowLayout {
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         let attributesForElementsInRect = super.layoutAttributesForElements(in: rect)
-        var newAttributesForElementsInRect = [UICollectionViewLayoutAttributes]()
-        
+
         var leftMargin: CGFloat = 0.0;
+        var newAttributesForElementsInRect = [UICollectionViewLayoutAttributes]()
         
         for attributes in attributesForElementsInRect! {
             if (attributes.frame.origin.x == self.sectionInset.left) {
@@ -26,10 +26,9 @@ class FlowLayout: UICollectionViewFlowLayout {
             }
             
             leftMargin += attributes.frame.size.width + 8
-
             newAttributesForElementsInRect.append(attributes)
-            
-        }        
+        }
+
         return newAttributesForElementsInRect
     }
 }

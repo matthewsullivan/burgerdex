@@ -56,7 +56,7 @@ class BurgerCameraVC: UIViewController {
         }
         
         UINavigationBar.appearance().prefersLargeTitles = false
-
+        
         let barButtonItemAppearance = UIBarButtonItem.appearance()
         barButtonItemAppearance.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .normal)
         
@@ -76,13 +76,13 @@ class BurgerCameraVC: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-    
+        
         UINavigationBar.appearance().prefersLargeTitles = true
         
         let barButtonItemAppearance = UIBarButtonItem.appearance()
         barButtonItemAppearance.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.clear], for: .normal)
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -98,7 +98,7 @@ extension BurgerCameraVC {
             toggleFlashButton.setImage(#imageLiteral(resourceName: "Flash On Icon"), for: .normal)
         }
     }
-
+    
     @IBAction func captureImage(_ sender: UIButton) {
         cameraController.captureImage {(image, error) in
             guard let image = image else { return }

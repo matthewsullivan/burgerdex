@@ -85,7 +85,7 @@ final public class ZKCarousel: UIView, UICollectionViewDelegateFlowLayout, UICol
         let visiblePoint = CGPoint(x: visibleRect.midX, y: visibleRect.midY)
         let visibleIndexPath: IndexPath = collectionView.indexPathForItem(at: visiblePoint) ?? IndexPath(item: 0, section: 0)
         let index = visibleIndexPath.item
-
+        
         if index == (slides.count-1) {
             let indexPathToShow = IndexPath(item: 0, section: 0)
             self.collectionView.selectItem(at: indexPathToShow, animated: true, scrollPosition: .centeredHorizontally)
@@ -239,7 +239,7 @@ fileprivate class carouselCollectionViewCell: UICollectionViewCell {
         
         return
     }
-
+    
 }
 
 final public class ZKCarouselSlide : NSObject {
@@ -281,9 +281,9 @@ extension UIImageView {
     func addBlackGradientLayer(frame: CGRect){
         let gradient = CAGradientLayer()
         gradient.frame = CGRect(x: frame.origin.x,
-                               y: frame.origin.y,
-                           width: frame.size.width,
-                          height: frame.size.height * 2)
+                                y: frame.origin.y,
+                                width: frame.size.width,
+                                height: frame.size.height * 2)
         gradient.colors = [UIColor.clear.cgColor, UIColor.black.withAlphaComponent(0.4).cgColor]
         gradient.locations = [0.0, 0.4]
         self.layer.insertSublayer(gradient, at: 0)

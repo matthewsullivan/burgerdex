@@ -9,8 +9,6 @@
 import UIKit
 
 class UploadTableViewCell: UITableViewCell {
-
-    
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var regionNameTextField: TweeBorderedTextField!
     @IBOutlet weak var burgerNameTextField: TweeBorderedTextField!
@@ -30,14 +28,10 @@ class UploadTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
-        
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
     
     func setCollectionViewDataSourceDelegate<D: UICollectionViewDataSource & UICollectionViewDelegate>(_ dataSourceDelegate: D, forRow row: Int) {
@@ -45,13 +39,13 @@ class UploadTableViewCell: UITableViewCell {
         self.collectionView.delegate = dataSourceDelegate
         self.collectionView.dataSource = dataSourceDelegate
         self.collectionView.tag = row
-        self.collectionView.setContentOffset(collectionView.contentOffset, animated:false) // Stops collection view if it was scrolling.
+        self.collectionView.setContentOffset(collectionView.contentOffset, animated:false)
         self.collectionView.reloadData()
         
         self.ingredientCollectionView.delegate = dataSourceDelegate
         self.ingredientCollectionView.dataSource = dataSourceDelegate
         self.ingredientCollectionView.tag = row
-        self.ingredientCollectionView.setContentOffset(ingredientCollectionView.contentOffset, animated:false) // Stops collection view if it was scrolling.
+        self.ingredientCollectionView.setContentOffset(ingredientCollectionView.contentOffset, animated:false)
         self.ingredientCollectionView.reloadData()
     }
     

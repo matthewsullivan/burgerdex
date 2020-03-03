@@ -106,9 +106,9 @@ class BurgerHeaderView: UIView {
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
         let offsetY = -(scrollView.contentOffset.y + scrollView.contentInset.top)
-
+        
         containerView.clipsToBounds = offsetY <= 0
-
+        
         bottomLayoutConstraint.constant = offsetY >= 0 ? 0 : -offsetY / 2
         containerLayoutConstraint.constant = scrollView.contentInset.top
         heightLayoutConstraint.constant = max(offsetY + scrollView.contentInset.top, scrollView.contentInset.top)

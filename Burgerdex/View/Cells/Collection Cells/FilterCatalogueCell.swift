@@ -15,7 +15,7 @@ class FilterCatalogueCell: UITableViewCell {
         super.awakeFromNib()
         
     }
-
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
@@ -27,7 +27,7 @@ class FilterCatalogueCell: UITableViewCell {
         self.collectionView.setContentOffset(collectionView.contentOffset, animated:false) // Stops collection view if it was scrolling.
         self.collectionView.reloadData()
     }
-
+    
     var collectionViewOffset: CGFloat {
         set { self.collectionView.contentOffset.x = newValue }
         get { return self.collectionView.contentOffset.x }
