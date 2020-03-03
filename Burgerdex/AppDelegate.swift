@@ -10,11 +10,34 @@ import UIKit
 import UserNotifications
 
 @UIApplicationMain
+
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     var visibleViewController: UIViewController? {
         return getVisibleViewController(nil)
+    }
+    
+    private func getVisibleViewController(_ rootViewController: UIViewController?) -> UIViewController? {
+        let rootVC = rootViewController ?? UIApplication.shared.keyWindow?.rootViewController
+        
+        if rootVC!.isKind(of: UINavigationController.self) {
+            let navigationController = rootVC as! UINavigationController
+            
+            return getVisibleViewController(navigationController.viewControllers.last!)
+        }
+        
+        if rootVC!.isKind(of: UITabBarController.self) {
+            let tabBarController = rootVC as! UITabBarController
+            
+            return getVisibleViewController(tabBarController.selectedViewController!)
+        }
+        
+        if let presentedVC = rootVC?.presentedViewController {
+            return getVisibleViewController(presentedVC)
+        }
+        
+        return rootVC
     }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -23,6 +46,56 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         registerForPushNotifications()
         
         return true
+    }
+    
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        if ((UserDefaults.standard.object(forKey: "deviceToken")) == nil) {
+            return;
+        }
+
+        let tokenParts = deviceToken.map { data -> String in
+            return String(format: "%02.2hhx", data)
+        }
+        
+        let token = tokenParts.joined()
+        
+        var fetchedToken = ""
+        
+        fetchedToken = UserDefaults.standard.object(forKey: "deviceToken") as! String
+        
+        if (fetchedToken != token) {
+            let sharedSession = URLSession.shared
+            
+            Account.insertToken(token: token, session: sharedSession , completion: { (data) in
+                if (data[0] as! Int) == 1 {
+                    let defaults = UserDefaults.standard
+                    
+                    defaults.set(token, forKey: "deviceToken")
+                }
+            })
+        }
+    }
+    
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        visibleViewController?.navigationController?.isNavigationBarHidden = false
+    }
+    
+    func getNotificationSettings() {
+        UNUserNotificationCenter.current().getNotificationSettings { (settings) in
+            guard settings.authorizationStatus == .authorized else { return }
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.registerForRemoteNotifications()
+            })
+        }
+    }
+    
+    func registerForPushNotifications() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
+            (granted, error) in
+            guard granted else { return }
+            
+            self.getNotificationSettings()
+        }
     }
     
     func setupNavigationAndStatusBarLayout(){
@@ -49,88 +122,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             NSAttributedString.Key.foregroundColor: UIColor.white
         ]
     }
-    
-    func registerForPushNotifications() {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
-            (granted, error) in 
-            guard granted else { return }
-            
-            self.getNotificationSettings()
-        }
-    }
-    
-    func application(_ application: UIApplication,
-                     didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        let tokenParts = deviceToken.map { data -> String in
-            return String(format: "%02.2hhx", data)
-        }
         
-        let token = tokenParts.joined()
-        
-        var fetchedToken = ""
-        
-        if ((UserDefaults.standard.object(forKey: "deviceToken")) != nil) {
-            fetchedToken = UserDefaults.standard.object(forKey: "deviceToken") as! String
-        }
-        
-        if (fetchedToken != token) {
-            let sharedSession = URLSession.shared
-            
-            Account.insertToken(token: token, session: sharedSession , completion: { (data) in
-                if (data[0] as! Int) == 1 {
-                    let defaults = UserDefaults.standard
-                    
-                    defaults.set(token, forKey: "deviceToken")
-                }
-            })
-        }
-    }
-    
-    func getNotificationSettings() {
-        UNUserNotificationCenter.current().getNotificationSettings { (settings) in
-            guard settings.authorizationStatus == .authorized else { return }
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.registerForRemoteNotifications()
-            }) 
-        }
-    }
-    
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        
-        if response.actionIdentifier == "dismiss" {}
-        
         completionHandler()
-    }
-    
-    func applicationDidBecomeActive(_ application: UIApplication) {
-        visibleViewController?.navigationController?.isNavigationBarHidden = false
-    }
-    
-    private func getVisibleViewController(_ rootViewController: UIViewController?) -> UIViewController? {
-        let rootVC = rootViewController ?? UIApplication.shared.keyWindow?.rootViewController
-        
-        if rootVC!.isKind(of: UINavigationController.self) {
-            let navigationController = rootVC as! UINavigationController
-            
-            return getVisibleViewController(navigationController.viewControllers.last!)
-        }
-        
-        if rootVC!.isKind(of: UITabBarController.self) {
-            let tabBarController = rootVC as! UITabBarController
-            
-            return getVisibleViewController(tabBarController.selectedViewController!)
-        }
-        
-        if let presentedVC = rootVC?.presentedViewController {
-            return getVisibleViewController(presentedVC)
-        }
-        
-        return rootVC
     }
 }
 
 extension UIApplication {
     var statusBarView : UIView? {
+        if #available(iOS 13.0, *) {
+            return UIApplication.shared.windows.filter {$0.isKeyWindow}.first;
+        }
+
         return value(forKey: "statusBar") as? UIView
     }
 }
