@@ -3,7 +3,7 @@
 //  NotificationView
 //
 //  Created by Matthew Sullivan on 2018-04-23.
-//  Copyright © 2018 Dev & Barrel Inc. All rights reserved.
+//  Copyright © 2020 Dev & Barrel Inc. All rights reserved.
 //
 
 import UIKit
