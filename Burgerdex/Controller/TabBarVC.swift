@@ -12,19 +12,20 @@ class TabBarVC: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        var paddingHeight = 0.0
-        
         let width = CGFloat(tabBar.frame.width) / CGFloat((self.tabBar.items?.count)!)
+
+        var paddingHeight = 0.0
         
         if(UIDevice.current.userInterfaceIdiom != .pad){
             var hasTopNotch: Bool {
                 if #available(iOS 11.0, *) {
                     return UIApplication.shared.delegate?.window??.safeAreaInsets.top ?? 0 > 20
                 }
+                
                 return false
             }
             
-            if hasTopNotch{
+            if hasTopNotch {
                 paddingHeight = 34.0
                 
                 UITabBarItem.appearance().titlePositionAdjustment = UIOffset.init(horizontal: 0.0, vertical: 10.0)
@@ -63,11 +64,15 @@ extension UIDevice {
     var modelName: String {
         var systemInfo = utsname()
         uname(&systemInfo)
+
         let machineMirror = Mirror(reflecting: systemInfo.machine)
+
         let identifier = machineMirror.children.reduce("") { identifier, element in
             guard let value = element.value as? Int8, value != 0 else { return identifier }
+
             return identifier + String(UnicodeScalar(UInt8(value)))
         }
+
         if let value = ProcessInfo.processInfo.environment["SIMULATOR_MODEL_IDENTIFIER"] {
             return value
         } else {
@@ -81,9 +86,13 @@ extension UIDevice {
 extension UIImage {
     func makeImageWithColorAndSize(color: UIColor, size: CGSize) -> UIImage {
         UIGraphicsBeginImageContextWithOptions(size, false, 0)
+
         color.setFill()
+
         UIRectFill(CGRect(x:0, y:0, width:size.width, height:size.height))
+
         let image = UIGraphicsGetImageFromCurrentImageContext()
+
         UIGraphicsEndImageContext()
         
         return image!

@@ -11,25 +11,23 @@ import UIKit
 class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     private let kLazyLoadCollectionCellImage = 1
     
+    @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var errorButton: UIButton!
     @IBOutlet weak var errorContainerView: UIView!
     @IBOutlet weak var errorHeaderLabel: UILabel!
     @IBOutlet weak var errorBodyLabel: UILabel!
     @IBOutlet weak var errorImageContainer: UIImageView!
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var collectionView: UICollectionView!
     
     @IBAction func errorButtonLabel(_ sender: Any) {
         self.requestCatalogueBurgerData(page:1, filter:self.selectedFilterIndex)
     }
+
     @IBAction func searchBurgerBtn(_ sender: Any) {
         self.performSegue(withIdentifier: "searchBurgersSegue", sender: self)
     }
     
     let sharedSession = URLSession.shared
-    
-    var selectedBurger: BurgerPreview!
-    
     
     var burgers = [BurgerPreview]()
     var burgerSortedArray = [BurgerSort]()
@@ -38,6 +36,7 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
     var noMoreData = false
     var pageIndex = 1
     var sbshown: Bool = false
+    var selectedBurger: BurgerPreview!
     var selectedFilterIndex = Int()
     var statusBarCorrect: CGFloat = 20.0
     
@@ -246,12 +245,12 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
     
     func numberOfSections(in tableView: UITableView) -> Int {
         if selectedFilterIndex == 14 ||
-            selectedFilterIndex == 13 ||
-            selectedFilterIndex == 2 {
+           selectedFilterIndex == 13 ||
+           selectedFilterIndex == 2 {
             return burgerSortedArray.count
-        } else {
-            return 1
         }
+        
+        return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -259,22 +258,22 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
             selectedFilterIndex == 13 ||
             selectedFilterIndex == 2 {
             return burgerSortedArray[section].sectionObjects.count
-        } else {
-            return burgers.count
         }
+            
+        return burgers.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if self.pageIndex > 1 {TableLoader.removeLoaderFrom(self.tableView)}
-        
+
         let cellIdentifier = "CatalogueTableViewCell"
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! CatalogueTableViewCell
         
         var burger : BurgerPreview
         
         if selectedFilterIndex == 14 ||
-            selectedFilterIndex == 13 ||
-            selectedFilterIndex == 2 {
+           selectedFilterIndex == 13 ||
+           selectedFilterIndex == 2 {
             burger = burgerSortedArray[indexPath.section].sectionObjects[indexPath.row]
         } else {
             burger = burgers[indexPath.row]
@@ -369,59 +368,56 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
                     BurgerPreview.fetchBurgerPreviews(page: self.pageIndex,
                                                       filter: self.selectedFilterIndex,
                                                       session: sharedSession,
-                                                      completion: { (data) in
-                                                        if (data[1] as AnyObject).count > 0 {
-                                                            self.burgers += data[1] as! [BurgerPreview]
-                                                            self.pageIndex  += 1
-                                                            
-                                                            self.burgerSortedArray.removeAll()
-                                                            
-                                                            if self.selectedFilterIndex == 14 {
-                                                                let predicate = { (element: BurgerPreview) in
-                                                                    return element.kitchen
-                                                                }
-                                                                
-                                                                let dictionary = Dictionary(grouping: self.burgers, by: predicate)
-                                                                
-                                                                let sortedByKeyDictionary = dictionary.sorted { $0.0 < $1.0 }
-                                                                
-                                                                for (key, value) in sortedByKeyDictionary {
-                                                                    self.burgerSortedArray.append(BurgerSort(sectionName: key, sectionObjects: value))
-                                                                }
-                                                            }
-                                                            
-                                                            if self.selectedFilterIndex == 13 {
-                                                                let predicate = { (element: BurgerPreview) in
-                                                                    return element.location
-                                                                }
-                                                                
-                                                                let dictionary = Dictionary(grouping: self.burgers, by: predicate)
-                                                                
-                                                                let sortedByKeyDictionary = dictionary.sorted { $0.0 < $1.0 }
-                                                                
-                                                                for (key, value) in sortedByKeyDictionary {
-                                                                    self.burgerSortedArray.append(BurgerSort(sectionName: key, sectionObjects: value))
-                                                                }
-                                                            }
-                                                            
-                                                            if self.selectedFilterIndex == 2{
-                                                                let predicate = { (element: BurgerPreview) in
-                                                                    return element.year
-                                                                }
-                                                                
-                                                                let dictionary = Dictionary(grouping: self.burgers, by: predicate)
-                                                                
-                                                                let sortedByKeyDictionary = dictionary.sorted { $0.0 > $1.0 }
-                                                                
-                                                                for (key, value) in sortedByKeyDictionary {
-                                                                    self.burgerSortedArray.append(BurgerSort(sectionName: key, sectionObjects: value))
-                                                                }
-                                                            }
-                                                            
-                                                            self.tableView.reloadData()
-                                                        } else {
-                                                            self.noMoreData = true
-                                                        }
+                                                      completion: {(data) in
+                        if (data[1] as AnyObject).count > 0 {
+                            self.burgers += data[1] as! [BurgerPreview]
+                            self.pageIndex  += 1
+                            
+                            self.burgerSortedArray.removeAll()
+                            
+                            if self.selectedFilterIndex == 14 {
+                                let predicate = { (element: BurgerPreview) in
+                                    return element.kitchen
+                                }
+                                
+                                let dictionary = Dictionary(grouping: self.burgers, by: predicate)
+                                let sortedByKeyDictionary = dictionary.sorted { $0.0 < $1.0 }
+                                
+                                for (key, value) in sortedByKeyDictionary {
+                                    self.burgerSortedArray.append(BurgerSort(sectionName: key, sectionObjects: value))
+                                }
+                            }
+                            
+                            if self.selectedFilterIndex == 13 {
+                                let predicate = { (element: BurgerPreview) in
+                                    return element.location
+                                }
+                                
+                                let dictionary = Dictionary(grouping: self.burgers, by: predicate)
+                                let sortedByKeyDictionary = dictionary.sorted { $0.0 < $1.0 }
+                                
+                                for (key, value) in sortedByKeyDictionary {
+                                    self.burgerSortedArray.append(BurgerSort(sectionName: key, sectionObjects: value))
+                                }
+                            }
+                            
+                            if self.selectedFilterIndex == 2{
+                                let predicate = { (element: BurgerPreview) in
+                                    return element.year
+                                }
+                                
+                                let dictionary = Dictionary(grouping: self.burgers, by: predicate)
+                                let sortedByKeyDictionary = dictionary.sorted { $0.0 > $1.0 }
+                                
+                                for (key, value) in sortedByKeyDictionary {
+                                    self.burgerSortedArray.append(BurgerSort(sectionName: key, sectionObjects: value))
+                                }
+                            }
+                            
+                            self.tableView.reloadData()
+                        } else {
+                            self.noMoreData = true
+                        }
                     })
                 }
             }
@@ -458,8 +454,8 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
         var burger : BurgerPreview
         
         if selectedFilterIndex == 14 ||
-            selectedFilterIndex == 13 ||
-            selectedFilterIndex == 2 {
+           selectedFilterIndex == 13 ||
+           selectedFilterIndex == 2 {
             burger = burgerSortedArray[indexPath.section].sectionObjects[indexPath.row]
         } else {
             burger = burgers[indexPath.row]
@@ -468,16 +464,10 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
         burgerThumbnail = burger.photo
         selectedBurger = burger
         
-        if(burger.sightings > 1) {
-            self.performSegue(withIdentifier: "multipleSightingSegue", sender: self)
-        } else {
-            self.performSegue(withIdentifier: "burgerSegue", sender: self)
-        }
+        self.performSegue(withIdentifier: burger.sightings > 1 ? "multipleSightingSegue" : "burgerSegue", sender: self)
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 80.0
-    }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {return 80.0}
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "burgerSegue") {
@@ -563,8 +553,8 @@ extension CatalogueVC: UICollectionViewDelegate, UICollectionViewDataSource, UIC
         }
         
         if selectedFilterIndex == 14 ||
-            selectedFilterIndex == 13 ||
-            selectedFilterIndex == 2 {
+           selectedFilterIndex == 13 ||
+           selectedFilterIndex == 2 {
             self.burgerSortedArray.removeAll()
             
             let dictionary = ["": self.burgers]
@@ -582,8 +572,8 @@ extension CatalogueVC: UICollectionViewDelegate, UICollectionViewDataSource, UIC
         self.hideErrorView()
         
         if selectedFilterIndex == 14 ||
-            selectedFilterIndex == 13 ||
-            selectedFilterIndex == 2 {
+           selectedFilterIndex == 13 ||
+           selectedFilterIndex == 2 {
             if  self.burgerSortedArray.count > 0 {
                 self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0),
                                            at: UITableView.ScrollPosition.top,
@@ -604,11 +594,13 @@ extension CatalogueVC: UICollectionViewDelegate, UICollectionViewDataSource, UIC
 extension UIScrollView {
     var scrolledToTop: Bool {
         let topEdge = 0 - contentInset.top
+
         return contentOffset.y <= topEdge
     }
     
     var scrolledToBottom: Bool {
         let bottomEdge = contentSize.height + contentInset.bottom - bounds.height
+
         return contentOffset.y >= bottomEdge
     }
 }

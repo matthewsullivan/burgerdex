@@ -8,17 +8,14 @@
 
 import UIKit
 
-class SearchBurgerVC: UIViewController,
-    UITableViewDelegate,
-    UITableViewDataSource,
-UISearchBarDelegate {
+class SearchBurgerVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
     @IBOutlet weak var errorButton: UIButton!
     @IBOutlet weak var errorContainerView: UIView!
     @IBOutlet weak var errorHeaderLabel: UILabel!
     @IBOutlet weak var errorBodyLabel: UILabel!
     @IBOutlet weak var errorImageContainer: UIImageView!
-    @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var tableView: UITableView!
     
     let sharedSession = URLSession.shared
     
@@ -39,6 +36,7 @@ UISearchBarDelegate {
         
         hideErrorView()
     }
+
     @IBAction func closeSearchBtn(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
     }
@@ -154,7 +152,6 @@ UISearchBarDelegate {
                                                 self.hideErrorView()
                                                 
                                                 self.burgers.removeAll()
-                                                
                                                 self.burgers = data[1] as! [BurgerPreview]
                                                 
                                                 searchBar.resignFirstResponder()
@@ -207,8 +204,8 @@ UISearchBarDelegate {
         
         var contentInset:UIEdgeInsets = self.tableView.contentInset
         var keyboardFrame:CGRect = (userInfo[UIResponder.keyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
+
         keyboardFrame = self.view.convert(keyboardFrame, from: nil)
-        
         contentInset.bottom = keyboardFrame.size.height
         
         self.tableView.contentInset = contentInset
@@ -233,6 +230,7 @@ UISearchBarDelegate {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! CatalogueTableViewCell
         
         var burger : BurgerPreview
+
         burger = burgers[indexPath.row]
         
         cell.selectionStyle = .none
@@ -254,10 +252,7 @@ UISearchBarDelegate {
         return cell
     }
     
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return nil
-    }
-    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {return nil}
     
     func updateImageForCell(_ cell: UITableViewCell,
                             inTableView tableView: UITableView,
@@ -265,6 +260,7 @@ UISearchBarDelegate {
                             andImageView: UIImageView,
                             atIndexPath indexPath: IndexPath) {
         var burger : BurgerPreview
+
         burger = burgers[indexPath.row]
         
         let imageURL = burger.thumbUrl
@@ -290,16 +286,10 @@ UISearchBarDelegate {
         burgerThumbnail = burger.photo
         selectedBurger = burger
         
-        if(burger.sightings > 1) {
-            self.performSegue(withIdentifier: "searchMultipleSightingSegue", sender: self)
-        } else {
-            self.performSegue(withIdentifier: "burgerDetailSegue", sender: self)
-        }
+        self.performSegue(withIdentifier: burger.sightings > 1 ? "searchMultipleSightingSegue" : "burgerDetailSegue", sender: self)
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 80.0
-    }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {return 80.0}
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if let _ = scrollView as? UITableView {
