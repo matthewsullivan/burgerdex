@@ -23,8 +23,15 @@ class BurgerVC: UITableViewController {
     }
     
     let statusBarBgView = { () -> UIView in
-        let statusBarWindow: UIView = UIApplication.shared.value(forKey: "statusBarWindow") as! UIView
-        
+        var statusBarWindow : UIView {
+            if #available(iOS 13.0, *) {
+                return UIApplication.shared.windows.filter {$0.isKeyWindow}.first!;
+            }
+
+            return UIApplication.shared.value(forKey: "statusBarWindow") as! UIView
+        }
+
+        // let statusBarWindow: UIView = UIApplication.shared.value(forKey: "statusBarWindow") as! UIView
         let statusBarBgView = UIView(frame: (statusBarWindow.statusBar?.bounds)!)
         
         return statusBarBgView

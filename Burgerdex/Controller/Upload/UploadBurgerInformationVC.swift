@@ -9,15 +9,7 @@
 import UIKit
 import Photos
 
-extension UIView {
-    var statusBar: UIView? {
-        return value(forKey: "statusBar") as? UIView
-    }
-}
-
-class UploadBurgerInformationVC: UITableViewController,
-    UITextFieldDelegate,
-UITextViewDelegate {
+class UploadBurgerInformationVC: UITableViewController, UITextFieldDelegate, UITextViewDelegate {
     let headerBurgerNamePlaceholder  = "Mystery Burger"
     let headerBurgerKitchenPlaceholder  = "Mystery Kitchen"
     let tvPlaceHolder = "Describe your first few bites."
@@ -105,18 +97,17 @@ UITextViewDelegate {
     
     @IBAction func submitBtn(_ sender: Any) {
         setInputValueFields()
-        
-        details["ratingLbl"] = "" as AnyObject
-        details["iphone"] = "1" as AnyObject
-        
+                
         SwiftSpinner.show(delay: 0, title: "Uploading Burger" , animated: true)
         
         let submit = BurgerSubmit()
         
-        details["seasonal"] = details["limited"] as AnyObject
         details["deviceName"] = UIDevice.current.name as AnyObject
-        details["timezone"] = TimeZone.current.identifier as AnyObject
         details["deviceType"] = UIDevice.current.modelName as AnyObject
+        details["iphone"] = "1" as AnyObject
+        details["ratingLbl"] = "" as AnyObject
+        details["seasonal"] = details["limited"] as AnyObject
+        details["timezone"] = TimeZone.current.identifier as AnyObject
         
         submit.submitBurger(details: details, image:photo, completion: { (data) in
             if (data[0] as! Int) == 0 {
@@ -129,15 +120,16 @@ UITextViewDelegate {
                 SwiftSpinner.show("Success..", animated: false).addTapHandler({
                     SwiftSpinner.hide()
                 }, subtitle: "Tap to dismiss")
+
                 self.delay(seconds: 1.5, completion: {
                     SwiftSpinner.hide()
                 })
             } else {
+                let response = data[1]
+
                 self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0),
                                            at: UITableView.ScrollPosition.top,
                                            animated: false)
-                
-                let response = data[1]
                 
                 UINotificationFeedbackGenerator().notificationOccurred(.error)
                 
@@ -148,6 +140,7 @@ UITextViewDelegate {
         })
         
         let tmpLbl = UILabel()
+
         tmpLbl.text = "5.0"
         
         details["ratingLbl"] = tmpLbl
@@ -219,8 +212,8 @@ UITextViewDelegate {
         guard let fusionBadge = Badge.init(ratingTitle: "",
                                            badgeTitle: "fusion",
                                            badgeIcon: UIImage(named: "fusion")!)
-            else {
-                fatalError("Unable to instantiate fusion badge")
+        else {
+            fatalError("Unable to instantiate fusion badge")
         }
         
         self.badges += [fusionBadge]
@@ -228,8 +221,8 @@ UITextViewDelegate {
         guard let veggieBadge = Badge.init(ratingTitle: "",
                                            badgeTitle: "veggie",
                                            badgeIcon: UIImage(named: "veggie")!)
-            else {
-                fatalError("Unable to instantiate veggie badge")
+        else {
+            fatalError("Unable to instantiate veggie badge")
         }
         
         self.badges += [veggieBadge]
@@ -237,8 +230,8 @@ UITextViewDelegate {
         guard let spicyBadge = Badge.init(ratingTitle: "",
                                           badgeTitle: "spicy",
                                           badgeIcon: UIImage(named: "spicy")!)
-            else {
-                fatalError("Unable to instantiate spicy badge")
+        else {
+            fatalError("Unable to instantiate spicy badge")
         }
         
         self.badges += [spicyBadge]
@@ -246,8 +239,8 @@ UITextViewDelegate {
         guard let extinctBadge = Badge.init(ratingTitle: "",
                                             badgeTitle: "extinct",
                                             badgeIcon: UIImage(named: "available")!)
-            else {
-                fatalError("Unable to instantiate extinct badge")
+        else {
+            fatalError("Unable to instantiate extinct badge")
         }
         
         self.badges += [extinctBadge]
@@ -255,8 +248,8 @@ UITextViewDelegate {
         guard let seasonalBadge = Badge.init(ratingTitle: "",
                                              badgeTitle: "limited",
                                              badgeIcon: UIImage(named: "seasonal")!)
-            else {
-                fatalError("Unable to instantiate seasonal badge")
+        else {
+            fatalError("Unable to instantiate seasonal badge")
         }
         
         self.badges += [seasonalBadge]
@@ -264,8 +257,8 @@ UITextViewDelegate {
         guard let hasChallengeBadge = Badge.init(ratingTitle: "",
                                                  badgeTitle: "challenge",
                                                  badgeIcon: UIImage(named: "hasChallenge")!)
-            else {
-                fatalError("Unable to instantiate hasChallenge badge")
+        else {
+            fatalError("Unable to instantiate hasChallenge badge")
         }
         
         self.badges += [hasChallengeBadge]
@@ -273,8 +266,8 @@ UITextViewDelegate {
         guard let hasModsBadge = Badge.init(ratingTitle: "",
                                             badgeTitle: "mods",
                                             badgeIcon: UIImage(named: "hasMods")!)
-            else {
-                fatalError("Unable to instantiate hasChallege badge")
+        else {
+            fatalError("Unable to instantiate hasChallege badge")
         }
         
         self.badges += [hasModsBadge]
@@ -288,6 +281,7 @@ UITextViewDelegate {
         details["hasMods"] = "0" as AnyObject
         
         let tmpLbl = UILabel()
+
         tmpLbl.text = "5.0"
         
         details["ratingLbl"] = tmpLbl
@@ -300,6 +294,7 @@ UITextViewDelegate {
         }
         
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+
         tap.cancelsTouchesInView = false
         
         view.addGestureRecognizer(tap)
@@ -336,13 +331,7 @@ UITextViewDelegate {
         }
         
         for tags in self.tags {
-            if tags.selected{
-                atLeastOneIngredient = true
-                
-                break
-            } else {
-                atLeastOneIngredient = false
-            }
+            atLeastOneIngredient = tags.selected ? true : false;
         }
         
         if !(fields["locations"]?.text ?? "").isEmpty{progress = (progress + 0.15 <= 1.0) ? progress + 0.15 : 1.0}
@@ -374,7 +363,6 @@ UITextViewDelegate {
         
         var contentInset:UIEdgeInsets = self.tableView.contentInset
         var keyboardFrame:CGRect = (userInfo[UIResponder.keyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
-        
         
         keyboardFrame = self.view.convert(keyboardFrame, from: nil)
         
@@ -410,29 +398,22 @@ UITextViewDelegate {
         view.endEditing(true)
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         guard let tableViewCell = cell as? UploadTableViewCell else { return }
+
         tableViewCell.setCollectionViewDataSourceDelegate(self, forRow: indexPath.row)
     }
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
+    override func numberOfSections(in tableView: UITableView) -> Int {return 1}
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
-    }
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {return 1}
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cellIdentifier = "UploadInfoCell"
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? UploadTableViewCell
-            else {
-                fatalError("The dequeued cell is not an instance of UploadTableViewCell.")
+        else {
+            fatalError("The dequeued cell is not an instance of UploadTableViewCell.")
         }
         
         cell.burgerNameTextField.delegate = self
@@ -459,6 +440,7 @@ UITextViewDelegate {
         let cellNib = UINib(nibName: "TagCell", bundle: nil)
         
         ingredientCollectionView.register(cellNib, forCellWithReuseIdentifier: "TagCell")
+
         self.sizingCell = (cellNib.instantiate(withOwner: nil, options: nil) as NSArray).firstObject as! TagCell?
         
         cell.ratingSlider.minimumValue = 0.0
@@ -467,7 +449,6 @@ UITextViewDelegate {
         cell.ratingSlider.addTarget(self, action: #selector(updateRatingLabel(sender:)), for: .allEvents)
         
         addIngredientButton = cell.addIngredientButton
-        
         addIngredientButton.addTarget(self, action: #selector(addIngredient(_:)), for: .touchUpInside)
         
         cell.burgerDescriptionTextView.delegate = self
@@ -505,7 +486,11 @@ UITextViewDelegate {
         self.submitBtn.alpha = 0.5;
         
         let ratingLbl = Float((details["ratingLbl"]?.text as AnyObject) as! String)
-        if ratingLbl != 5.0 {cell.ratingSlider.value = ratingLbl!}
+
+        if (ratingLbl != 5.0) {
+            cell.ratingSlider.value = ratingLbl!
+            
+        }
         
         return cell
     }
@@ -515,8 +500,8 @@ UITextViewDelegate {
         
         if (!(ingredientLabel.text ?? "").isEmpty) {
             if !TAGS.contains(ingredientLabel.text!) {
-                
                 let tag = Tag()
+
                 tag.name = ingredientLabel.text
                 
                 self.tags.append(tag)
@@ -601,22 +586,12 @@ UITextViewDelegate {
         }
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {}
-    
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == 1 {
-            return 80
-        } else {
-            return tableView.rowHeight
-        }
+        return indexPath.section == 1 ? 80 : tableView.rowHeight
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 1 {
-            return 0.0
-        } else {
-            return 80.0
-        }
+        return section == 1 ? 0.0 : 80.0
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -648,9 +623,9 @@ UITextViewDelegate {
             determineDetailProgress()
             
             return cell.contentView
-        } else {
-            return nil
         }
+            
+        return nil
     }
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -676,6 +651,7 @@ UITextViewDelegate {
             }
             
             let headerView = self.tableView.tableHeaderView as! BurgerHeaderView
+
             headerView.scrollViewDidScroll(scrollView: scrollView)
         }
     }
@@ -702,15 +678,15 @@ UITextViewDelegate {
     }
 }
 
-extension UploadBurgerInformationVC: UICollectionViewDelegate,
-    UICollectionViewDataSource,
-UICollectionViewDelegateFlowLayout {
+extension UIView {
+    var statusBar: UIView? {
+        return value(forKey: "statusBar") as? UIView
+    }
+}
+
+extension UploadBurgerInformationVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if collectionView == self.ingredientCollectionView {
-            return tags.count
-        } else {
-            return badges.count
-        }
+        return collectionView == self.ingredientCollectionView ? tags.count : badges.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -730,7 +706,7 @@ UICollectionViewDelegateFlowLayout {
             var detailsKey = burgerBadge.badgeTitle
             
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BadgeCell", for: indexPath) as? BurgerBadgeCollectionViewCell
-                else {
+            else {
                     fatalError("The dequeued cell is not an instance of BurgerTableViewCell.")
             }
             
@@ -744,7 +720,9 @@ UICollectionViewDelegateFlowLayout {
             if burgerBadge.badgeTitle == "challenge" {detailsKey = "hasChallenge"}
             if burgerBadge.badgeTitle == "mods" {detailsKey = "hasMods"}
             
-            if (details[detailsKey] as AnyObject) as! String == "1"{cell.selectionStatus.backgroundColor = colour}
+            if (details[detailsKey] as AnyObject) as! String == "1"{
+                cell.selectionStatus.backgroundColor = colour
+            }
             
             if(firstLayout){
                 firstLayout = false
@@ -769,11 +747,9 @@ UICollectionViewDelegateFlowLayout {
             self.configureCell(cell: self.sizingCell!, forIndexPath: indexPath as NSIndexPath)
             
             return self.sizingCell!.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
-        } else {
-            let cellSize = CGSize(width: 65, height: 85);
-            
-            return cellSize
         }
+        
+        return CGSize(width: 65, height: 85)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath){
@@ -786,14 +762,11 @@ UICollectionViewDelegateFlowLayout {
         } else {
             selectedBadgesIndex = indexPath.row
             
-            let colour = UIColor(red: 222/255,
-                                 green: 173/255,
-                                 blue: 107/255,
-                                 alpha: 1.0)
+            let colour = UIColor(red: 222/255, green: 173/255, blue: 107/255, alpha: 1.0)
             
             if let cell = collectionView.cellForItem(at: indexPath)  as? BurgerBadgeCollectionViewCell {
                 
-                if  cell.selectionStatus.backgroundColor != colour{
+                if (cell.selectionStatus.backgroundColor != colour) {
                     if indexPath.row == 0 {details["fusion"] = "1" as AnyObject}
                     if indexPath.row == 1 {details["veggie"] = "1" as AnyObject}
                     if indexPath.row == 2 {details["spicy"] = "1" as AnyObject}
@@ -820,9 +793,10 @@ UICollectionViewDelegateFlowLayout {
     
     func configureCell(cell: TagCell, forIndexPath indexPath: NSIndexPath) {
         let tag = tags[indexPath.row]
+
         cell.tagName.text = tag.name
         
-        if tag.selected {
+        if (tag.selected) {
             if !ingredients.contains(tag.name!) {
                 ingredients.append(tag.name!)
             }
@@ -832,22 +806,7 @@ UICollectionViewDelegateFlowLayout {
             }
         }
         
-        cell.tagName.textColor = tag.selected ? UIColor(red: 56/255,
-                                                        green: 49/255,
-                                                        blue: 40/255,
-                                                        alpha: 1) :
-            UIColor(red: 56/255,
-                    green: 49/255,
-                    blue: 40/255,
-                    alpha: 1)
-        
-        cell.backgroundColor = tag.selected ? UIColor(red: 222/255,
-                                                      green: 173/255,
-                                                      blue: 107/255,
-                                                      alpha: 1):
-            UIColor(red: 0.8,
-                    green: 0.8,
-                    blue: 0.8,
-                    alpha: 1)
+        cell.tagName.textColor = tag.selected ? UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1) : UIColor(red: 56/255,green: 49/255, blue: 40/255, alpha: 1)
+        cell.backgroundColor = tag.selected ? UIColor(red: 222/255, green: 173/255, blue: 107/255, alpha: 1): UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1)
     }
 }
