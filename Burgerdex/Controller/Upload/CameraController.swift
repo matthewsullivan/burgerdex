@@ -30,6 +30,7 @@ extension CameraController {
         
         func configureCaptureDevices() throws {
             let session = AVCaptureDevice.DiscoverySession(deviceTypes: [AVCaptureDevice.DeviceType.builtInWideAngleCamera], mediaType: AVMediaType.video, position: .unspecified)
+
             guard let cameras = (session.devices.compactMap { $0 }) as [AVCaptureDevice]?, !cameras.isEmpty else { throw CameraControllerError.noCamerasAvailable }
             
             for camera in cameras {
@@ -57,17 +58,19 @@ extension CameraController {
                 if captureSession.canAddInput(self.rearCameraInput!) { captureSession.addInput(self.rearCameraInput!) }
                 
                 self.currentCameraPosition = .rear
-            }
-                
-            else if let frontCamera = self.frontCamera {
+            } else if let frontCamera = self.frontCamera {
                 self.frontCameraInput = try AVCaptureDeviceInput(device: frontCamera)
                 
-                if captureSession.canAddInput(self.frontCameraInput!) { captureSession.addInput(self.frontCameraInput!) }
-                else { throw CameraControllerError.inputsAreInvalid }
+                if captureSession.canAddInput(self.frontCameraInput!) {
+                    captureSession.addInput(self.frontCameraInput!)
+                } else {
+                    throw CameraControllerError.inputsAreInvalid
+                }
                 
                 self.currentCameraPosition = .front
+            } else {
+                throw CameraControllerError.noCamerasAvailable
             }
-            else { throw CameraControllerError.noCamerasAvailable }
         }
         
         func configurePhotoOutput() throws {
@@ -76,7 +79,9 @@ extension CameraController {
             self.photoOutput = AVCapturePhotoOutput()
             self.photoOutput!.setPreparedPhotoSettingsArray([AVCapturePhotoSettings(format: [AVVideoCodecKey : AVVideoCodecType.jpeg])], completionHandler: nil)
             
-            if captureSession.canAddOutput(self.photoOutput!) { captureSession.addOutput(self.photoOutput!) }
+            if captureSession.canAddOutput(self.photoOutput!) {
+                captureSession.addOutput(self.photoOutput!)
+            }
             captureSession.startRunning()
         }
         
@@ -87,9 +92,7 @@ extension CameraController {
                 try configureCaptureDevices()
                 try configureDeviceInputs()
                 try configurePhotoOutput()
-            }
-                
-            catch {
+            } catch {
                 DispatchQueue.main.async {
                     completionHandler(error)
                 }
@@ -117,7 +120,7 @@ extension CameraController {
     
     func switchCameras() throws {
         guard let currentCameraPosition = currentCameraPosition, let captureSession = self.captureSession, captureSession.isRunning
-            else { throw CameraControllerError.captureSessionIsMissing }
+        else { throw CameraControllerError.captureSessionIsMissing }
         
         captureSession.beginConfiguration()
         
@@ -170,6 +173,7 @@ extension CameraController {
         guard let captureSession = captureSession, captureSession.isRunning else { completion(nil, CameraControllerError.captureSessionIsMissing); return }
         
         let settings = AVCapturePhotoSettings()
+
         settings.flashMode = self.flashMode
         
         self.photoOutput?.capturePhoto(with: settings, delegate: self)

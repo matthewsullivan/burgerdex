@@ -67,18 +67,21 @@ class UploadBurgerVC: UIViewController, UploadBurgerDelegate {
                     self.loadPhotos()
                 }
             }
+
             break
         case PHAuthorizationStatus.authorized:
             self.errorContainerView.isHidden = true
             
             initView()
             loadPhotos()
+
             break
         case PHAuthorizationStatus.restricted, PHAuthorizationStatus.denied:
             self.errorContainerView.isHidden = false
             self.displayErrorView(errorType: 0)
             
             cameraBtn.isEnabled = false
+
             break
         @unknown default:
             break
@@ -98,10 +101,6 @@ class UploadBurgerVC: UIViewController, UploadBurgerDelegate {
         }
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
     func performBurgerInformationSegue(photo : UIImage) {
         selectedPhoto = photo
         
@@ -111,9 +110,11 @@ class UploadBurgerVC: UIViewController, UploadBurgerDelegate {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "uploadBurgerInfoSegue" {
             let burgerInformationViewController = segue.destination as! UploadBurgerInformationVC
+
             burgerInformationViewController.photo = selectedPhoto
         } else {
             let burgerCameraView = segue.destination as! BurgerCameraVC
+
             burgerCameraView.delegate = self
         }
     }
@@ -143,9 +144,8 @@ fileprivate extension UploadBurgerVC {
     
     func loadPhotos() {
         let options = PHFetchOptions()
-        options.sortDescriptors = [
-            NSSortDescriptor(key: "creationDate", ascending: false)
-        ]
+
+        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         
         fetchResult = PHAsset.fetchAssets(with: .image, options: options)
     }
@@ -155,6 +155,7 @@ extension UploadBurgerVC: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: kCellReuseIdentifier, for: indexPath)
         let photoAsset = fetchResult.object(at: indexPath.item)
+
         imageManager.requestImage(for: photoAsset, targetSize: targetSize, contentMode: .aspectFill, options: nil) { (image, info) -> Void in
             let imageView = UIImageView(image: image)
             
@@ -168,9 +169,7 @@ extension UploadBurgerVC: UICollectionViewDataSource {
         return cell
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return fetchResult.count
-    }
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {return fetchResult.count}
 }
 
 extension UploadBurgerVC: UICollectionViewDataSourcePrefetching {
@@ -188,13 +187,9 @@ extension UploadBurgerVC: UICollectionViewDataSourcePrefetching {
 }
 
 extension UploadBurgerVC: UICollectionViewDelegate {
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
+    func numberOfSections(in collectionView: UICollectionView) -> Int {return 1}
     
-    func collectionView(_ collectionView: UICollectionView, layout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize {
-        return targetSize
-    }
+    func collectionView(_ collectionView: UICollectionView, layout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize {return targetSize}
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         photoAsset = fetchResult.object(at: indexPath.item)

@@ -26,7 +26,7 @@ class BurgerCameraVC: UIViewController {
     var delegate: UploadBurgerDelegate?
     
     @IBAction func cancelBurgerCapture(_ sender: Any) {
-        if self.cancelBurgerPhotoBtn.tag == 1{
+        if (self.cancelBurgerPhotoBtn.tag == 1) {
             dismiss(animated: true, completion: nil)
         } else {
             self.burgerImage.isHidden = true
@@ -58,6 +58,7 @@ class BurgerCameraVC: UIViewController {
         UINavigationBar.appearance().prefersLargeTitles = false
         
         let barButtonItemAppearance = UIBarButtonItem.appearance()
+
         barButtonItemAppearance.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .normal)
         
         func styleCaptureButton() {

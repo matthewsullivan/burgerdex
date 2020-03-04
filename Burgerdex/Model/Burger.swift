@@ -90,8 +90,8 @@ class BurgerPreview : BurgerObject {
                                                              burgerID: 0,
                                                              recordID: 0,
                                                              sightings: 1)
-                else {
-                    fatalError("Unable to instantiate burgerPreview")
+            else {
+                fatalError("Unable to instantiate burgerPreview")
             }
             
             patties += [burgerPlaceholder]
@@ -117,6 +117,7 @@ class BurgerPreview : BurgerObject {
         
         do {
             let jsonParams = try JSONSerialization.data(withJSONObject: parameters, options:[])
+
             postRequest.httpBody = jsonParams
         } catch {
             return
@@ -162,21 +163,24 @@ class BurgerPreview : BurgerObject {
                                                                                  burgerID: catalogueNumber!,
                                                                                  recordID:recordNumber!,
                                                                                  sightings: totalSightings!)
-                                        else {
-                                            fatalError("Unable to instantiate burgerPreview")
+                                    else {
+                                        fatalError("Unable to instantiate burgerPreview")
                                     }
+
                                     patties += [burgerPreview]
                                 }
+
                                 burgerPreviewSuccess[0] = 1
                                 burgerPreviewSuccess[1] = patties
                                 
                                 completion(burgerPreviewSuccess)
                             }
-                            } as @convention(block) () -> Void)
+                        } as @convention(block) () -> Void)
                     }
                 } catch {
                     burgerPreviewSuccess[0] = 0
                     burgerPreviewSuccess[1] = patties
+
                     DispatchQueue.main.async(execute: {
                         completion(burgerPreviewSuccess)
                     })
@@ -208,6 +212,7 @@ class BurgerPreview : BurgerObject {
         
         do {
             let jsonParams = try JSONSerialization.data(withJSONObject: parameters, options:[])
+
             postRequest.httpBody = jsonParams
         } catch {
             return
@@ -252,8 +257,8 @@ class BurgerPreview : BurgerObject {
                                                                                  burgerID: catalogueNumber!,
                                                                                  recordID: recordNumber!,
                                                                                  sightings: totalSightings!)
-                                        else {
-                                            fatalError("Unable to instantiate burgerPreview")
+                                    else {
+                                        fatalError("Unable to instantiate burgerPreview")
                                     }
                                     
                                     patties += [burgerPreview]
@@ -264,14 +269,14 @@ class BurgerPreview : BurgerObject {
                                 
                                 completion(burgerPreviewSuccess)
                             }
-                            } as @convention(block) () -> Void)
+                        } as @convention(block) () -> Void)
                     }
                 } catch {
                     burgerPreviewSuccess[0] = 0
                     burgerPreviewSuccess[1] = patties
+
                     DispatchQueue.main.async(execute: {
                         completion(burgerPreviewSuccess)
-                        
                     })
                 }
             } else {
@@ -376,8 +381,8 @@ class Burger : BurgerObject{
                                                   hasChallenge: false,
                                                   hasMods: false,
                                                   dateCaptured: "2017-10-18 08:08:59")
-            else {
-                fatalError("Unable to instantiate burger")
+        else {
+            fatalError("Unable to instantiate burger")
         }
         
         return burgerPlaceholder
@@ -393,6 +398,7 @@ class Burger : BurgerObject{
         
         do {
             let jsonParams = try JSONSerialization.data(withJSONObject: parameters, options:[])
+
             postRequest.httpBody = jsonParams
         } catch {
             return
@@ -453,8 +459,8 @@ class Burger : BurgerObject{
                                                                        hasChallenge: hasChallenge!,
                                                                        hasMods: hasMods!,
                                                                        dateCaptured: dateCaptured!)
-                                        else {
-                                            fatalError("Unable to instantiate burger")
+                                    else {
+                                        fatalError("Unable to instantiate burger")
                                     }
                                     
                                     patty.append(burgerInfo)
@@ -462,7 +468,7 @@ class Burger : BurgerObject{
                                     completion(patty)
                                 }
                             }
-                            } as @convention(block) () -> Void)
+                        } as @convention(block) () -> Void)
                     }
                 } catch {
                     completion(patty)
@@ -488,17 +494,17 @@ class BurgerSubmit{
         
         var message = [Any]()
         var responseCode = [0,message] as [Any]
-        var r  = URLRequest(url: URL(string: kSubmitBurger)!)
+        var request  = URLRequest(url: URL(string: kSubmitBurger)!)
         
-        r.httpMethod = "POST"
-        r.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-        r.httpBody = createBody(parameters: details  as! [String : String],
+        request.httpMethod = "POST"
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        request.httpBody = createBody(parameters: details  as! [String : String],
                                 boundary: boundary,
                                 data: image.jpegData(compressionQuality: 0.1)!,
                                 mimeType: "image/jpg",
                                 filename: "burger.jpg")
         
-        URLSession.shared.dataTask(with: r as URLRequest, completionHandler: { (data, response, error) -> Void in
+        URLSession.shared.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) -> Void in
             if data != nil {
                 do {
                     if let response = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers) as? NSDictionary {
@@ -520,8 +526,7 @@ class BurgerSubmit{
                                 
                                 completion(responseCode)
                             }
-                            
-                            } as @convention(block) () -> Void)
+                        } as @convention(block) () -> Void)
                     }
                 } catch {
                     responseCode[0] = 1
@@ -546,7 +551,6 @@ class BurgerSubmit{
                     data: Data,
                     mimeType: String,
                     filename: String) -> Data {
-        
         let body = NSMutableData()
         let boundaryPrefix = "--\(boundary)\r\n"
         
