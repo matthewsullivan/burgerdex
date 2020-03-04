@@ -40,7 +40,6 @@ private var CurrentProgress = "CurrentProgressKey"
 private let DefaultDuration = 0.3
 
 public extension UIImageView {
-    
     fileprivate var waveObject:WaveObject {
         set {
             objc_setAssociatedObject(self, &WaveObjectKey, newValue, .OBJC_ASSOCIATION_RETAIN)

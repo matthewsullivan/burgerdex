@@ -50,7 +50,6 @@ public class SwiftSpinner: UIView {
         titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.textColor = UIColor.white
         
-        
         blurView.contentView.addSubview(titleLabel)
         blurView.contentView.addSubview(vibrancyView)
         
@@ -95,7 +94,6 @@ public class SwiftSpinner: UIView {
     }
     
     // MARK: - Public interface
-    
     public lazy var titleLabel = UILabel()
     public var subtitleLabel: UILabel?
     
@@ -127,7 +125,6 @@ public class SwiftSpinner: UIView {
     //
     private static weak var customSuperview: UIView? = nil
     private static func containerView() -> UIView? {
-        
         #if EXTENSION
         return customSuperview
         #else
@@ -230,7 +227,6 @@ public class SwiftSpinner: UIView {
     //
     public static var hideCancelsScheduledSpinners = true
     public class func hide(_ completion: (() -> Void)? = nil) {
-        
         let spinner = SwiftSpinner.sharedInstance
         
         NotificationCenter.default.removeObserver(spinner)
@@ -340,7 +336,6 @@ public class SwiftSpinner: UIView {
     //
     // Start the spinning animation
     //
-    
     public var animating: Bool = false {
         
         willSet (shouldAnimate) {
@@ -411,7 +406,6 @@ public class SwiftSpinner: UIView {
     //
     // layout elements
     //
-    
     private var blurEffectStyle: UIBlurEffect.Style = .dark
     private var blurEffect: UIBlurEffect!
     private var blurView: UIVisualEffectView!
@@ -486,7 +480,6 @@ public class SwiftSpinner: UIView {
     }
     
     // MARK: - Util methods
-    
     func delay(_ seconds: Double, completion:@escaping ()->()) {
         let popTime = DispatchTime.now() + Double(Int64( Double(NSEC_PER_SEC) * seconds )) / Double(NSEC_PER_SEC)
         

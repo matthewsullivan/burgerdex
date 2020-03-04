@@ -9,7 +9,6 @@
 import UIKit
 
 final public class ZKCarousel: UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, UICollectionViewDataSource {
-    
     public var slides : [ZKCarouselSlide] = [] {
         didSet {
             self.collectionView.reloadData()

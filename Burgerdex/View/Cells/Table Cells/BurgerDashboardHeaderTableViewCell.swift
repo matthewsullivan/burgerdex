@@ -14,12 +14,7 @@ class BurgerDashboardHeaderTableViewCell: UITableViewCell {
     @IBOutlet weak var catalogueNumberLabel: UILabel!
     @IBOutlet weak var catalogueNumberNumber: UILabel!
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
-
 }

@@ -26,10 +26,6 @@ class UploadTableViewCell: UITableViewCell {
     @IBOutlet weak var addIngredientButton: UIButton!
     @IBOutlet weak var newIngredientTextField: TweeBorderedTextField!
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
@@ -53,5 +49,4 @@ class UploadTableViewCell: UITableViewCell {
         set { self.collectionView.contentOffset.x = newValue }
         get { return self.collectionView.contentOffset.x }
     }
-
 }

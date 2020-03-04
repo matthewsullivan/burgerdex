@@ -7,7 +7,6 @@ import QuartzCore
 
 /// An object of the class can show animated bottom line when a user begins editing.
 open class TweeActiveTextField: TweeBorderedTextField {
-    
     private var activeLine = Line()
     
     /// Color of line that appears when a user begins editing.

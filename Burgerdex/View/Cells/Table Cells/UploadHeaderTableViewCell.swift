@@ -9,7 +9,6 @@
 import UIKit
 
 class UploadHeaderTableViewCell: UITableViewCell {
-    
     @IBOutlet weak var burgerName: UILabel!
     @IBOutlet weak var kitchenName: UILabel!
     @IBOutlet weak var progressContainerView: UIImageView!

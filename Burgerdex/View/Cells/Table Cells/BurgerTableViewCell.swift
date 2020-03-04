@@ -17,16 +17,11 @@ class BurgerTableViewCell: UITableViewCell {
     @IBOutlet weak var ingredients: UILabel!
     @IBOutlet weak var fusionLabel: UILabel!
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
     
-    func setCollectionViewDataSourceDelegate<D: UICollectionViewDataSource & UICollectionViewDelegate>(_ dataSourceDelegate: D, forRow row: Int) {
-        
+    func setCollectionViewDataSourceDelegate<D: UICollectionViewDataSource & UICollectionViewDelegate>(_ dataSourceDelegate: D, forRow row: Int) {    
         self.collectionView.delegate = dataSourceDelegate
         self.collectionView.dataSource = dataSourceDelegate
         self.collectionView.tag = row

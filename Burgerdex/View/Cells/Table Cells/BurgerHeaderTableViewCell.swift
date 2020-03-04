@@ -9,18 +9,12 @@
 import UIKit
 
 class BurgerHeaderTableViewCell: UITableViewCell {
-    
     @IBOutlet weak var burgerName: UILabel!
     @IBOutlet weak var kitchenName: UILabel!
     @IBOutlet weak var catalogueNumberLabel: UILabel!
     @IBOutlet weak var catalogueNumberNumber: UILabel!
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
-    
 }

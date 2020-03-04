@@ -7,7 +7,6 @@ let dhHidesWhenCompletedDelay: TimeInterval = 0.5
 
 public typealias Block = () -> Void
 
-
 public class ActivityIndicator: UIView, CAAnimationDelegate {
     public enum ProgressStatus: Int {
         case Unknown, Loading, Progress, Completion
@@ -46,7 +45,6 @@ public class ActivityIndicator: UIView, CAAnimationDelegate {
             return _progress
         }
         set(newProgress) {
-            //Avoid calling excessively
             if (newProgress - _progress >= 0.01 || newProgress >= 100.0) {
                 _progress = min(max(0, newProgress), 1)
                 progressLayer.strokeEnd = CGFloat(_progress)
@@ -80,6 +78,7 @@ public class ActivityIndicator: UIView, CAAnimationDelegate {
     
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+
         initialize()
     }
     
@@ -264,7 +263,6 @@ public class ActivityIndicator: UIView, CAAnimationDelegate {
     
     //MARK: - Private
     private func initialize() {
-        //progressLabel
         progressLabel.font = UIFont.systemFont(ofSize: CGFloat(fontSize))
         progressLabel.textColor = strokeColor
         progressLabel.textAlignment = .center
@@ -272,13 +270,11 @@ public class ActivityIndicator: UIView, CAAnimationDelegate {
         progressLabel.isHidden = true
         self.addSubview(progressLabel)
         
-        //progressLayer
         progressLayer.strokeColor = strokeColor.cgColor
         progressLayer.fillColor = nil
         progressLayer.lineWidth = lineWidth
         self.layer.addSublayer(progressLayer)
         
-        //shapeLayer
         shapeLayer.strokeColor = strokeColor.cgColor
         shapeLayer.fillColor = nil
         shapeLayer.lineWidth = lineWidth
@@ -310,7 +306,6 @@ public class ActivityIndicator: UIView, CAAnimationDelegate {
         let yOffset = 1.5 * oneTenth
         let ySpace = 3.2 * oneTenth
         let point = correctJoinPoint()
-        
         
         let path = CGMutablePath()
         path.move(to: CGPoint(x:point.x, y:point.y))

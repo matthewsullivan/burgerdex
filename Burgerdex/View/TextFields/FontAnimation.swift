@@ -7,7 +7,6 @@ import QuartzCore
 import CoreFoundation
 
 internal final class FontAnimation {
-    
     private var displayLink: CADisplayLink?
     private(set) var startTime: CFTimeInterval?
     

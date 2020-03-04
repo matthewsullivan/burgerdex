@@ -74,6 +74,7 @@ class CutoutView : UIView {
         super.draw(rect)
         
         let context = UIGraphicsGetCurrentContext()
+
         context?.setFillColor(UIColor.white.cgColor)
         context?.fill(self.bounds)
         
@@ -174,6 +175,7 @@ extension UIView {
     
     func addCutoutView() {
         let cutout = CutoutView()
+
         cutout.frame = self.bounds
         cutout.backgroundColor = UIColor.clear
         
