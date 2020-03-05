@@ -9,21 +9,7 @@ import UIKit
 
 class BurgerVC: UITableViewController {
     private let kLazyLoadCollectionCellImage = 1
-    
-    let statusBarBgView = { () -> UIView in
-        var statusBarWindow : UIView {
-            if #available(iOS 13.0, *) {
-                return UIApplication.shared.windows.filter {$0.isKeyWindow}.first!;
-            }
 
-            return UIApplication.shared.value(forKey: "statusBarWindow") as! UIView
-        }
-
-        let statusBarBgView = UIView(frame: (statusBarWindow.statusBar?.bounds)!)
-        
-        return statusBarBgView
-    }()
-    
     var badges = [Badge]()
     var burger: BurgerPreview!
     var burgerAttr = [Array<BurgerObject>]()
@@ -35,30 +21,12 @@ class BurgerVC: UITableViewController {
         
         layoutBurgerView()
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        var preferredStatusBarStyle : UIStatusBarStyle {
-            return .lightContent
-        }
-        
-        let colour = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1)
-        let navigationBar = self.navigationController?.navigationBar
-        
-        self.statusBarBgView.backgroundColor = colour
-        
-        navigationBar?.superview?.insertSubview(self.statusBarBgView, aboveSubview: navigationBar!)
-    }
-    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
         self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0),
                                    at: UITableView.ScrollPosition.top,
                                    animated: false)
-        
-        self.statusBarBgView.removeFromSuperview()
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {return burgerAttr.count}

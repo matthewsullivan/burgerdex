@@ -5,7 +5,6 @@
 //  Created by Matthew Sullivan on 2018-01-17.
 //  Copyright © 2020 Dev & Barrel Inc. All rights reserved.
 //
-
 import UIKit
 
 class TabBarVC: UITabBarController {
@@ -49,6 +48,25 @@ class TabBarVC: UITabBarController {
         
         UITabBar.appearance().selectionIndicatorImage = UIImage().makeImageWithColorAndSize(color: UIColor(red: 222/255, green: 173/255, blue: 107/255, alpha: 1),
                                                                                             size: CGSize(width: width, height:self.tabBar.frame.size.height + CGFloat(paddingHeight)))
+        
+        if #available(iOS 13.0, *) {
+            let app = UIApplication.shared
+            let statusBarHeight: CGFloat = app.statusBarFrame.size.height
+            let statusbarView = UIView()
+            
+            view.addSubview(statusbarView)
+
+            statusbarView.backgroundColor = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1)
+            statusbarView.translatesAutoresizingMaskIntoConstraints = false
+            statusbarView.heightAnchor.constraint(equalToConstant: statusBarHeight).isActive = true
+            statusbarView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1.0).isActive = true
+            statusbarView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+            statusbarView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        } else {
+            let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView
+
+            statusBar?.backgroundColor = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1)
+        }
     }
 }
 
@@ -73,8 +91,6 @@ extension UIDevice {
         }
     }
 }
-
-
 
 extension UIImage {
     func makeImageWithColorAndSize(color: UIColor, size: CGSize) -> UIImage {
