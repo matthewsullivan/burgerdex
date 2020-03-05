@@ -5,7 +5,6 @@
 //  Created by Matthew Sullivan on 2018-01-03.
 //  Copyright © 2020 Dev & Barrel Inc. All rights reserved.
 //
-
 import UIKit
 
 private let _singletonInstance = ImageManager()
@@ -14,9 +13,13 @@ private let kLazyLoadMaxCacheImageSize = 20
 let kLazyLoadPlaceholderImage = UIImage(named: "baconBeast")!
 
 class ImageManager: NSObject {
+    static var sharedInstance: ImageManager { return _singletonInstance }
+
     var imageCache = [String: UIImage]()
     
-    static var sharedInstance: ImageManager { return _singletonInstance }
+    func clearCache() {
+        imageCache.removeAll()
+    }
     
     func cacheImage(_ image: UIImage, forURL url: String) {
         if imageCache.count > kLazyLoadMaxCacheImageSize {
@@ -29,11 +32,7 @@ class ImageManager: NSObject {
     func cachedImageForURL(_ url: String) -> UIImage? {
         return imageCache[url]
     }
-    
-    func clearCache() {
-        imageCache.removeAll()
-    }
-    
+
     func downloadImageFromURL(_ urlString: String, completion: ((_ success: Bool, _ image: UIImage?) -> Void)?) {
         if let cachedImage = cachedImageForURL(urlString) {
             DispatchQueue.main.async(execute: {

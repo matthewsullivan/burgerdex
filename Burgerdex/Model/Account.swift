@@ -5,7 +5,6 @@
 //  Created by Matthew Sullivan on 2018-01-03.
 //  Copyright © 2020 Dev & Barrel Inc. All rights reserved.
 //
-
 import UIKit
 
 private let kUploadToken = "https://www.app.burgerdex.ca/services/ios/apns/send_token.php"
