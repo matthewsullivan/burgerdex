@@ -5,18 +5,9 @@
 //  Created by Matthew Sullivan on 2018-04-26.
 //  Copyright © 2020 Dev & Barrel Inc. All rights reserved.
 //
-
 import UIKit
 
 class SearchBurgerVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
-    @IBOutlet weak var errorButton: UIButton!
-    @IBOutlet weak var errorContainerView: UIView!
-    @IBOutlet weak var errorHeaderLabel: UILabel!
-    @IBOutlet weak var errorBodyLabel: UILabel!
-    @IBOutlet weak var errorImageContainer: UIImageView!
-    @IBOutlet weak var searchBar: UISearchBar!
-    @IBOutlet weak var tableView: UITableView!
-    
     let sharedSession = URLSession.shared
     
     var burgers = [BurgerPreview]()
@@ -26,6 +17,14 @@ class SearchBurgerVC: UIViewController, UITableViewDelegate, UITableViewDataSour
     var sbshown: Bool = false
     var selectedBurger: BurgerPreview!
     var statusBarCorrect: CGFloat = 20.0
+    
+    @IBOutlet weak var errorButton: UIButton!
+    @IBOutlet weak var errorContainerView: UIView!
+    @IBOutlet weak var errorHeaderLabel: UILabel!
+    @IBOutlet weak var errorBodyLabel: UILabel!
+    @IBOutlet weak var errorImageContainer: UIImageView!
+    @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var tableView: UITableView!
     
     @IBAction func errorButtonLabel(_ sender: Any) {
         searchBar.text = ""
@@ -37,32 +36,19 @@ class SearchBurgerVC: UIViewController, UITableViewDelegate, UITableViewDataSour
         hideErrorView()
     }
 
-    @IBAction func closeSearchBtn(_ sender: Any) {
-        self.dismiss(animated: true, completion: nil)
-    }
+    @IBAction func closeSearchBtn(_ sender: Any) {self.dismiss(animated: true, completion: nil)}
     
-    func checkForStatusBars() {
-        if UIDevice.current.modelName != "iPhone10,3" || UIDevice.current.modelName != "iPhone10,6" {
-            if (UIApplication.shared.statusBarFrame.height == 40) {
-                statusBarCorrect = UIApplication.shared.statusBarFrame.height - 20
-                
-                sbshown = true
-            } else {
-                sbshown = false
-                
-                statusBarCorrect = UIApplication.shared.statusBarFrame.height
-            }
-            NotificationCenter.default.addObserver(forName: UIApplication.didChangeStatusBarFrameNotification, object: nil, queue: nil, using: statusbarChange)
-        }
-    }
-    
-    func statusbarChange(notif: Notification) -> Void {
-        if (sbshown) {
-            sbshown = false
-            statusBarCorrect = UIApplication.shared.statusBarFrame.height
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if (segue.identifier == "burgerDetailSegue") {
+            let burgerViewController = segue.destination as! BurgerVC
+            
+            burgerViewController.burgerThumbnail = burgerThumbnail.size.width == 0.0 ? UIImage(named:"baconBeast") : burgerThumbnail;
+            burgerViewController.burger = selectedBurger
         } else {
-            sbshown = true
-            statusBarCorrect = UIApplication.shared.statusBarFrame.height - 20
+            let burgerViewController = segue.destination as! BurgerDashboardVC
+            
+            burgerViewController.burgerThumbnail = burgerThumbnail.size.width == 0.0 ? UIImage(named:"baconBeast") : burgerThumbnail;
+            burgerViewController.burger = selectedBurger
         }
     }
     
@@ -84,39 +70,22 @@ class SearchBurgerVC: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         checkPassedBurgers()
     }
-    
-    func checkPassedBurgers() {
-        if burgers.count > 0 {
-            hideErrorView()
-        } else {
-            self.displayErrorView(errorType: 0)
+        
+    func checkForStatusBars() {
+        if UIDevice.current.modelName != "iPhone10,3" || UIDevice.current.modelName != "iPhone10,6" {
+            if (UIApplication.shared.statusBarFrame.height == 40) {
+                statusBarCorrect = UIApplication.shared.statusBarFrame.height - 20
+                sbshown = true
+            } else {
+                sbshown = false
+                statusBarCorrect = UIApplication.shared.statusBarFrame.height
+            }
+
+            NotificationCenter.default.addObserver(forName: UIApplication.didChangeStatusBarFrameNotification, object: nil, queue: nil, using: statusbarChange)
         }
     }
-    
-    func setUpSearchBar() {
-        searchBar.keyboardAppearance = .dark
-        searchBar.delegate = self
-        searchBar.enablesReturnKeyAutomatically = true
-        
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        tap.cancelsTouchesInView = false
-        
-        view.addGestureRecognizer(tap)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(SearchBurgerVC.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SearchBurgerVC.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    func hideErrorView() {
-        errorContainerView.isHidden = true
-        
-        TableLoader.removeLoaderFrom(self.tableView)
-        
-        self.tableView.allowsSelection = true
-        self.tableView.isScrollEnabled = true
-        
-        view.endEditing(true)
-    }
+
+    func checkPassedBurgers() {burgers.count > 0 ? hideErrorView() : self.displayErrorView(errorType: 0)}
     
     func displayErrorView(errorType: Int) {
         self.errorContainerView.isHidden = false
@@ -135,6 +104,23 @@ class SearchBurgerVC: UIViewController, UITableViewDelegate, UITableViewDataSour
             self.errorHeaderLabel.text = "Network Error"
             self.errorBodyLabel.text = "It seems that the network connection has been lost."
             self.errorButton.isHidden = false
+        }
+    }
+    
+    func hideErrorView() {
+        errorContainerView.isHidden = true
+        
+        TableLoader.removeLoaderFrom(self.tableView)
+        
+        self.tableView.allowsSelection = true
+        self.tableView.isScrollEnabled = true
+        
+        view.endEditing(true)
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText.count == 0 {
+            hideErrorView()
         }
     }
     
@@ -189,42 +175,56 @@ class SearchBurgerVC: UIViewController, UITableViewDelegate, UITableViewDataSour
         })
     }
     
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText.count == 0 {
-            hideErrorView()
+    func setUpSearchBar() {
+        searchBar.keyboardAppearance = .dark
+        searchBar.delegate = self
+        searchBar.enablesReturnKeyAutomatically = true
+        
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+
+        tap.cancelsTouchesInView = false
+        
+        view.addGestureRecognizer(tap)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(SearchBurgerVC.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SearchBurgerVC.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    func statusbarChange(notif: Notification) -> Void {
+        if (sbshown) {
+            sbshown = false
+            statusBarCorrect = UIApplication.shared.statusBarFrame.height
+        } else {
+            sbshown = true
+            statusBarCorrect = UIApplication.shared.statusBarFrame.height - 20
         }
     }
     
-    @objc func dismissKeyboard() {
-        view.endEditing(true)
-    }
-    
-    @objc func keyboardWillShow(notification: NSNotification) {
-        let userInfo = notification.userInfo!
-        
-        var contentInset:UIEdgeInsets = self.tableView.contentInset
-        var keyboardFrame:CGRect = (userInfo[UIResponder.keyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
+    func updateImageForCell(_ cell: UITableViewCell,
+                            inTableView tableView: UITableView,
+                            withImageURL: String,
+                            andImageView: UIImageView,
+                            atIndexPath indexPath: IndexPath) {
+        var burger : BurgerPreview
 
-        keyboardFrame = self.view.convert(keyboardFrame, from: nil)
-        contentInset.bottom = keyboardFrame.size.height
+        burger = burgers[indexPath.row]
         
-        self.tableView.contentInset = contentInset
-    }
-    
-    @objc func keyboardWillHide(notification: NSNotification) {
-        let contentInset:UIEdgeInsets = UIEdgeInsets.zero
+        let imageURL = burger.thumbUrl
+        let imageView = andImageView
         
-        self.tableView.contentInset = contentInset
+        imageView.image = kLazyLoadPlaceholderImage
+        
+        ImageManager.sharedInstance.downloadImageFromURL(imageURL) { (success, image) -> Void in
+            if success && image != nil {
+                if (tableView.indexPath(for: cell) as NSIndexPath?)?.row == (indexPath as NSIndexPath).row {
+                    imageView.image = image
+
+                    burger.photo = imageView.image!
+                }
+            }
+        }
     }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return burgers.count
-    }
-    
+        
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cellIdentifier = "CatalogueTableViewCell"
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! CatalogueTableViewCell
@@ -248,34 +248,8 @@ class SearchBurgerVC: UIViewController, UITableViewDelegate, UITableViewDataSour
                                andImageView: cell.burgerImage!,
                                atIndexPath: indexPath)
         }
-        
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {return nil}
-    
-    func updateImageForCell(_ cell: UITableViewCell,
-                            inTableView tableView: UITableView,
-                            withImageURL: String,
-                            andImageView: UIImageView,
-                            atIndexPath indexPath: IndexPath) {
-        var burger : BurgerPreview
 
-        burger = burgers[indexPath.row]
-        
-        let imageURL = burger.thumbUrl
-        let imageView = andImageView
-        
-        imageView.image = kLazyLoadPlaceholderImage
-        
-        ImageManager.sharedInstance.downloadImageFromURL(imageURL) { (success, image) -> Void in
-            if success && image != nil {
-                if (tableView.indexPath(for: cell) as NSIndexPath?)?.row == (indexPath as NSIndexPath).row {
-                    imageView.image = image
-                    burger.photo = imageView.image!
-                }
-            }
-        }
+        return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -290,6 +264,8 @@ class SearchBurgerVC: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {return 80.0}
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {return burgers.count}
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {return nil}
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if let _ = scrollView as? UITableView {
@@ -314,27 +290,24 @@ class SearchBurgerVC: UIViewController, UITableViewDelegate, UITableViewDataSour
             self.lastContentOffset = scrollView.contentOffset.y
         }
     }
+        
+    @objc func dismissKeyboard() {view.endEditing(true)}
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if (segue.identifier == "burgerDetailSegue") {
-            let burgerViewController = segue.destination as! BurgerVC
-            
-            if burgerThumbnail.size.width == 0.0 {
-                burgerViewController.burgerThumbnail = UIImage(named:"baconBeast")
-            } else {
-                burgerViewController.burgerThumbnail = burgerThumbnail
-            }
-            
-            burgerViewController.burger = selectedBurger
-        } else {
-            let burgerViewController = segue.destination as! BurgerDashboardVC
-            
-            if burgerThumbnail.size.width == 0.0 {
-                burgerViewController.burgerThumbnail = UIImage(named:"baconBeast")
-            } else {
-                burgerViewController.burgerThumbnail = burgerThumbnail
-            }
-            burgerViewController.burger = selectedBurger
-        }
+    @objc func keyboardWillHide(notification: NSNotification) {
+        let contentInset:UIEdgeInsets = UIEdgeInsets.zero
+        
+        self.tableView.contentInset = contentInset
+    }
+
+    @objc func keyboardWillShow(notification: NSNotification) {
+        let userInfo = notification.userInfo!
+        
+        var contentInset:UIEdgeInsets = self.tableView.contentInset
+        var keyboardFrame:CGRect = (userInfo[UIResponder.keyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
+
+        keyboardFrame = self.view.convert(keyboardFrame, from: nil)
+        contentInset.bottom = keyboardFrame.size.height
+        
+        self.tableView.contentInset = contentInset
     }
 }

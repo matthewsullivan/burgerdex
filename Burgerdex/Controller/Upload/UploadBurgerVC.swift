@@ -5,11 +5,21 @@
 //  Created by Matthew Sullivan on 2018-01-02.
 //  Copyright © 2020 Dev & Barrel Inc. All rights reserved.
 //
-
 import UIKit
 import Photos
 
 class UploadBurgerVC: UIViewController, UploadBurgerDelegate {
+    fileprivate let kCellReuseIdentifier = "PhotoCell"
+    fileprivate let kCellSpacing: CGFloat = 2
+    fileprivate let kColumnCnt: Int = 3
+    fileprivate var fetchResult: PHFetchResult<PHAsset>!
+    fileprivate var imageManager = PHCachingImageManager()
+    fileprivate var targetSize = CGSize.zero
+
+    var firstLoad = 0
+    var photoAsset : PHAsset!
+    var selectedPhoto : UIImage!
+    
     @IBOutlet weak var errorBodyLabel: UILabel!
     @IBOutlet weak var errorButton: UIButton!
     @IBOutlet weak var errorContainerView: UIView!
@@ -22,17 +32,17 @@ class UploadBurgerVC: UIViewController, UploadBurgerDelegate {
         self.performSegue(withIdentifier: "burgerCameraSegue", sender: self)
     }
     
-    var firstLoad = 0
-    var selectedPhoto : UIImage!
-    
-    fileprivate let kCellReuseIdentifier = "PhotoCell"
-    fileprivate let kCellSpacing: CGFloat = 2
-    fileprivate let kColumnCnt: Int = 3
-    fileprivate var fetchResult: PHFetchResult<PHAsset>!
-    fileprivate var imageManager = PHCachingImageManager()
-    fileprivate var targetSize = CGSize.zero
-    
-    var photoAsset : PHAsset!
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "uploadBurgerInfoSegue" {
+            let burgerInformationViewController = segue.destination as! UploadBurgerInformationVC
+
+            burgerInformationViewController.photo = selectedPhoto
+        } else {
+            let burgerCameraView = segue.destination as! BurgerCameraVC
+
+            burgerCameraView.delegate = self
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,13 +55,30 @@ class UploadBurgerVC: UIViewController, UploadBurgerDelegate {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         
-        if(firstLoad > 0) {
+        if (firstLoad > 0) {
             loadPhotos()
             
             self.collectionView.reloadData()
         }
         
         firstLoad = 1
+    }
+
+    func displayErrorView(errorType: Int) {
+        self.errorContainerView.isHidden = false
+        
+        if (errorType == 0) {
+            self.errorImageContainer.image = UIImage(named: "noFood")
+            self.errorHeaderLabel.text = "SORRY"
+            self.errorBodyLabel.text = "Burgerdex requires access to your photos to upload a burger. Please go to your settings and allow access to your Camera Roll or Camera to begin the burger creation process."
+            self.errorButton.isHidden = false
+        }
+    }
+    
+    func performBurgerInformationSegue(photo : UIImage) {
+        selectedPhoto = photo
+        
+        self.performSegue(withIdentifier: "uploadBurgerInfoSegue", sender: self)
     }
     
     func setupCollectionViewOfCameraRollPhotos(){
@@ -88,35 +115,6 @@ class UploadBurgerVC: UIViewController, UploadBurgerDelegate {
         }
         
         self.collectionView.reloadData()
-    }
-    
-    func displayErrorView(errorType: Int) {
-        self.errorContainerView.isHidden = false
-        
-        if errorType == 0 {
-            self.errorImageContainer.image = UIImage(named: "noFood")
-            self.errorHeaderLabel.text = "SORRY"
-            self.errorBodyLabel.text = "Burgerdex requires access to your photos to upload a burger. Please go to your settings and allow access to your Camera Roll or Camera to begin the burger creation process."
-            self.errorButton.isHidden = false
-        }
-    }
-    
-    func performBurgerInformationSegue(photo : UIImage) {
-        selectedPhoto = photo
-        
-        self.performSegue(withIdentifier: "uploadBurgerInfoSegue", sender: self)
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "uploadBurgerInfoSegue" {
-            let burgerInformationViewController = segue.destination as! UploadBurgerInformationVC
-
-            burgerInformationViewController.photo = selectedPhoto
-        } else {
-            let burgerCameraView = segue.destination as! BurgerCameraVC
-
-            burgerCameraView.delegate = self
-        }
     }
 }
 
@@ -173,22 +171,20 @@ extension UploadBurgerVC: UICollectionViewDataSource {
 }
 
 extension UploadBurgerVC: UICollectionViewDataSourcePrefetching {
-    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
-        DispatchQueue.main.async {
-            self.imageManager.startCachingImages(for: indexPaths.map{ self.fetchResult.object(at: $0.item) }, targetSize: self.targetSize, contentMode: .aspectFill, options: nil)
-        }
-    }
-    
     func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
         DispatchQueue.main.async {
             self.imageManager.stopCachingImages(for: indexPaths.map{ self.fetchResult.object(at: $0.item) }, targetSize: self.targetSize, contentMode: .aspectFill, options: nil)
         }
     }
+
+    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+        DispatchQueue.main.async {
+            self.imageManager.startCachingImages(for: indexPaths.map{ self.fetchResult.object(at: $0.item) }, targetSize: self.targetSize, contentMode: .aspectFill, options: nil)
+        }
+    }
 }
 
 extension UploadBurgerVC: UICollectionViewDelegate {
-    func numberOfSections(in collectionView: UICollectionView) -> Int {return 1}
-    
     func collectionView(_ collectionView: UICollectionView, layout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize {return targetSize}
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -212,4 +208,6 @@ extension UploadBurgerVC: UICollectionViewDelegate {
         
         return thumbnail
     }
+    
+     func numberOfSections(in collectionView: UICollectionView) -> Int {return 1}
 }

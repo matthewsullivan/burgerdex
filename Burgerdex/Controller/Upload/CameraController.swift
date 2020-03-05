@@ -24,8 +24,15 @@ class CameraController: NSObject {
 
 extension CameraController {
     func prepare(completionHandler: @escaping (Error?) -> Void) {
-        func createCaptureSession() {
-            self.captureSession = AVCaptureSession()
+        func captureImage(completion: @escaping (UIImage?, Error?) -> Void) {
+            guard let captureSession = captureSession, captureSession.isRunning else { completion(nil, CameraControllerError.captureSessionIsMissing); return }
+            
+            let settings = AVCapturePhotoSettings()
+
+            settings.flashMode = self.flashMode
+            
+            self.photoOutput?.capturePhoto(with: settings, delegate: self)
+            self.photoCaptureCompletionBlock = completion
         }
         
         func configureCaptureDevices() throws {
@@ -83,6 +90,10 @@ extension CameraController {
                 captureSession.addOutput(self.photoOutput!)
             }
             captureSession.startRunning()
+        }
+
+        func createCaptureSession() {
+            self.captureSession = AVCaptureSession()
         }
         
         DispatchQueue(label: "prepare").async {
@@ -159,40 +170,14 @@ extension CameraController {
         }
         
         switch currentCameraPosition {
-        case .front:
-            try switchToRearCamera()
+            case .front:
+                try switchToRearCamera()
             
-        case .rear:
-            try switchToFrontCamera()
+            case .rear:
+                try switchToFrontCamera()
         }
         
         captureSession.commitConfiguration()
-    }
-    
-    func captureImage(completion: @escaping (UIImage?, Error?) -> Void) {
-        guard let captureSession = captureSession, captureSession.isRunning else { completion(nil, CameraControllerError.captureSessionIsMissing); return }
-        
-        let settings = AVCapturePhotoSettings()
-
-        settings.flashMode = self.flashMode
-        
-        self.photoOutput?.capturePhoto(with: settings, delegate: self)
-        self.photoCaptureCompletionBlock = completion
-    }
-}
-
-
-extension CameraController: AVCapturePhotoCaptureDelegate {
-    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
-        if let error = error {
-            self.photoCaptureCompletionBlock?(nil, error)
-        } else if let data = photo.fileDataRepresentation(){
-            let image = UIImage(data: data)
-            
-            self.photoCaptureCompletionBlock?(image, nil)
-        } else {
-            self.photoCaptureCompletionBlock?(nil, CameraControllerError.unknown)
-        }
     }
 }
 
@@ -209,5 +194,19 @@ extension CameraController {
     public enum CameraPosition {
         case front
         case rear
+    }
+}
+
+extension CameraController: AVCapturePhotoCaptureDelegate {
+    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
+        if let error = error {
+            self.photoCaptureCompletionBlock?(nil, error)
+        } else if let data = photo.fileDataRepresentation(){
+            let image = UIImage(data: data)
+            
+            self.photoCaptureCompletionBlock?(image, nil)
+        } else {
+            self.photoCaptureCompletionBlock?(nil, CameraControllerError.unknown)
+        }
     }
 }

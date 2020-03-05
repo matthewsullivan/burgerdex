@@ -47,22 +47,15 @@ class TabBarVC: UITabBarController {
         UITabBar.appearance().unselectedItemTintColor = UIColor.white
         UITabBar.appearance().barTintColor = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1)
         
-        UITabBar.appearance().selectionIndicatorImage = UIImage().makeImageWithColorAndSize(color: UIColor(red: 222/255,
-                                                                                                           green: 173/255,
-                                                                                                           blue: 107/255,
-                                                                                                           alpha: 1),
-                                                                                            size: CGSize(width: width,
-                                                                                                         height:self.tabBar.frame.size.height + CGFloat(paddingHeight)))
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
+        UITabBar.appearance().selectionIndicatorImage = UIImage().makeImageWithColorAndSize(color: UIColor(red: 222/255, green: 173/255, blue: 107/255, alpha: 1),
+                                                                                            size: CGSize(width: width, height:self.tabBar.frame.size.height + CGFloat(paddingHeight)))
     }
 }
 
 extension UIDevice {
     var modelName: String {
         var systemInfo = utsname()
+
         uname(&systemInfo)
 
         let machineMirror = Mirror(reflecting: systemInfo.machine)

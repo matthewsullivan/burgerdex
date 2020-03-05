@@ -14,6 +14,10 @@ protocol UploadBurgerDelegate {
 }
 
 class BurgerCameraVC: UIViewController {
+    let cameraController = CameraController()
+    
+    var delegate: UploadBurgerDelegate?
+    
     @IBOutlet weak var burgerImage: UIImageView!
     @IBOutlet fileprivate var captureButton: UIButton!
     @IBOutlet fileprivate var capturePreviewView: UIView!
@@ -21,12 +25,8 @@ class BurgerCameraVC: UIViewController {
     @IBOutlet weak var savePhotoBtn: UIBarButtonItem!
     @IBOutlet fileprivate var toggleFlashButton: UIButton!
     
-    let cameraController = CameraController()
-    
-    var delegate: UploadBurgerDelegate?
-    
     @IBAction func cancelBurgerCapture(_ sender: Any) {
-        if (self.cancelBurgerPhotoBtn.tag == 1) {
+        if self.cancelBurgerPhotoBtn.tag == 1{
             dismiss(animated: true, completion: nil)
         } else {
             self.burgerImage.isHidden = true
@@ -36,6 +36,7 @@ class BurgerCameraVC: UIViewController {
             cancelBurgerPhotoBtn.tag = 1
         }
     }
+
     @IBAction func saveBurgerPhoto(_ sender: Any) {
         try? PHPhotoLibrary.shared().performChangesAndWait {
             PHAssetChangeRequest.creationRequestForAsset(from: self.burgerImage.image!)

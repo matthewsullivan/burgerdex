@@ -5,7 +5,6 @@
 //  Created by Matthew Sullivan on 2018-01-25.
 //  Copyright © 2020 Dev & Barrel Inc. All rights reserved.
 //
-
 import UIKit
 import Photos
 
@@ -13,6 +12,13 @@ class UploadBurgerInformationVC: UITableViewController, UITextFieldDelegate, UIT
     let headerBurgerNamePlaceholder  = "Mystery Burger"
     let headerBurgerKitchenPlaceholder  = "Mystery Kitchen"
     let tvPlaceHolder = "Describe your first few bites."
+    
+    let statusBarBgView = { () -> UIView in
+       let statusBarWindow: UIView = UIApplication.shared.value(forKey: "statusBarWindow") as! UIView
+       let statusBarBgView = UIView(frame: (statusBarWindow.statusBar?.bounds)!)
+       
+       return statusBarBgView
+   }()
     
     var addIngredientButton: UIButton!
     var badges = [Badge]()
@@ -145,42 +151,7 @@ class UploadBurgerInformationVC: UITableViewController, UITextFieldDelegate, UIT
         
         details["ratingLbl"] = tmpLbl
     }
-    
-    @objc func reset() {
-        self.imgView.uploadImage(image:photo, progress: progress)
-        
-        if(progress <= 1.0) {
-            self.perform(#selector(self.reset), with: nil, afterDelay: 0.3)
-        }
-        
-        progress += 0.1
-    }
-    
-    let statusBarBgView = { () -> UIView in
-        let statusBarWindow: UIView = UIApplication.shared.value(forKey: "statusBarWindow") as! UIView
-        let statusBarBgView = UIView(frame: (statusBarWindow.statusBar?.bounds)!)
-        
-        return statusBarBgView
-    }()
-    
-    func delay(seconds: Double, completion: @escaping () -> ()) {
-        let popTime = DispatchTime.now() + Double(Int64( Double(NSEC_PER_SEC) * seconds )) / Double(NSEC_PER_SEC)
-        
-        DispatchQueue.main.asyncAfter(deadline: popTime) {
-            completion()
-        }
-    }
-    
-    func setInputValueFields(){
-        details["name"] =  fields["name"]?.text as AnyObject
-        details["kitchen"] =  fields["kitchen"]?.text as AnyObject
-        details["locations"] =  fields["locations"]?.text as AnyObject
-        details["price"] =  fields["price"]?.text as AnyObject
-        details["descript"] =  fields["descript"]?.text as AnyObject
-        details["rating"] =  fields["rating"]?.text as AnyObject
-        details["ingredients"] = ingredients.joined(separator: ", ") as AnyObject
-    }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -309,6 +280,43 @@ class UploadBurgerInformationVC: UITableViewController, UITextFieldDelegate, UIT
                                                object: nil)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        let colour = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1)
+        let navigationBar = self.navigationController?.navigationBar
+        
+        var preferredStatusBarStyle : UIStatusBarStyle {return .lightContent}
+        
+        self.statusBarBgView.backgroundColor = colour
+        
+        navigationBar?.superview?.insertSubview(self.statusBarBgView, aboveSubview: navigationBar!)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        NotificationCenter.default.removeObserver(self)
+        
+        self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0),
+                                   at: UITableView.ScrollPosition.top,
+                                   animated: false)
+        
+        
+        let colour = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1)
+        
+        self.navigationController?.navigationBar.tintColor = UIColor(red: 222/255, green: 173/255, blue: 107/255,alpha: 1)
+        self.navigationController?.navigationBar.backgroundColor = colour
+        
+        self.statusBarBgView.removeFromSuperview()
+    }
+    
+    func delay(seconds: Double, completion: @escaping () -> ()) {
+        let popTime = DispatchTime.now() + Double(Int64( Double(NSEC_PER_SEC) * seconds )) / Double(NSEC_PER_SEC)
+        
+        DispatchQueue.main.asyncAfter(deadline: popTime) {
+            completion()
+        }
+    }
+
     func determineDetailProgress(){
         var atLeastOneIngredient = false
         
@@ -340,10 +348,10 @@ class UploadBurgerInformationVC: UITableViewController, UITextFieldDelegate, UIT
         if atLeastOneIngredient{progress = (progress + 0.15 <= 1.0) ? progress + 0.15 : 1.0}
         
         if !(fields["name"]?.text ?? "").isEmpty &&
-            !(fields["kitchen"]?.text ?? "").isEmpty &&
-            !(fields["locations"]?.text ?? "").isEmpty &&
-            !(fields["price"]?.text ?? "").isEmpty &&
-            !(fields["descript"]?.text ?? "").isEmpty &&
+           !(fields["kitchen"]?.text ?? "").isEmpty &&
+           !(fields["locations"]?.text ?? "").isEmpty &&
+           !(fields["price"]?.text ?? "").isEmpty &&
+           !(fields["descript"]?.text ?? "").isEmpty &&
             (fields["descript"]?.text != tvPlaceHolder) &&
             atLeastOneIngredient{
             
@@ -358,56 +366,105 @@ class UploadBurgerInformationVC: UITableViewController, UITextFieldDelegate, UIT
         self.imgView.uploadImage(image:photo, progress: progress)
     }
     
-    @objc func keyboardWillShow(notification: NSNotification){
-        let userInfo = notification.userInfo!
+    func redrawIngredientHeight() {
+        let height = self.ingredientCollectionView.collectionViewLayout.collectionViewContentSize.height
         
-        var contentInset:UIEdgeInsets = self.tableView.contentInset
-        var keyboardFrame:CGRect = (userInfo[UIResponder.keyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
+        setInputValueFields()
         
-        keyboardFrame = self.view.convert(keyboardFrame, from: nil)
+        heightConstraint.constant = height
         
-        contentInset.bottom = keyboardFrame.size.height
-        
-        self.tableView.contentInset = contentInset
-        
+        self.view.layoutIfNeeded()
+        self.tableView.reloadData()
+    }
+    
+    func setInputValueFields(){
+        details["name"] =  fields["name"]?.text as AnyObject
+        details["kitchen"] =  fields["kitchen"]?.text as AnyObject
+        details["locations"] =  fields["locations"]?.text as AnyObject
+        details["price"] =  fields["price"]?.text as AnyObject
+        details["descript"] =  fields["descript"]?.text as AnyObject
+        details["rating"] =  fields["rating"]?.text as AnyObject
+        details["ingredients"] = ingredients.joined(separator: ", ") as AnyObject
+    }
+    
+    func tableView(_: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {return UITableView.automaticDimension}
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
         determineDetailProgress()
     }
     
-    @objc func keyboardWillHide(notification: NSNotification) {
-        let contentInset:UIEdgeInsets = UIEdgeInsets.zero
-        
-        self.tableView.contentInset = contentInset
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
         
         determineDetailProgress()
+        
+        return true;
+    }
+
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == UIColor.lightGray && textView.isFirstResponder && textView.text == tvPlaceHolder{
+            textView.text = nil
+            textView.textColor = .gray
+        }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        let colour = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1)
-        let navigationBar = self.navigationController?.navigationBar
+    func textViewDidChange(_ textView: UITextView) {
+        let calcHeight = textView.sizeThatFits(textView.frame.size).height
+        let startHeight = textView.frame.size.height
         
-        var preferredStatusBarStyle : UIStatusBarStyle {
-            return .lightContent
+        if startHeight != calcHeight {
+            let scrollTo = self.tableView.contentSize.height - self.tableView.frame.size.height
+            
+            UIView.setAnimationsEnabled(false)
+            
+            self.tableView.beginUpdates()
+            self.tableView.endUpdates()
+            
+            self.tableView.setContentOffset(CGPoint(x:0, y:scrollTo), animated: false)
+            
+            UIView.setAnimationsEnabled(true)
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty || textView.text == ""{
+            textView.textColor = .lightGray
+            textView.text = tvPlaceHolder
         }
         
-        self.statusBarBgView.backgroundColor = colour
-        
-        navigationBar?.superview?.insertSubview(self.statusBarBgView, aboveSubview: navigationBar!)
-    }
-    
-    @objc func dismissKeyboard() {
-        view.endEditing(true)
-    }
-    
-    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        guard let tableViewCell = cell as? UploadTableViewCell else { return }
-
-        tableViewCell.setCollectionViewDataSourceDelegate(self, forRow: indexPath.row)
+        determineDetailProgress()
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {return 1}
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {return 1}
-    
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if let _ = scrollView as? UITableView {
+            var offset = scrollView.contentOffset.y / 40
+            
+            if (offset > 1) {
+                offset = 1
+                
+                let colour = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: offset)
+                
+                
+                self.navigationController?.navigationBar.tintColor = UIColor(red: 222/255,
+                                                                             green: 173/255,
+                                                                             blue: 107/255,
+                                                                             alpha: 1)
+                self.navigationController?.navigationBar.backgroundColor = colour
+            } else {
+                let colour = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: offset)
+                
+                self.navigationController?.navigationBar.tintColor = UIColor.white
+                self.navigationController?.navigationBar.backgroundColor = colour
+            }
+            
+            let headerView = self.tableView.tableHeaderView as! BurgerHeaderView
+
+            headerView.scrollViewDidScroll(scrollView: scrollView)
+        }
+    }
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cellIdentifier = "UploadInfoCell"
         
@@ -453,7 +510,6 @@ class UploadBurgerInformationVC: UITableViewController, UITextFieldDelegate, UIT
         
         cell.burgerDescriptionTextView.delegate = self
         cell.burgerDescriptionTextView.textColor = .lightGray
-        
         cell.burgerDescriptionTextView.text = tvPlaceHolder
         
         fields["name"] = cell.burgerNameTextField
@@ -464,21 +520,11 @@ class UploadBurgerInformationVC: UITableViewController, UITextFieldDelegate, UIT
         fields["rating"] = cell.ratingNumberLabel
         fields["addIngredientLabel"] = cell.newIngredientTextField
         
-        if details["name"] as! String != headerBurgerNamePlaceholder {
-            cell.burgerNameTextField.text = (details["name"] as! String)
-        } else {
-            cell.burgerNameTextField.text = ""
-        }
-        
-        if details["kitchen"] as! String != headerBurgerKitchenPlaceholder {
-            cell.kitchenNameTextField.text = (details["kitchen"] as! String)
-        } else {
-            cell.kitchenNameTextField.text = ""
-        }
-        
-        cell.regionNameTextField.text = (details["locations"] as! String)
-        cell.priceTextField.text = (details["price"] as! String)
+        cell.burgerNameTextField.text = details["name"] as! String != headerBurgerNamePlaceholder ?  (details["name"] as! String) : ""
         cell.burgerDescriptionTextView.text = (details["descript"] as! String)
+        cell.kitchenNameTextField.text =  details["kitchen"] as! String != headerBurgerKitchenPlaceholder ? (details["kitchen"] as! String) : ""
+        cell.priceTextField.text = (details["price"] as! String)
+        cell.regionNameTextField.text = (details["locations"] as! String)
         
         self.submitBtn = cell.submitBtn
         
@@ -494,108 +540,13 @@ class UploadBurgerInformationVC: UITableViewController, UITextFieldDelegate, UIT
         
         return cell
     }
-    
-    @objc private func addIngredient(_ sender: UIButton?) {
-        let ingredientLabel = self.fields["addIngredientLabel"] as! UITextField
-        
-        if (!(ingredientLabel.text ?? "").isEmpty) {
-            if !TAGS.contains(ingredientLabel.text!) {
-                let tag = Tag()
 
-                tag.name = ingredientLabel.text
-                
-                self.tags.append(tag)
-                
-                ingredientCollectionView.reloadData()
-                
-                redrawIngredientHeight()
-            }
-        }
-    }
-    
-    func redrawIngredientHeight() {
-        let height = self.ingredientCollectionView.collectionViewLayout.collectionViewContentSize.height
-        
-        setInputValueFields()
-        
-        heightConstraint.constant = height
-        
-        self.view.layoutIfNeeded()
-        self.tableView.reloadData()
-    }
-    
-    @objc func updateRatingLabel(sender: UISlider!) {
-        let value = sender.value
-        
-        DispatchQueue.main.async {
-            let ratingLabel = self.fields["rating"] as! UILabel
-            
-            self.details["ratingLbl"] = self.fields["rating"]
-            
-            ratingLabel.text = String(format:"%.1f", value)
-        }
-    }
-    
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.textColor == UIColor.lightGray && textView.isFirstResponder && textView.text == tvPlaceHolder{
-            textView.text = nil
-            textView.textColor = .gray
-        }
-    }
-    
-    func textViewDidEndEditing(_ textView: UITextView) {
-        if textView.text.isEmpty || textView.text == ""{
-            textView.textColor = .lightGray
-            textView.text = tvPlaceHolder
-        }
-        
-        determineDetailProgress()
-    }
-    
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        determineDetailProgress()
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        self.view.endEditing(true)
-        
-        determineDetailProgress()
-        
-        return true;
-    }
-    
-    func tableView(_: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return UITableView.automaticDimension
-    }
-    
-    func textViewDidChange(_ textView: UITextView) {
-        let calcHeight = textView.sizeThatFits(textView.frame.size).height
-        let startHeight = textView.frame.size.height
-        
-        if startHeight != calcHeight {
-            let scrollTo = self.tableView.contentSize.height - self.tableView.frame.size.height
-            
-            UIView.setAnimationsEnabled(false)
-            
-            self.tableView.beginUpdates()
-            self.tableView.endUpdates()
-            
-            self.tableView.setContentOffset(CGPoint(x:0, y:scrollTo), animated: false)
-            
-            UIView.setAnimationsEnabled(true)
-        }
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return indexPath.section == 1 ? 80 : tableView.rowHeight
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return section == 1 ? 0.0 : 80.0
-    }
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {return section == 1 ? 0.0 : 80.0}
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {return indexPath.section == 1 ? 80 : tableView.rowHeight}
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {return 1}
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if section == 0 {
+        if (section == 0) {
             let  cell = tableView.dequeueReusableCell(withIdentifier: "UploadHeaderCell") as! UploadHeaderTableViewCell
             
             if (details["name"] as! String) != headerBurgerNamePlaceholder && (details["name"] as! String) != "" {
@@ -628,67 +579,93 @@ class UploadBurgerInformationVC: UITableViewController, UITextFieldDelegate, UIT
         return nil
     }
     
-    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if let _ = scrollView as? UITableView {
-            var offset = scrollView.contentOffset.y / 40
-            
-            if offset > 1 {
-                offset = 1
-                
-                let colour = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: offset)
-                
-                
-                self.navigationController?.navigationBar.tintColor = UIColor(red: 222/255,
-                                                                             green: 173/255,
-                                                                             blue: 107/255,
-                                                                             alpha: 1)
-                self.navigationController?.navigationBar.backgroundColor = colour
-            } else {
-                let colour = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: offset)
-                
-                self.navigationController?.navigationBar.tintColor = UIColor.white
-                self.navigationController?.navigationBar.backgroundColor = colour
-            }
-            
-            let headerView = self.tableView.tableHeaderView as! BurgerHeaderView
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        guard let tableViewCell = cell as? UploadTableViewCell else { return }
 
-            headerView.scrollViewDidScroll(scrollView: scrollView)
+        tableViewCell.setCollectionViewDataSourceDelegate(self, forRow: indexPath.row)
+    }
+    
+    @objc private func addIngredient(_ sender: UIButton?) {
+        let ingredientLabel = self.fields["addIngredientLabel"] as! UITextField
+        
+        if (!(ingredientLabel.text ?? "").isEmpty) {
+            if !TAGS.contains(ingredientLabel.text!) {
+                let tag = Tag()
+
+                tag.name = ingredientLabel.text
+                
+                self.tags.append(tag)
+                
+                ingredientCollectionView.reloadData()
+                
+                redrawIngredientHeight()
+            }
         }
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        NotificationCenter.default.removeObserver(self)
-        
-        self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0),
-                                   at: UITableView.ScrollPosition.top,
-                                   animated: false)
-        
-        
-        let colour = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1)
-        
-        self.navigationController?.navigationBar.tintColor = UIColor(red: 222/255,
-                                                                     green: 173/255,
-                                                                     blue: 107/255,
-                                                                     alpha: 1)
-        self.navigationController?.navigationBar.backgroundColor = colour
-        
-        self.statusBarBgView.removeFromSuperview()
-    }
-}
+    @objc func dismissKeyboard() {view.endEditing(true)}
 
-extension UIView {
-    var statusBar: UIView? {
-        return value(forKey: "statusBar") as? UIView
+    @objc func keyboardWillShow(notification: NSNotification){
+        let userInfo = notification.userInfo!
+        
+        var contentInset:UIEdgeInsets = self.tableView.contentInset
+        var keyboardFrame:CGRect = (userInfo[UIResponder.keyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
+        
+        keyboardFrame = self.view.convert(keyboardFrame, from: nil)
+        
+        contentInset.bottom = keyboardFrame.size.height
+        
+        self.tableView.contentInset = contentInset
+        
+        determineDetailProgress()
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        let contentInset:UIEdgeInsets = UIEdgeInsets.zero
+        
+        self.tableView.contentInset = contentInset
+        
+        determineDetailProgress()
+    }
+    
+    @objc func reset() {
+        self.imgView.uploadImage(image:photo, progress: progress)
+        
+        if(progress <= 1.0) {
+            self.perform(#selector(self.reset), with: nil, afterDelay: 0.3)
+        }
+        
+        progress += 0.1
+    }
+    
+    @objc func updateRatingLabel(sender: UISlider!) {
+        let value = sender.value
+        
+        DispatchQueue.main.async {
+            let ratingLabel = self.fields["rating"] as! UILabel
+            
+            self.details["ratingLbl"] = self.fields["rating"]
+            
+            ratingLabel.text = String(format:"%.1f", value)
+        }
     }
 }
 
 extension UploadBurgerInformationVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return collectionView == self.ingredientCollectionView ? tags.count : badges.count
+    private func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+        return CGSize(width:view.frame.width , height:64)
     }
     
+    internal func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        if collectionView == self.ingredientCollectionView {
+            self.configureCell(cell: self.sizingCell!, forIndexPath: indexPath as NSIndexPath)
+            
+            return self.sizingCell!.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+        }
+        
+        return CGSize(width: 65, height: 85)
+    }
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == self.ingredientCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TagCell", for: indexPath as IndexPath) as! TagCell
@@ -734,26 +711,8 @@ extension UploadBurgerInformationVC: UICollectionViewDelegate, UICollectionViewD
         }
     }
     
-    private func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        return CGSize(width:view.frame.width , height:64)
-    }
-    
-    
-    internal func collectionView(_ collectionView: UICollectionView,
-                                 layout collectionViewLayout: UICollectionViewLayout,
-                                 sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        if collectionView == self.ingredientCollectionView {
-            self.configureCell(cell: self.sizingCell!, forIndexPath: indexPath as NSIndexPath)
-            
-            return self.sizingCell!.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
-        }
-        
-        return CGSize(width: 65, height: 85)
-    }
-    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath){
-        if collectionView == self.ingredientCollectionView {
+        if (collectionView == self.ingredientCollectionView) {
             tags[indexPath.row].selected = !tags[indexPath.row].selected
             
             determineDetailProgress()
@@ -790,6 +749,10 @@ extension UploadBurgerInformationVC: UICollectionViewDelegate, UICollectionViewD
             }
         }
     }
+
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return collectionView == self.ingredientCollectionView ? tags.count : badges.count
+    }
     
     func configureCell(cell: TagCell, forIndexPath indexPath: NSIndexPath) {
         let tag = tags[indexPath.row]
@@ -808,5 +771,11 @@ extension UploadBurgerInformationVC: UICollectionViewDelegate, UICollectionViewD
         
         cell.tagName.textColor = tag.selected ? UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1) : UIColor(red: 56/255,green: 49/255, blue: 40/255, alpha: 1)
         cell.backgroundColor = tag.selected ? UIColor(red: 222/255, green: 173/255, blue: 107/255, alpha: 1): UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1)
+    }
+}
+
+extension UIView {
+    var statusBar: UIView? {
+        return value(forKey: "statusBar") as? UIView
     }
 }
