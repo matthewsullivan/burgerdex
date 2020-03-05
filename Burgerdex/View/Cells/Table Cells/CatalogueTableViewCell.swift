@@ -5,11 +5,10 @@
 //  Created by Matthew Sullivan on 2018-01-02.
 //  Copyright © 2020 Dev & Barrel Inc. All rights reserved.
 //
-
 import UIKit
 
 class CatalogueTableViewCell: UITableViewCell {
-    
+
     @IBOutlet weak var catalogueNumberContainer: UIView!
     @IBOutlet weak var burgerName: UILabel!
     @IBOutlet weak var kitchenName: UILabel!
@@ -33,7 +32,6 @@ class CatalogueTableViewCell: UITableViewCell {
         mask.frame = burgerImage.bounds
 
         burgerImage.layer.mask = mask
-        
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {

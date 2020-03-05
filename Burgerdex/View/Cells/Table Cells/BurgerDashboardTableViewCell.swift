@@ -5,11 +5,9 @@
 //  Created by Matthew Sullivan on 2018-01-04.
 //  Copyright © 2020 Dev & Barrel Inc. All rights reserved.
 //
-
 import UIKit
 
 class BurgerDashboardTableViewCell: UITableViewCell {
-    
     @IBOutlet weak var averagePrice: UILabel!
     @IBOutlet weak var sightings: UILabel!
     @IBOutlet weak var locations: UILabel!

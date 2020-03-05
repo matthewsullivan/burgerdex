@@ -5,17 +5,21 @@
 //  Created by Matthew Sullivan on 2018-01-04.
 //  Copyright © 2020 Dev & Barrel Inc. All rights reserved.
 //
-
 import UIKit
 
 class UploadTableViewCell: UITableViewCell {
+    var collectionViewOffset: CGFloat {
+        set { self.collectionView.contentOffset.x = newValue }
+        get { return self.collectionView.contentOffset.x }
+    }
+
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var regionNameTextField: TweeBorderedTextField!
     @IBOutlet weak var burgerNameTextField: TweeBorderedTextField!
     @IBOutlet weak var priceTextField: TweeBorderedTextField!
     @IBOutlet weak var kitchenNameTextField: TweeBorderedTextField!
     @IBOutlet weak var burgerDescriptionTextView: UITextView!
-    
+
     @IBOutlet weak var submitBtn: UIButton!
     @IBOutlet weak var ratingNumberLabel: UILabel!
     @IBOutlet weak var ratingSlider: UISlider!
@@ -31,7 +35,6 @@ class UploadTableViewCell: UITableViewCell {
     }
     
     func setCollectionViewDataSourceDelegate<D: UICollectionViewDataSource & UICollectionViewDelegate>(_ dataSourceDelegate: D, forRow row: Int) {
-        
         self.collectionView.delegate = dataSourceDelegate
         self.collectionView.dataSource = dataSourceDelegate
         self.collectionView.tag = row
@@ -43,10 +46,5 @@ class UploadTableViewCell: UITableViewCell {
         self.ingredientCollectionView.tag = row
         self.ingredientCollectionView.setContentOffset(ingredientCollectionView.contentOffset, animated:false)
         self.ingredientCollectionView.reloadData()
-    }
-    
-    var collectionViewOffset: CGFloat {
-        set { self.collectionView.contentOffset.x = newValue }
-        get { return self.collectionView.contentOffset.x }
     }
 }

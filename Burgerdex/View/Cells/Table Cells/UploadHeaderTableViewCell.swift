@@ -5,7 +5,6 @@
 //  Created by Matthew Sullivan on 2018-01-04.
 //  Copyright © 2020 Dev & Barrel Inc. All rights reserved.
 //
-
 import UIKit
 
 class UploadHeaderTableViewCell: UITableViewCell {

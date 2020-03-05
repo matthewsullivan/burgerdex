@@ -5,7 +5,6 @@
 //  Created by Matthew Sullivan on 2018-01-03.
 //  Copyright © 2020 Dev & Barrel Inc. All rights reserved.
 //
-
 import UIKit
 
 class BurgerHeaderView: UIView {
@@ -16,6 +15,10 @@ class BurgerHeaderView: UIView {
     var burgerImage = UIImageView()
     var containerView = UIView()
     
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -99,11 +102,7 @@ class BurgerHeaderView: UIView {
         containerView.addConstraint(bottomLayoutConstraint)
         containerView.addConstraint(heightLayoutConstraint)
     }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-    
+
     func scrollViewDidScroll(scrollView: UIScrollView) {
         let offsetY = -(scrollView.contentOffset.y + scrollView.contentInset.top)
         
