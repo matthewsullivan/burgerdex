@@ -3,7 +3,7 @@
 //  Burgerdex
 //
 //  Created by Matthew Sullivan on 2018-01-03.
-//  Copyright © 2018 Dev & Barrel Inc. All rights reserved.
+//  Copyright © 2020 Dev & Barrel Inc. All rights reserved.
 //
 
 import UIKit
@@ -38,10 +38,10 @@ extension UIColor {
     }
 }
 
-extension UIView{
+extension UIView {
     func boundInside(_ superView: UIView){
         self.translatesAutoresizingMaskIntoConstraints = false
-
+        
         superView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[subview]-0-|", options: NSLayoutConstraint.FormatOptions(), metrics:nil, views:["subview":self]))
         superView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[subview]-0-|", options: NSLayoutConstraint.FormatOptions(), metrics:nil, views:["subview":self]))
     }
@@ -74,6 +74,7 @@ class CutoutView : UIView {
         super.draw(rect)
         
         let context = UIGraphicsGetCurrentContext()
+
         context?.setFillColor(UIColor.white.cgColor)
         context?.fill(self.bounds)
         
@@ -105,42 +106,24 @@ extension CGFloat {
 }
 
 extension UIView {
-    public func ld_getCutoutView()->UIView? {
-        return objc_getAssociatedObject(self, &cutoutHandle) as! UIView?
-    }
-    
-    func ld_setCutoutView(_ aView : UIView) {
-        return objc_setAssociatedObject(self, &cutoutHandle, aView, .OBJC_ASSOCIATION_RETAIN)
-    }
-    
-    func ld_getGradient()->CAGradientLayer? {
-        return objc_getAssociatedObject(self, &gradientHandle) as! CAGradientLayer?
-    }
-    
-    func ld_setGradient(_ aLayer : CAGradientLayer) {
-        return objc_setAssociatedObject(self, &gradientHandle, aLayer, .OBJC_ASSOCIATION_RETAIN)
-    }
-    
-    public func ld_addLoader() {
-        let gradient: CAGradientLayer = CAGradientLayer()
-        gradient.frame = CGRect(x: 0, y: 0, width: self.bounds.size.width , height: self.bounds.size.height)
+    func addCutoutView() {
+        let cutout = CutoutView()
 
-        self.layer.insertSublayer(gradient, at:0)
+        cutout.frame = self.bounds
+        cutout.backgroundColor = UIColor.clear
         
-        self.configureAndAddAnimationToGradient(gradient)
-        self.addCutoutView()
-    }
-    
-    public func ld_removeLoader() {
-        self.ld_getCutoutView()?.removeFromSuperview()
-        self.ld_getGradient()?.removeAllAnimations()
-        self.ld_getGradient()?.removeFromSuperlayer()
+        self.addSubview(cutout)
+        
+        cutout.setNeedsDisplay()
+        cutout.boundInside(self)
         
         for view in self.subviews {
-            view.alpha = 1
+            if view != cutout {
+                view.alpha = 0
+            }
         }
+        self.ld_setCutoutView(cutout)
     }
-    
     
     func configureAndAddAnimationToGradient(_ gradient : CAGradientLayer) {
         gradient.startPoint = CGPoint(x: -1.0 + CGFloat(gradientWidth), y: 0)
@@ -171,23 +154,41 @@ extension UIView {
         
         self.ld_setGradient(gradient)
     }
-    
-    func addCutoutView() {
-        let cutout = CutoutView()
-        cutout.frame = self.bounds
-        cutout.backgroundColor = UIColor.clear
-        
-        self.addSubview(cutout)
 
-        cutout.setNeedsDisplay()
-        cutout.boundInside(self)
+    public func ld_addLoader() {
+        let gradient: CAGradientLayer = CAGradientLayer()
+        gradient.frame = CGRect(x: 0, y: 0, width: self.bounds.size.width , height: self.bounds.size.height)
+        
+        self.layer.insertSublayer(gradient, at:0)
+        
+        self.configureAndAddAnimationToGradient(gradient)
+        self.addCutoutView()
+    }
+    
+    public func ld_getCutoutView()->UIView? {
+        return objc_getAssociatedObject(self, &cutoutHandle) as! UIView?
+    }
+
+    public func ld_removeLoader() {
+        self.ld_getCutoutView()?.removeFromSuperview()
+        self.ld_getGradient()?.removeAllAnimations()
+        self.ld_getGradient()?.removeFromSuperlayer()
         
         for view in self.subviews {
-            if view != cutout {
-                view.alpha = 0
-            }
+            view.alpha = 1
         }
-        self.ld_setCutoutView(cutout)
+    }
+
+    func ld_getGradient()->CAGradientLayer? {
+        return objc_getAssociatedObject(self, &gradientHandle) as! CAGradientLayer?
+    }
+    
+    func ld_setCutoutView(_ aView : UIView) {
+        return objc_setAssociatedObject(self, &cutoutHandle, aView, .OBJC_ASSOCIATION_RETAIN)
+    }
+    
+    func ld_setGradient(_ aLayer : CAGradientLayer) {
+        return objc_setAssociatedObject(self, &gradientHandle, aLayer, .OBJC_ASSOCIATION_RETAIN)
     }
 }
 
