@@ -24,17 +24,6 @@ class CameraController: NSObject {
 
 extension CameraController {
     func prepare(completionHandler: @escaping (Error?) -> Void) {
-        func captureImage(completion: @escaping (UIImage?, Error?) -> Void) {
-            guard let captureSession = captureSession, captureSession.isRunning else { completion(nil, CameraControllerError.captureSessionIsMissing); return }
-            
-            let settings = AVCapturePhotoSettings()
-
-            settings.flashMode = self.flashMode
-            
-            self.photoOutput?.capturePhoto(with: settings, delegate: self)
-            self.photoCaptureCompletionBlock = completion
-        }
-        
         func configureCaptureDevices() throws {
             let session = AVCaptureDevice.DiscoverySession(deviceTypes: [AVCaptureDevice.DeviceType.builtInWideAngleCamera], mediaType: AVMediaType.video, position: .unspecified)
 
@@ -115,6 +104,17 @@ extension CameraController {
                 completionHandler(nil)
             }
         }
+    }
+    
+    func captureImage(completion: @escaping (UIImage?, Error?) -> Void) {
+        guard let captureSession = captureSession, captureSession.isRunning else { completion(nil, CameraControllerError.captureSessionIsMissing); return }
+        
+        let settings = AVCapturePhotoSettings()
+
+        settings.flashMode = self.flashMode
+        
+        self.photoOutput?.capturePhoto(with: settings, delegate: self)
+        self.photoCaptureCompletionBlock = completion
     }
     
     func displayPreview(on view: UIView) throws {

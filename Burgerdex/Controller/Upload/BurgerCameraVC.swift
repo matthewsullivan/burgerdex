@@ -108,7 +108,7 @@ extension BurgerCameraVC {
             self.burgerImage.image = image
             self.burgerImage.isHidden = false
             self.savePhotoBtn.isEnabled = true
-            self.cancelBurgerPhotoBtn.title = "Re-Take"
+            self.cancelBurgerPhotoBtn.title = "Retake"
             self.cancelBurgerPhotoBtn.tag = 0
         }
     }

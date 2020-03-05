@@ -260,6 +260,32 @@ public class ActivityIndicator: UIView, CAAnimationDelegate {
             }
         }
     }
+
+    private func correctJoinPoint() -> CGPoint {
+        let r = min(self.bounds.width, self.bounds.height)/2
+        let m = r/2
+        let k = lineWidth/2
+        
+        let a: CGFloat = 2.0
+        let b = -4 * r + 2 * m
+        let c = (r - m) * (r - m) + 2 * r * k - k * k
+        let x = (-b - sqrt(b * b - 4 * a * c))/(2 * a)
+        let y = x + m
+        
+        return CGPoint(x:x, y:y)
+    }
+    
+    private func errorJoinPoint() -> CGPoint {
+        let r = min(self.bounds.width, self.bounds.height)/2
+        let k = lineWidth/2
+        
+        let a: CGFloat = 2.0
+        let b = -4 * r
+        let c = r * r + 2 * r * k - k * k
+        let x = (-b - sqrt(b * b - 4 * a * c))/(2 * a)
+        
+        return CGPoint(x:x, y:x)
+    }
     
     //MARK: - Private
     private func initialize() {
@@ -296,6 +322,28 @@ public class ActivityIndicator: UIView, CAAnimationDelegate {
         progressLayer.strokeEnd = 0.0
     }
     
+    private func setStrokeFailureShapePath() {
+        let width = self.bounds.width
+        let height = self.bounds.height
+        let square = min(width, height)
+        let b = square/2
+        let space = square/3
+        let point = errorJoinPoint()
+        
+        
+        let path = CGMutablePath()
+        path.move(to: CGPoint(x:point.x, y:point.y))
+        path.addLine(to: CGPoint(x:2 * b - space, y: 2 * b - space))
+        path.move(to: CGPoint(x:2 * b - space, y: space))
+        path.addLine(to: CGPoint(x:space, y:2 * b - space))
+        
+        shapeLayer.path = path
+        shapeLayer.cornerRadius = square/2
+        shapeLayer.masksToBounds = true
+        shapeLayer.strokeStart = 0
+        shapeLayer.strokeEnd = 0.0
+    }
+
     private func setStrokeSuccessShapePath() {
         let width = self.bounds.width
         let height = self.bounds.height
@@ -319,55 +367,7 @@ public class ActivityIndicator: UIView, CAAnimationDelegate {
         shapeLayer.strokeStart = 0.0
         shapeLayer.strokeEnd = 0.0
     }
-    
-    private func setStrokeFailureShapePath() {
-        let width = self.bounds.width
-        let height = self.bounds.height
-        let square = min(width, height)
-        let b = square/2
-        let space = square/3
-        let point = errorJoinPoint()
-        
-        
-        let path = CGMutablePath()
-        path.move(to: CGPoint(x:point.x, y:point.y))
-        path.addLine(to: CGPoint(x:2 * b - space, y: 2 * b - space))
-        path.move(to: CGPoint(x:2 * b - space, y: space))
-        path.addLine(to: CGPoint(x:space, y:2 * b - space))
-        
-        shapeLayer.path = path
-        shapeLayer.cornerRadius = square/2
-        shapeLayer.masksToBounds = true
-        shapeLayer.strokeStart = 0
-        shapeLayer.strokeEnd = 0.0
-    }
-    
-    private func correctJoinPoint() -> CGPoint {
-        let r = min(self.bounds.width, self.bounds.height)/2
-        let m = r/2
-        let k = lineWidth/2
-        
-        let a: CGFloat = 2.0
-        let b = -4 * r + 2 * m
-        let c = (r - m) * (r - m) + 2 * r * k - k * k
-        let x = (-b - sqrt(b * b - 4 * a * c))/(2 * a)
-        let y = x + m
-        
-        return CGPoint(x:x, y:y)
-    }
-    
-    private func errorJoinPoint() -> CGPoint {
-        let r = min(self.bounds.width, self.bounds.height)/2
-        let k = lineWidth/2
-        
-        let a: CGFloat = 2.0
-        let b = -4 * r
-        let c = r * r + 2 * r * k - k * k
-        let x = (-b - sqrt(b * b - 4 * a * c))/(2 * a)
-        
-        return CGPoint(x:x, y:x)
-    }
-    
+
     @objc private func resetAnimations() {
         if status == .Loading {
             status = .Unknown
