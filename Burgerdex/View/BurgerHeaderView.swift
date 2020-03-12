@@ -54,7 +54,6 @@ class BurgerHeaderView: UIView {
         burgerImage.image = UIImage(named: "baconBeast")
         containerView.addSubview(burgerImage)
         
-        
         let layerHeight = frame.size.height
         let layerWidth = frame.size.width * 3
         

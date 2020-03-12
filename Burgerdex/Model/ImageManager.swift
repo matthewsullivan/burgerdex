@@ -55,7 +55,7 @@ class ImageManager: NSObject {
                         }
                     }
                 }
-                if !found {
+                if (!found) {
                     DispatchQueue.main.async(execute: {
                         completion?(false, nil)
                         

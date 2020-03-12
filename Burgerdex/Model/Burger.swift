@@ -46,14 +46,16 @@ class BurgerPreview : BurgerObject {
           recordID: Int,
           sightings: Int) {
         
-        if displayTag.isEmpty ||
+        if (
+            displayTag.isEmpty ||
             displayText.isEmpty ||
             name.isEmpty ||
             kitchen.isEmpty ||
             catalogueNumber < 0 ||
             burgerID < 0 ||
             location.isEmpty  ||
-            year.isEmpty {
+            year.isEmpty
+        ) {
             return nil
         }
         
@@ -313,28 +315,29 @@ class Burger : BurgerObject{
     var hasMods: Bool
     var dateCaptured: String
     
-    init?(name: String,
-          kitchen: String,
-          catalogueNumber: Int,
-          descript: String,
-          burgerID: Int,
-          location: String,
-          rating: String,
-          price: String,
-          averagePrice: String,
-          ingredients: String,
-          fusion: Bool,
-          fused: [Dictionary<String, AnyObject>],
-          sightings: [Dictionary<String, AnyObject>],
-          locationCount: Int,
-          veggie: Bool,
-          spicy: Bool,
-          extinct: Bool,
-          seasonal: Bool,
-          hasChallenge: Bool,
-          hasMods: Bool,
-          dateCaptured: String) {
-        
+    init? (
+        name: String,
+        kitchen: String,
+        catalogueNumber: Int,
+        descript: String,
+        burgerID: Int,
+        location: String,
+        rating: String,
+        price: String,
+        averagePrice: String,
+        ingredients: String,
+        fusion: Bool,
+        fused: [Dictionary<String, AnyObject>],
+        sightings: [Dictionary<String, AnyObject>],
+        locationCount: Int,
+        veggie: Bool,
+        spicy: Bool,
+        extinct: Bool,
+        seasonal: Bool,
+        hasChallenge: Bool,
+        hasMods: Bool,
+        dateCaptured: String
+    ) {
         self.name = name
         self.kitchen = kitchen
         self.catalogueNumber = catalogueNumber
@@ -583,9 +586,11 @@ class Badge : BurgerObject{
     var badgeTitle: String
     var badgeIcon: UIImage
     
-    init?(ratingTitle: String,
-          badgeTitle: String,
-          badgeIcon: UIImage) {
+    init?(
+        ratingTitle: String,
+        badgeTitle: String,
+        badgeIcon: UIImage
+    ) {
         
         self.ratingTitle = ratingTitle
         self.badgeTitle = badgeTitle

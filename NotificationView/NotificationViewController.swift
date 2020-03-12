@@ -5,7 +5,6 @@
 //  Created by Matthew Sullivan on 2018-04-23.
 //  Copyright © 2020 Dev & Barrel Inc. All rights reserved.
 //
-
 import UIKit
 import UserNotifications
 import UserNotificationsUI

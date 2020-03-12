@@ -50,7 +50,7 @@ class Account  {
                                 
                                 completion(tokenResponseData)
                             }
-                            } as @convention(block) () -> Void)
+                        } as @convention(block) () -> Void)
                     }
                 } catch {
                     tokenResponseData[0] = 0
