@@ -13,13 +13,6 @@ class UploadBurgerInformationVC: UITableViewController, UITextFieldDelegate, UIT
     let headerBurgerKitchenPlaceholder  = "Mystery Kitchen"
     let tvPlaceHolder = "Describe your first few bites."
     
-//    let statusBarBgView = { () -> UIView in
-//       let statusBarWindow: UIView = UIApplication.shared.value(forKey: "statusBarWindow") as! UIView
-//       let statusBarBgView = UIView(frame: (statusBarWindow.statusBar?.bounds)!)
-//
-//       return statusBarBgView
-//   }()
-    
     var addIngredientButton: UIButton!
     var badges = [Badge]()
     var details : [String:AnyObject] = [:]

@@ -432,7 +432,6 @@ class BurgerDashboardVC: UITableViewController {
     }
 }
 
-
 extension BurgerDashboardVC: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let burgerBadge = badges[indexPath.row]
