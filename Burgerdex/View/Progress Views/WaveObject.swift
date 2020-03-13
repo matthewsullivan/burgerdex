@@ -5,7 +5,6 @@
 //  Created by MILLMAN on 2016/9/1.
 //
 //
-
 import UIKit
 
 class WaveObject: NSObject {

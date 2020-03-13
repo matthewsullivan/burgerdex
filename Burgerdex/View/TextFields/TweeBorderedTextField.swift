@@ -1,7 +1,6 @@
 //  Created by Oleg Gnidets on 12/20/17.
 //  Copyright © 2017 Oleg Gnidets. All rights reserved.
 //
-
 import UIKit
 
 /// Represents a line containing path and layer.

@@ -1,7 +1,6 @@
 //  Created by Oleg Gnidets on 12/12/17.
 //  Copyright © 2017 Oleg Gnidets. All rights reserved.
 //
-
 import UIKit
 
 /// An object of the class can show the custom info label under text field.
