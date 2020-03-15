@@ -5,7 +5,6 @@
 //  Created by Matthew Sullivan on 2018-01-02.
 //  Copyright © 2020 Dev & Barrel Inc. All rights reserved.
 //
-
 import UIKit
 import UserNotifications
 
@@ -102,38 +101,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let barButtonItemAppearance = UIBarButtonItem.appearance()
         let colour = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1)
         
-        var preferredStatusBarStyle : UIStatusBarStyle {
-            return .lightContent
-        }
+        var preferredStatusBarStyle : UIStatusBarStyle {return .lightContent}
         
         barButtonItemAppearance.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.clear], for: .normal)
-        
-        UIApplication.shared.statusBarView?.backgroundColor = colour
         
         UINavigationBar.appearance().barTintColor = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1)
         UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
         UINavigationBar.appearance().shadowImage = UIImage()
         UINavigationBar.appearance().backgroundColor = colour
         UINavigationBar.appearance().prefersLargeTitles = true
-        UINavigationBar.appearance().largeTitleTextAttributes = [
-            NSAttributedString.Key.foregroundColor: UIColor.white
-        ]
-        UINavigationBar.appearance().titleTextAttributes = [
-            NSAttributedString.Key.foregroundColor: UIColor.white
-        ]
+        UINavigationBar.appearance().largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
     }
-        
+
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         completionHandler()
-    }
-}
-
-extension UIApplication {
-    var statusBarView : UIView? {
-        if #available(iOS 13.0, *) {
-            return UIApplication.shared.windows.filter {$0.isKeyWindow}.first;
-        }
-
-        return value(forKey: "statusBar") as? UIView
     }
 }

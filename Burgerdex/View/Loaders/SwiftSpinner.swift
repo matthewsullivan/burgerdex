@@ -27,9 +27,7 @@ public class SwiftSpinner: UIView {
     //
     // Custom init to build the spinner UI
     //
-    
     public override init(frame: CGRect) {
-        
         currentTitleFont = defaultTitleFont // By default we initialize to the same.
         
         super.init(frame: frame)
@@ -140,11 +138,9 @@ public class SwiftSpinner: UIView {
     //
     @discardableResult
     public class func show(_ title: String, animated: Bool = true) -> SwiftSpinner {
-        
         let spinner = SwiftSpinner.sharedInstance
         
         spinner.clearTapHandler()
-        
         spinner.updateFrame()
         
         if spinner.superview == nil {
@@ -193,6 +189,7 @@ public class SwiftSpinner: UIView {
         spinner.delay(duration) {
             SwiftSpinner.hide()
         }
+
         return spinner
     }
     

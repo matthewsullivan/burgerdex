@@ -208,7 +208,6 @@ class CatalogueVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
                         }
                         
                         let dictionary = Dictionary(grouping: self.burgers, by: predicate)
-                        
                         let sortedByKeyDictionary = dictionary.sorted { $0.0 < $1.0 }
                         
                         for (key, value) in sortedByKeyDictionary {

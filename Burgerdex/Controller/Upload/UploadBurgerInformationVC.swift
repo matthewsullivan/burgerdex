@@ -13,13 +13,6 @@ class UploadBurgerInformationVC: UITableViewController, UITextFieldDelegate, UIT
     let headerBurgerKitchenPlaceholder  = "Mystery Kitchen"
     let tvPlaceHolder = "Describe your first few bites."
     
-    let statusBarBgView = { () -> UIView in
-       let statusBarWindow: UIView = UIApplication.shared.value(forKey: "statusBarWindow") as! UIView
-       let statusBarBgView = UIView(frame: (statusBarWindow.statusBar?.bounds)!)
-       
-       return statusBarBgView
-   }()
-    
     var addIngredientButton: UIButton!
     var badges = [Badge]()
     var details : [String:AnyObject] = [:]
@@ -279,18 +272,7 @@ class UploadBurgerInformationVC: UITableViewController, UITextFieldDelegate, UIT
                                                name: UIResponder.keyboardWillHideNotification,
                                                object: nil)
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        let colour = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1)
-        let navigationBar = self.navigationController?.navigationBar
-        
-        var preferredStatusBarStyle : UIStatusBarStyle {return .lightContent}
-        
-        self.statusBarBgView.backgroundColor = colour
-        
-        navigationBar?.superview?.insertSubview(self.statusBarBgView, aboveSubview: navigationBar!)
-    }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
@@ -305,8 +287,6 @@ class UploadBurgerInformationVC: UITableViewController, UITextFieldDelegate, UIT
         
         self.navigationController?.navigationBar.tintColor = UIColor(red: 222/255, green: 173/255, blue: 107/255,alpha: 1)
         self.navigationController?.navigationBar.backgroundColor = colour
-        
-        self.statusBarBgView.removeFromSuperview()
     }
     
     func delay(seconds: Double, completion: @escaping () -> ()) {
@@ -771,11 +751,5 @@ extension UploadBurgerInformationVC: UICollectionViewDelegate, UICollectionViewD
         
         cell.tagName.textColor = tag.selected ? UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1) : UIColor(red: 56/255,green: 49/255, blue: 40/255, alpha: 1)
         cell.backgroundColor = tag.selected ? UIColor(red: 222/255, green: 173/255, blue: 107/255, alpha: 1): UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1)
-    }
-}
-
-extension UIView {
-    var statusBar: UIView? {
-        return value(forKey: "statusBar") as? UIView
     }
 }

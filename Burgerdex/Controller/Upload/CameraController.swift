@@ -5,7 +5,6 @@
 //  Created by Pranjal Satija on 29/5/2017.
 //  Copyright © 2017 AppCoda. All rights reserved.
 //
-
 import AVFoundation
 import UIKit
 

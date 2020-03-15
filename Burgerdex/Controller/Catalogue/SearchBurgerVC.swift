@@ -92,14 +92,14 @@ class SearchBurgerVC: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         searchBar.resignFirstResponder()
         
-        if errorType == 0 {
+        if (errorType == 0) {
             self.errorImageContainer.image = UIImage(named: "noFood")
             self.errorHeaderLabel.text = "SORRY"
             self.errorBodyLabel.text = "No Burger Matches.."
             self.errorButton.isHidden = false
         }
         
-        if errorType == 1 {
+        if (errorType == 1) {
             self.errorImageContainer.image = UIImage(named: "noFood")
             self.errorHeaderLabel.text = "Network Error"
             self.errorBodyLabel.text = "It seems that the network connection has been lost."
@@ -119,7 +119,7 @@ class SearchBurgerVC: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText.count == 0 {
+        if (searchText.count == 0) {
             hideErrorView()
         }
     }

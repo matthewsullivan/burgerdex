@@ -5,7 +5,6 @@
 //  Created by Matthew Sullivan on 2018-01-03.
 //  Copyright © 2020 Dev & Barrel Inc. All rights reserved.
 //
-
 import UIKit
 
 @objc public protocol ListLoadable {
@@ -191,4 +190,3 @@ extension UIView {
         return objc_setAssociatedObject(self, &gradientHandle, aLayer, .OBJC_ASSOCIATION_RETAIN)
     }
 }
-

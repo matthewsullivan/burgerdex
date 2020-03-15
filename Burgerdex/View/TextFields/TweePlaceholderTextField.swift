@@ -1,7 +1,6 @@
 //  Created by Oleg Gnidets on 12/20/17.
 //  Copyright © 2017 Oleg Gnidets. All rights reserved.
 //
-
 import UIKit
 
 /// An object of the class has a customized placeholder label which has animations on the beginning and ending editing.
@@ -68,15 +67,11 @@ open class TweePlaceholderTextField: UITextField {
     }
     
     // Private
-    
-    private var minimizeFontAnimation: FontAnimation!
-    
     private var maximizeFontAnimation: FontAnimation!
-    
+    private var minimizeFontAnimation: FontAnimation!
     private var bottomConstraint: NSLayoutConstraint?
     
     // MARK: Methods
-    
     override open func awakeFromNib() {
         super.awakeFromNib()
         initializeTextField()
@@ -171,7 +166,6 @@ open class TweePlaceholderTextField: UITextField {
             self.maximizeFontAnimation.start()
         }) { (_) in
             self.maximizeFontAnimation.stop()
-            // self.placeholderLabel.font = self.placeholderLabel.font.withSize(self.originalPlaceholderFontSize)
         }
     }
     
