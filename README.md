@@ -1,6 +1,6 @@
 # Burgerdex ![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)
 
-<img src="https://www.static.matthewsullivan.media/burgerdex-a.png" width="200"/><img src="https://www.static.matthewsullivan.media/burgerdex-b.png" width="200"/><img src="https://www.static.matthewsullivan.media/burgerdex-c.png" width="200"/>
+<img src="https://raw.githubusercontent.com/matthewsullivan/burgerdex/master/burgerdex-a.png" width="200"/><img src="https://raw.githubusercontent.com/matthewsullivan/burgerdex/master/burgerdex-b.png" width="200"/><img src="https://raw.githubusercontent.com/matthewsullivan/burgerdex/master/burgerdex-c.png" width="200"/>
 
 [![N|Solid](https://static.burgerdex.ca/assets/img/ios_appstore.svg)](https://itunes.apple.com/ca/app/burgerdex/id1372235797?mt=8)
 
