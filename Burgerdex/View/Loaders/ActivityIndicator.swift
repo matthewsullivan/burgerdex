@@ -7,7 +7,6 @@ let dhHidesWhenCompletedDelay: TimeInterval = 0.5
 
 public typealias Block = () -> Void
 
-
 public class ActivityIndicator: UIView, CAAnimationDelegate {
     public enum ProgressStatus: Int {
         case Unknown, Loading, Progress, Completion
@@ -21,7 +20,7 @@ public class ActivityIndicator: UIView, CAAnimationDelegate {
             setProgressLayerPath()
         }
     }
-        
+    
     @IBInspectable public var strokeColor: UIColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 1.0){
         didSet{
             progressLayer.strokeColor = strokeColor.cgColor
@@ -46,7 +45,6 @@ public class ActivityIndicator: UIView, CAAnimationDelegate {
             return _progress
         }
         set(newProgress) {
-            //Avoid calling excessively
             if (newProgress - _progress >= 0.01 || newProgress >= 100.0) {
                 _progress = min(max(0, newProgress), 1)
                 progressLayer.strokeEnd = CGFloat(_progress)
@@ -80,6 +78,7 @@ public class ActivityIndicator: UIView, CAAnimationDelegate {
     
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+
         initialize()
     }
     
@@ -113,7 +112,7 @@ public class ActivityIndicator: UIView, CAAnimationDelegate {
         }
         
         status = .Loading
-       
+        
         progressLabel.isHidden = true
         progressLabel.text = "0"
         _progress = 0
@@ -261,92 +260,7 @@ public class ActivityIndicator: UIView, CAAnimationDelegate {
             }
         }
     }
-    
-    //MARK: - Private
-    private func initialize() {
-        //progressLabel
-        progressLabel.font = UIFont.systemFont(ofSize: CGFloat(fontSize))
-        progressLabel.textColor = strokeColor
-        progressLabel.textAlignment = .center
-        progressLabel.adjustsFontSizeToFitWidth = true
-        progressLabel.isHidden = true
-        self.addSubview(progressLabel)
-        
-        //progressLayer
-        progressLayer.strokeColor = strokeColor.cgColor
-        progressLayer.fillColor = nil
-        progressLayer.lineWidth = lineWidth
-        self.layer.addSublayer(progressLayer)
-        
-        //shapeLayer
-        shapeLayer.strokeColor = strokeColor.cgColor
-        shapeLayer.fillColor = nil
-        shapeLayer.lineWidth = lineWidth
-        shapeLayer.lineCap = CAShapeLayerLineCap.round
-        shapeLayer.lineJoin = CAShapeLayerLineJoin.round
-        shapeLayer.strokeStart = 0.0
-        shapeLayer.strokeEnd = 0.0
-        self.layer.addSublayer(shapeLayer)
-        
-        NotificationCenter.default.addObserver(self, selector:#selector(ActivityIndicator.resetAnimations), name: UIApplication.didBecomeActiveNotification, object: nil)
-    }
-    
-    private func setProgressLayerPath() {
-        let center = CGPoint(x:self.bounds.midX, y:self.bounds.midY)
-        let radius = (min(self.bounds.width, self.bounds.height) - progressLayer.lineWidth) / 2
-        let path = UIBezierPath(arcCenter: center, radius: radius, startAngle: CGFloat(0.0), endAngle: CGFloat(2 * Double.pi), clockwise: true)
-        progressLayer.path = path.cgPath
-        progressLayer.strokeStart = 0.0
-        progressLayer.strokeEnd = 0.0
-    }
-    
-    private func setStrokeSuccessShapePath() {
-        let width = self.bounds.width
-        let height = self.bounds.height
-        let square = min(width, height)
-        let b = square/2
-        let oneTenth = square/10
-        let xOffset = oneTenth
-        let yOffset = 1.5 * oneTenth
-        let ySpace = 3.2 * oneTenth
-        let point = correctJoinPoint()
-        
 
-        let path = CGMutablePath()
-        path.move(to: CGPoint(x:point.x, y:point.y))
-        path.addLine(to: CGPoint(x:point.x, y:point.y))
-        path.addLine(to: CGPoint(x: b - xOffset, y: b + yOffset))
-        path.addLine(to: CGPoint(x: 2 * b - xOffset + yOffset - ySpace, y:ySpace ))
-        
-        shapeLayer.path = path
-        shapeLayer.cornerRadius = square/2
-        shapeLayer.masksToBounds = true
-        shapeLayer.strokeStart = 0.0
-        shapeLayer.strokeEnd = 0.0
-    }
-    
-    private func setStrokeFailureShapePath() {
-        let width = self.bounds.width
-        let height = self.bounds.height
-        let square = min(width, height)
-        let b = square/2
-        let space = square/3
-        let point = errorJoinPoint()
-        
-
-        let path = CGMutablePath()
-        path.move(to: CGPoint(x:point.x, y:point.y))
-        path.addLine(to: CGPoint(x:2 * b - space, y: 2 * b - space))
-        path.move(to: CGPoint(x:2 * b - space, y: space))
-        path.addLine(to: CGPoint(x:space, y:2 * b - space))
-        
-        shapeLayer.path = path
-        shapeLayer.cornerRadius = square/2
-        shapeLayer.masksToBounds = true
-        shapeLayer.strokeStart = 0
-        shapeLayer.strokeEnd = 0.0
-    }
-    
     private func correctJoinPoint() -> CGPoint {
         let r = min(self.bounds.width, self.bounds.height)/2
         let m = r/2
@@ -373,6 +287,87 @@ public class ActivityIndicator: UIView, CAAnimationDelegate {
         return CGPoint(x:x, y:x)
     }
     
+    //MARK: - Private
+    private func initialize() {
+        progressLabel.font = UIFont.systemFont(ofSize: CGFloat(fontSize))
+        progressLabel.textColor = strokeColor
+        progressLabel.textAlignment = .center
+        progressLabel.adjustsFontSizeToFitWidth = true
+        progressLabel.isHidden = true
+        self.addSubview(progressLabel)
+        
+        progressLayer.strokeColor = strokeColor.cgColor
+        progressLayer.fillColor = nil
+        progressLayer.lineWidth = lineWidth
+        self.layer.addSublayer(progressLayer)
+        
+        shapeLayer.strokeColor = strokeColor.cgColor
+        shapeLayer.fillColor = nil
+        shapeLayer.lineWidth = lineWidth
+        shapeLayer.lineCap = CAShapeLayerLineCap.round
+        shapeLayer.lineJoin = CAShapeLayerLineJoin.round
+        shapeLayer.strokeStart = 0.0
+        shapeLayer.strokeEnd = 0.0
+        self.layer.addSublayer(shapeLayer)
+        
+        NotificationCenter.default.addObserver(self, selector:#selector(ActivityIndicator.resetAnimations), name: UIApplication.didBecomeActiveNotification, object: nil)
+    }
+    
+    private func setProgressLayerPath() {
+        let center = CGPoint(x:self.bounds.midX, y:self.bounds.midY)
+        let radius = (min(self.bounds.width, self.bounds.height) - progressLayer.lineWidth) / 2
+        let path = UIBezierPath(arcCenter: center, radius: radius, startAngle: CGFloat(0.0), endAngle: CGFloat(2 * Double.pi), clockwise: true)
+        progressLayer.path = path.cgPath
+        progressLayer.strokeStart = 0.0
+        progressLayer.strokeEnd = 0.0
+    }
+    
+    private func setStrokeFailureShapePath() {
+        let width = self.bounds.width
+        let height = self.bounds.height
+        let square = min(width, height)
+        let b = square/2
+        let space = square/3
+        let point = errorJoinPoint()
+        
+        
+        let path = CGMutablePath()
+        path.move(to: CGPoint(x:point.x, y:point.y))
+        path.addLine(to: CGPoint(x:2 * b - space, y: 2 * b - space))
+        path.move(to: CGPoint(x:2 * b - space, y: space))
+        path.addLine(to: CGPoint(x:space, y:2 * b - space))
+        
+        shapeLayer.path = path
+        shapeLayer.cornerRadius = square/2
+        shapeLayer.masksToBounds = true
+        shapeLayer.strokeStart = 0
+        shapeLayer.strokeEnd = 0.0
+    }
+
+    private func setStrokeSuccessShapePath() {
+        let width = self.bounds.width
+        let height = self.bounds.height
+        let square = min(width, height)
+        let b = square/2
+        let oneTenth = square/10
+        let xOffset = oneTenth
+        let yOffset = 1.5 * oneTenth
+        let ySpace = 3.2 * oneTenth
+        let point = correctJoinPoint()
+        
+        let path = CGMutablePath()
+        path.move(to: CGPoint(x:point.x, y:point.y))
+        path.addLine(to: CGPoint(x:point.x, y:point.y))
+        path.addLine(to: CGPoint(x: b - xOffset, y: b + yOffset))
+        path.addLine(to: CGPoint(x: 2 * b - xOffset + yOffset - ySpace, y:ySpace ))
+        
+        shapeLayer.path = path
+        shapeLayer.cornerRadius = square/2
+        shapeLayer.masksToBounds = true
+        shapeLayer.strokeStart = 0.0
+        shapeLayer.strokeEnd = 0.0
+    }
+
     @objc private func resetAnimations() {
         if status == .Loading {
             status = .Unknown

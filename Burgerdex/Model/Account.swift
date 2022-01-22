@@ -3,9 +3,8 @@
 //  Burgerdex
 //
 //  Created by Matthew Sullivan on 2018-01-03.
-//  Copyright © 2018 Dev & Barrel Inc. All rights reserved.
+//  Copyright © 2020 Dev & Barrel Inc. All rights reserved.
 //
-
 import UIKit
 
 private let kUploadToken = "https://www.app.burgerdex.ca/services/ios/apns/send_token.php"
@@ -25,6 +24,7 @@ class Account  {
         
         do {
             let jsonParams = try JSONSerialization.data(withJSONObject: parameters, options:[])
+
             postRequest.httpBody = jsonParams
         } catch {
             return
@@ -43,7 +43,7 @@ class Account  {
                             
                             if  successCode == 0 {
                                 tokenResponseData[0] = 0
-                
+                                
                                 completion(tokenResponseData)
                             } else {
                                 tokenResponseData[0] = 1
@@ -54,14 +54,14 @@ class Account  {
                     }
                 } catch {
                     tokenResponseData[0] = 0
-            
+                    
                     DispatchQueue.main.async(execute: {
                         completion(tokenResponseData)
                     })
                 }
             } else {
                 tokenResponseData[0] = 1
-        
+                
                 DispatchQueue.main.async(execute: {
                     completion(tokenResponseData)
                 })

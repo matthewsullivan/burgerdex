@@ -3,9 +3,8 @@
 //  Notifications
 //
 //  Created by Matthew Sullivan on 2018-04-23.
-//  Copyright © 2018 Dev & Barrel Inc. All rights reserved.
+//  Copyright © 2020 Dev & Barrel Inc. All rights reserved.
 //
-
 import UserNotifications
 
 class NotificationService: UNNotificationServiceExtension {
@@ -18,21 +17,12 @@ class NotificationService: UNNotificationServiceExtension {
 
         bestAttemptContent = (request.content.mutableCopy() as? UNMutableNotificationContent)
     
-        func failEarly() {
-            contentHandler(request.content)
-        }
+        func failEarly() {contentHandler(request.content)}
         
-        guard let content = (request.content.mutableCopy() as? UNMutableNotificationContent) else {
-            return failEarly()
-        }
+        guard let content = (request.content.mutableCopy() as? UNMutableNotificationContent) else {return failEarly()}
         
-        guard let apnsData = content.userInfo["data"] as? [String: Any] else {
-            return failEarly()
-        }
-        
-        guard let attachmentURL = apnsData["attachment-url"] as? String else {
-            return failEarly()
-        }
+        guard let apnsData = content.userInfo["data"] as? [String: Any] else {return failEarly()}
+        guard let attachmentURL = apnsData["attachment-url"] as? String else {return failEarly()}
         
         guard let imageData = NSData(contentsOf:NSURL(string: attachmentURL)! as URL) else { return failEarly() }
         guard let attachment = UNNotificationAttachment.create(imageFileIdentifier: "image.gif", data: imageData, options: nil) else { return failEarly() }

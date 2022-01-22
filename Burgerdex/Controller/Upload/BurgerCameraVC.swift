@@ -3,9 +3,8 @@
 //  Burgerdex
 //
 //  Created by Matthew Sullivan on 2018-02-02.
-//  Copyright © 2018 Dev & Barrel Inc. All rights reserved.
+//  Copyright © 2020 Dev & Barrel Inc. All rights reserved.
 //
-
 import UIKit
 import Photos
 
@@ -14,16 +13,16 @@ protocol UploadBurgerDelegate {
 }
 
 class BurgerCameraVC: UIViewController {
+    let cameraController = CameraController()
+    
+    var delegate: UploadBurgerDelegate?
+    
     @IBOutlet weak var burgerImage: UIImageView!
     @IBOutlet fileprivate var captureButton: UIButton!
     @IBOutlet fileprivate var capturePreviewView: UIView!
     @IBOutlet weak var cancelBurgerPhotoBtn: UIBarButtonItem!
     @IBOutlet weak var savePhotoBtn: UIBarButtonItem!
     @IBOutlet fileprivate var toggleFlashButton: UIButton!
-    
-    let cameraController = CameraController()
-    
-    var delegate: UploadBurgerDelegate?
     
     @IBAction func cancelBurgerCapture(_ sender: Any) {
         if self.cancelBurgerPhotoBtn.tag == 1{
@@ -36,6 +35,7 @@ class BurgerCameraVC: UIViewController {
             cancelBurgerPhotoBtn.tag = 1
         }
     }
+
     @IBAction func saveBurgerPhoto(_ sender: Any) {
         try? PHPhotoLibrary.shared().performChangesAndWait {
             PHAssetChangeRequest.creationRequestForAsset(from: self.burgerImage.image!)
@@ -56,8 +56,9 @@ class BurgerCameraVC: UIViewController {
         }
         
         UINavigationBar.appearance().prefersLargeTitles = false
-
+        
         let barButtonItemAppearance = UIBarButtonItem.appearance()
+
         barButtonItemAppearance.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .normal)
         
         func styleCaptureButton() {
@@ -76,13 +77,13 @@ class BurgerCameraVC: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-    
+        
         UINavigationBar.appearance().prefersLargeTitles = true
         
         let barButtonItemAppearance = UIBarButtonItem.appearance()
         barButtonItemAppearance.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.clear], for: .normal)
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -98,7 +99,7 @@ extension BurgerCameraVC {
             toggleFlashButton.setImage(#imageLiteral(resourceName: "Flash On Icon"), for: .normal)
         }
     }
-
+    
     @IBAction func captureImage(_ sender: UIButton) {
         cameraController.captureImage {(image, error) in
             guard let image = image else { return }
@@ -106,7 +107,7 @@ extension BurgerCameraVC {
             self.burgerImage.image = image
             self.burgerImage.isHidden = false
             self.savePhotoBtn.isEnabled = true
-            self.cancelBurgerPhotoBtn.title = "Re-Take"
+            self.cancelBurgerPhotoBtn.title = "Retake"
             self.cancelBurgerPhotoBtn.tag = 0
         }
     }

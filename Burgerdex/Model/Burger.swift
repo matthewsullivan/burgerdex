@@ -3,9 +3,8 @@
 //  Burgerdex
 //
 //  Created by Matthew Sullivan on 2018-01-03.
-//  Copyright © 2018 Dev & Barrel Inc. All rights reserved.
+//  Copyright © 2020 Dev & Barrel Inc. All rights reserved.
 //
-
 import UIKit
 
 private let versionNumber = "1.5.0"
@@ -47,14 +46,16 @@ class BurgerPreview : BurgerObject {
           recordID: Int,
           sightings: Int) {
         
-        if displayTag.isEmpty ||
-           displayText.isEmpty ||
-           name.isEmpty ||
-           kitchen.isEmpty ||
-           catalogueNumber < 0 ||
-           burgerID < 0 ||
-           location.isEmpty  ||
-           year.isEmpty {
+        if (
+            displayTag.isEmpty ||
+            displayText.isEmpty ||
+            name.isEmpty ||
+            kitchen.isEmpty ||
+            catalogueNumber < 0 ||
+            burgerID < 0 ||
+            location.isEmpty  ||
+            year.isEmpty
+        ) {
             return nil
         }
         
@@ -72,34 +73,7 @@ class BurgerPreview : BurgerObject {
         self.thumbUrl = thumbUrl
         self.photo = photo
     }
-    
-    class func generatePlaceholderBurgers() ->Array<Any> {
-        var patties = [BurgerPreview]()
-        
-        for _ in 1...10 {
-            guard let burgerPlaceholder = BurgerPreview.init(displayTag:"No.",
-                                                             displayText:"19",
-                                                             name:"Bacon Beast",
-                                                             kitchen: "Burger Delight",
-                                                             location: "Clarington",
-                                                             year: "2017",
-                                                             catalogueNumber: 0,
-                                                             photoUrl: "baconBeast",
-                                                             thumbUrl: "baconBeast",
-                                                             photo:UIImage(),
-                                                             burgerID: 0,
-                                                             recordID: 0,
-                                                             sightings: 1)
-            else {
-                    fatalError("Unable to instantiate burgerPreview")
-            }
-            
-            patties += [burgerPlaceholder]
-        }
-        
-        return patties
-    }
-    
+
     class func fetchBurgerPreviews(page: Int,
                                    filter: Int,
                                    session: URLSession,
@@ -112,16 +86,17 @@ class BurgerPreview : BurgerObject {
         var patties = [BurgerPreview]()
         var burgerPreviewSuccess = [0,patties] as [Any]
         var postRequest = URLRequest(url: URL(string:url)!,
-                            cachePolicy: .reloadIgnoringCacheData,
-                        timeoutInterval: 60.0)
+                                     cachePolicy: .reloadIgnoringCacheData,
+                                     timeoutInterval: 60.0)
         
         do {
             let jsonParams = try JSONSerialization.data(withJSONObject: parameters, options:[])
+
             postRequest.httpBody = jsonParams
         } catch {
             return
         }
-
+        
         postRequest.httpMethod = "POST"
         postRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         postRequest.setValue("application/json", forHTTPHeaderField: "Accept")
@@ -165,10 +140,12 @@ class BurgerPreview : BurgerObject {
                                     else {
                                         fatalError("Unable to instantiate burgerPreview")
                                     }
+
                                     patties += [burgerPreview]
                                 }
-                                 burgerPreviewSuccess[0] = 1
-                                 burgerPreviewSuccess[1] = patties
+
+                                burgerPreviewSuccess[0] = 1
+                                burgerPreviewSuccess[1] = patties
                                 
                                 completion(burgerPreviewSuccess)
                             }
@@ -177,6 +154,7 @@ class BurgerPreview : BurgerObject {
                 } catch {
                     burgerPreviewSuccess[0] = 0
                     burgerPreviewSuccess[1] = patties
+
                     DispatchQueue.main.async(execute: {
                         completion(burgerPreviewSuccess)
                     })
@@ -190,6 +168,33 @@ class BurgerPreview : BurgerObject {
                 })
             }
         }).resume()
+    }
+    
+    class func generatePlaceholderBurgers() ->Array<Any> {
+        var patties = [BurgerPreview]()
+        
+        for _ in 1...10 {
+            guard let burgerPlaceholder = BurgerPreview.init(displayTag:"No.",
+                                                             displayText:"19",
+                                                             name:"Bacon Beast",
+                                                             kitchen: "Burger Delight",
+                                                             location: "Clarington",
+                                                             year: "2017",
+                                                             catalogueNumber: 0,
+                                                             photoUrl: "baconBeast",
+                                                             thumbUrl: "baconBeast",
+                                                             photo:UIImage(),
+                                                             burgerID: 0,
+                                                             recordID: 0,
+                                                             sightings: 1)
+            else {
+                fatalError("Unable to instantiate burgerPreview")
+            }
+            
+            patties += [burgerPlaceholder]
+        }
+        
+        return patties
     }
     
     class func searchForBurgers(searchString: String,
@@ -208,11 +213,12 @@ class BurgerPreview : BurgerObject {
         
         do {
             let jsonParams = try JSONSerialization.data(withJSONObject: parameters, options:[])
+
             postRequest.httpBody = jsonParams
         } catch {
             return
         }
-
+        
         postRequest.httpMethod = "POST"
         postRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         postRequest.setValue("application/json", forHTTPHeaderField: "Accept")
@@ -269,9 +275,9 @@ class BurgerPreview : BurgerObject {
                 } catch {
                     burgerPreviewSuccess[0] = 0
                     burgerPreviewSuccess[1] = patties
+
                     DispatchQueue.main.async(execute: {
                         completion(burgerPreviewSuccess)
-                        
                     })
                 }
             } else {
@@ -309,28 +315,29 @@ class Burger : BurgerObject{
     var hasMods: Bool
     var dateCaptured: String
     
-    init?(name: String,
-         kitchen: String,
-         catalogueNumber: Int,
-         descript: String,
-         burgerID: Int,
-         location: String,
-         rating: String,
-         price: String,
-  averagePrice: String,
-         ingredients: String,
-         fusion: Bool,
-         fused: [Dictionary<String, AnyObject>],
-         sightings: [Dictionary<String, AnyObject>],
-     locationCount: Int,
-         veggie: Bool,
-         spicy: Bool,
-         extinct: Bool,
-         seasonal: Bool,
-         hasChallenge: Bool,
-         hasMods: Bool,
-         dateCaptured: String) {
-
+    init? (
+        name: String,
+        kitchen: String,
+        catalogueNumber: Int,
+        descript: String,
+        burgerID: Int,
+        location: String,
+        rating: String,
+        price: String,
+        averagePrice: String,
+        ingredients: String,
+        fusion: Bool,
+        fused: [Dictionary<String, AnyObject>],
+        sightings: [Dictionary<String, AnyObject>],
+        locationCount: Int,
+        veggie: Bool,
+        spicy: Bool,
+        extinct: Bool,
+        seasonal: Bool,
+        hasChallenge: Bool,
+        hasMods: Bool,
+        dateCaptured: String
+    ) {
         self.name = name
         self.kitchen = kitchen
         self.catalogueNumber = catalogueNumber
@@ -354,35 +361,6 @@ class Burger : BurgerObject{
         self.dateCaptured = dateCaptured
     }
     
-    class func generateBurgerPlaceholderInformation() ->Burger{
-        guard let burgerPlaceholder = Burger.init(name: "Bacon Beast",
-                                           kitchen: "Burger Delight",
-                                           catalogueNumber: 0,
-                                           descript: "Best burger in Clarington, hands down. The bacon on this burger is the best bacon I have ever eaten. You have to try this burger.\n\n \n\n$17 CAD because of poutine combo.",
-                                           burgerID: 0,
-                                           location: "Clarington",
-                                           rating: "9.2",
-                                           price: "CAD $17.00",
-                                           averagePrice: "$17.00",
-                                           ingredients: "BBQ Sauce \n\n Fresh (never frozen, delivered that day) double patty \n\n Bacon \n\n Cheese \n\n standard toppings of your choice.",
-                                           fusion: false,
-                                           fused: [],
-                                           sightings: [],
-                                           locationCount: 1,
-                                           veggie: false,
-                                           spicy: false,
-                                           extinct: false,
-                                           seasonal: false,
-                                           hasChallenge: false,
-                                           hasMods: false,
-                                           dateCaptured: "2017-10-18 08:08:59")
-        else {
-            fatalError("Unable to instantiate burger")
-        }
-        
-        return burgerPlaceholder
-    }
-    
     class func fetchBurgerDetails(burgerID: Int, completion:@escaping (_ pattyInformation:Array<Any>)->Void) {
         let url = kBurgerDetail
         let parameters: [String: Any] = ["id": String(burgerID)]
@@ -393,11 +371,12 @@ class Burger : BurgerObject{
         
         do {
             let jsonParams = try JSONSerialization.data(withJSONObject: parameters, options:[])
+
             postRequest.httpBody = jsonParams
         } catch {
             return
         }
-
+        
         postRequest.httpMethod = "POST"
         postRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         postRequest.setValue("application/json", forHTTPHeaderField: "Accept")
@@ -478,27 +457,80 @@ class Burger : BurgerObject{
             }
         }).resume()
     }
+    
+    class func generateBurgerPlaceholderInformation() ->Burger{
+        guard let burgerPlaceholder = Burger.init(name: "Bacon Beast",
+                                                  kitchen: "Burger Delight",
+                                                  catalogueNumber: 0,
+                                                  descript: "Best burger in Clarington, hands down. The bacon on this burger is the best bacon I have ever eaten. You have to try this burger.\n\n \n\n$17 CAD because of poutine combo.",
+                                                  burgerID: 0,
+                                                  location: "Clarington",
+                                                  rating: "9.2",
+                                                  price: "CAD $17.00",
+                                                  averagePrice: "$17.00",
+                                                  ingredients: "BBQ Sauce \n\n Fresh (never frozen, delivered that day) double patty \n\n Bacon \n\n Cheese \n\n standard toppings of your choice.",
+                                                  fusion: false,
+                                                  fused: [],
+                                                  sightings: [],
+                                                  locationCount: 1,
+                                                  veggie: false,
+                                                  spicy: false,
+                                                  extinct: false,
+                                                  seasonal: false,
+                                                  hasChallenge: false,
+                                                  hasMods: false,
+                                                  dateCaptured: "2017-10-18 08:08:59")
+        else {
+            fatalError("Unable to instantiate burger")
+        }
+        
+        return burgerPlaceholder
+    }
 }
 
 class BurgerSubmit{
+    func createBody(parameters: [String: String],
+                    boundary: String,
+                    data: Data,
+                    mimeType: String,
+                    filename: String) -> Data {
+        let body = NSMutableData()
+        let boundaryPrefix = "--\(boundary)\r\n"
+        
+        for (key, value) in parameters {
+            body.appendString(boundaryPrefix)
+            body.appendString("Content-Disposition: form-data; name=\"\(key)\"\r\n\r\n")
+            body.appendString("\(value)\r\n")
+        }
+        
+        body.appendString(boundaryPrefix)
+        body.appendString("Content-Disposition: form-data; name=\"user_image\"; filename=\"\(filename)\"\r\n")
+        body.appendString("Content-Type: \(mimeType)\r\n\r\n")
+        body.append(data)
+        body.appendString("\r\n")
+        body.appendString("--".appending(boundary.appending("--")))
+        
+        return body as Data
+    }
+
     func submitBurger(details: Dictionary<String, Any>,
                       image: UIImage,
                       completion:@escaping (_ requestResponse:Array<Any>)->Void) {
         let boundary = "Boundary-\(UUID().uuidString)"
-
+        
         var message = [Any]()
         var responseCode = [0,message] as [Any]
-        var r  = URLRequest(url: URL(string: kSubmitBurger)!)
-
-        r.httpMethod = "POST"
-        r.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-        r.httpBody = createBody(parameters: details  as! [String : String],
+        var request  = URLRequest(url: URL(string: kSubmitBurger)!)
+        
+        request.httpMethod = "POST"
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        request.httpBody = createBody(parameters: details  as! [String : String],
                                 boundary: boundary,
                                 data: image.jpegData(compressionQuality: 0.1)!,
                                 mimeType: "image/jpg",
                                 filename: "burger.jpg")
         
-        URLSession.shared.dataTask(with: r as URLRequest, completionHandler: { (data, response, error) -> Void in
+        URLSession.shared.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) -> Void in
             if data != nil {
                 do {
                     if let response = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers) as? NSDictionary {
@@ -520,13 +552,12 @@ class BurgerSubmit{
                                 
                                 completion(responseCode)
                             }
-                            
                         } as @convention(block) () -> Void)
                     }
                 } catch {
                     responseCode[0] = 1
                     responseCode[1] = message
-
+                    
                     DispatchQueue.main.async(execute: {
                         completion(responseCode)
                     })
@@ -539,31 +570,6 @@ class BurgerSubmit{
                 })
             }
         }).resume()
-    }
-    
-    func createBody(parameters: [String: String],
-                    boundary: String,
-                    data: Data,
-                    mimeType: String,
-                    filename: String) -> Data {
-        
-        let body = NSMutableData()
-        let boundaryPrefix = "--\(boundary)\r\n"
-        
-        for (key, value) in parameters {
-            body.appendString(boundaryPrefix)
-            body.appendString("Content-Disposition: form-data; name=\"\(key)\"\r\n\r\n")
-            body.appendString("\(value)\r\n")
-        }
-        
-        body.appendString(boundaryPrefix)
-        body.appendString("Content-Disposition: form-data; name=\"user_image\"; filename=\"\(filename)\"\r\n")
-        body.appendString("Content-Type: \(mimeType)\r\n\r\n")
-        body.append(data)
-        body.appendString("\r\n")
-        body.appendString("--".appending(boundary.appending("--")))
-        
-        return body as Data
     }
 }
 
@@ -580,10 +586,12 @@ class Badge : BurgerObject{
     var badgeTitle: String
     var badgeIcon: UIImage
     
-    init?(ratingTitle: String,
-          badgeTitle: String,
-          badgeIcon: UIImage) {
-
+    init?(
+        ratingTitle: String,
+        badgeTitle: String,
+        badgeIcon: UIImage
+    ) {
+        
         self.ratingTitle = ratingTitle
         self.badgeTitle = badgeTitle
         self.badgeIcon = badgeIcon

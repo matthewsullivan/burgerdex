@@ -3,9 +3,8 @@
 //  Burgerdex
 //
 //  Created by Matthew Sullivan on 2018-01-03.
-//  Copyright © 2018 Dev & Barrel Inc. All rights reserved.
+//  Copyright © 2020 Dev & Barrel Inc. All rights reserved.
 //
-
 import UIKit
 
 class BurgerHeaderView: UIView {
@@ -16,6 +15,10 @@ class BurgerHeaderView: UIView {
     var burgerImage = UIImageView()
     var containerView = UIView()
     
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -50,7 +53,6 @@ class BurgerHeaderView: UIView {
         burgerImage.contentMode = .scaleAspectFill
         burgerImage.image = UIImage(named: "baconBeast")
         containerView.addSubview(burgerImage)
-        
         
         let layerHeight = frame.size.height
         let layerWidth = frame.size.width * 3
@@ -99,16 +101,12 @@ class BurgerHeaderView: UIView {
         containerView.addConstraint(bottomLayoutConstraint)
         containerView.addConstraint(heightLayoutConstraint)
     }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-    
+
     func scrollViewDidScroll(scrollView: UIScrollView) {
         let offsetY = -(scrollView.contentOffset.y + scrollView.contentInset.top)
-
+        
         containerView.clipsToBounds = offsetY <= 0
-
+        
         bottomLayoutConstraint.constant = offsetY >= 0 ? 0 : -offsetY / 2
         containerLayoutConstraint.constant = scrollView.contentInset.top
         heightLayoutConstraint.constant = max(offsetY + scrollView.contentInset.top, scrollView.contentInset.top)

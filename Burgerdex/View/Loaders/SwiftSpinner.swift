@@ -27,9 +27,7 @@ public class SwiftSpinner: UIView {
     //
     // Custom init to build the spinner UI
     //
-    
     public override init(frame: CGRect) {
-        
         currentTitleFont = defaultTitleFont // By default we initialize to the same.
         
         super.init(frame: frame)
@@ -49,7 +47,6 @@ public class SwiftSpinner: UIView {
         titleLabel.lineBreakMode = .byWordWrapping
         titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.textColor = UIColor.white
-        
         
         blurView.contentView.addSubview(titleLabel)
         blurView.contentView.addSubview(vibrancyView)
@@ -95,10 +92,9 @@ public class SwiftSpinner: UIView {
     }
     
     // MARK: - Public interface
-    
     public lazy var titleLabel = UILabel()
     public var subtitleLabel: UILabel?
-
+    
     private let outerCircleDefaultColor = UIColor(red: 222/255,
                                                   green: 173/255,
                                                   blue: 107/255,
@@ -111,7 +107,7 @@ public class SwiftSpinner: UIView {
             outerCircle.strokeColor = newColor?.cgColor ?? outerCircleDefaultColor
         }
     }
-
+    
     private let innerCircleDefaultColor = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1).cgColor
     fileprivate var _innerColor: UIColor?
     public var innerColor: UIColor? {
@@ -127,11 +123,10 @@ public class SwiftSpinner: UIView {
     //
     private static weak var customSuperview: UIView? = nil
     private static func containerView() -> UIView? {
-        
         #if EXTENSION
-            return customSuperview
+        return customSuperview
         #else
-            return customSuperview ?? UIApplication.shared.keyWindow
+        return customSuperview ?? UIApplication.shared.keyWindow
         #endif
     }
     public class func useContainerView(_ sv: UIView?) {
@@ -143,11 +138,9 @@ public class SwiftSpinner: UIView {
     //
     @discardableResult
     public class func show(_ title: String, animated: Bool = true) -> SwiftSpinner {
-        
         let spinner = SwiftSpinner.sharedInstance
         
         spinner.clearTapHandler()
-        
         spinner.updateFrame()
         
         if spinner.superview == nil {
@@ -156,9 +149,9 @@ public class SwiftSpinner: UIView {
             
             guard let containerView = containerView() else {
                 #if EXTENSION
-                    fatalError("\n`containerView` is `nil`. `UIApplication.keyWindow` is not available in extensions and so, a containerView is required. Use `useContainerView` to set a view where the spinner should show")
+                fatalError("\n`containerView` is `nil`. `UIApplication.keyWindow` is not available in extensions and so, a containerView is required. Use `useContainerView` to set a view where the spinner should show")
                 #else
-                    fatalError("\n`UIApplication.keyWindow` is `nil`. If you're trying to show a spinner from your view controller's `viewDidLoad` method, do that from `viewWillAppear` instead. Alternatively use `useContainerView` to set a view where the spinner should show")
+                fatalError("\n`UIApplication.keyWindow` is `nil`. If you're trying to show a spinner from your view controller's `viewDidLoad` method, do that from `viewWillAppear` instead. Alternatively use `useContainerView` to set a view where the spinner should show")
                 #endif
             }
             
@@ -196,6 +189,7 @@ public class SwiftSpinner: UIView {
         spinner.delay(duration) {
             SwiftSpinner.hide()
         }
+
         return spinner
     }
     
@@ -214,7 +208,7 @@ public class SwiftSpinner: UIView {
             }
         })
     }
-
+    
     ///
     /// Show the spinner with the outer circle representing progress (0 to 1)
     ///
@@ -224,13 +218,12 @@ public class SwiftSpinner: UIView {
         spinner.outerCircle.strokeEnd = CGFloat(progress)
         return spinner
     }
-
+    
     //
     // Hide the spinner
     //
     public static var hideCancelsScheduledSpinners = true
     public class func hide(_ completion: (() -> Void)? = nil) {
-        
         let spinner = SwiftSpinner.sharedInstance
         
         NotificationCenter.default.removeObserver(spinner)
@@ -250,12 +243,12 @@ public class SwiftSpinner: UIView {
                 spinner.blurView.contentView.alpha = 0
                 spinner.blurView.effect = nil
                 
-                }, completion: {_ in
-                    spinner.blurView.contentView.alpha = 1
-                    spinner.removeFromSuperview()
-                    spinner.titleLabel.text = nil
-                    
-                    completion?()
+            }, completion: {_ in
+                spinner.blurView.contentView.alpha = 1
+                spinner.removeFromSuperview()
+                spinner.titleLabel.text = nil
+                
+                completion?()
             })
             
             spinner.animating = false
@@ -296,23 +289,23 @@ public class SwiftSpinner: UIView {
     public var title: String = "" {
         didSet {
             let spinner = SwiftSpinner.sharedInstance
-
+            
             guard spinner.animating else {
                 spinner.titleLabel.transform = CGAffineTransform.identity
                 spinner.titleLabel.alpha = 1.0
                 spinner.titleLabel.text = self.title
                 return
             }
-
+            
             UIView.animate(withDuration: 0.15, delay: 0.0, options: .curveEaseOut, animations: {
                 spinner.titleLabel.transform = CGAffineTransform(scaleX: 0.75, y: 0.75)
                 spinner.titleLabel.alpha = 0.2
-                }, completion: {_ in
-                    spinner.titleLabel.text = self.title
-                    UIView.animate(withDuration: 0.35, delay: 0.0, usingSpringWithDamping: 0.35, initialSpringVelocity: 0.0, options: [], animations: {
-                        spinner.titleLabel.transform = CGAffineTransform.identity
-                        spinner.titleLabel.alpha = 1.0
-                        }, completion: nil)
+            }, completion: {_ in
+                spinner.titleLabel.text = self.title
+                UIView.animate(withDuration: 0.35, delay: 0.0, usingSpringWithDamping: 0.35, initialSpringVelocity: 0.0, options: [], animations: {
+                    spinner.titleLabel.transform = CGAffineTransform.identity
+                    spinner.titleLabel.alpha = 1.0
+                }, completion: nil)
             })
         }
     }
@@ -340,7 +333,6 @@ public class SwiftSpinner: UIView {
     //
     // Start the spinning animation
     //
-    
     public var animating: Bool = false {
         
         willSet (shouldAnimate) {
@@ -411,7 +403,6 @@ public class SwiftSpinner: UIView {
     //
     // layout elements
     //
-    
     private var blurEffectStyle: UIBlurEffect.Style = .dark
     private var blurEffect: UIBlurEffect!
     private var blurView: UIVisualEffectView!
@@ -450,13 +441,13 @@ public class SwiftSpinner: UIView {
         UIView.animate(withDuration: duration, delay: 0.0, usingSpringWithDamping: 0.4, initialSpringVelocity: 0.0, options: [], animations: {
             self.currentOuterRotation -= CGFloat(randomRotation)
             self.outerCircleView.transform = CGAffineTransform(rotationAngle: self.currentOuterRotation)
-            }, completion: {_ in
-                let waitDuration = Double(Float(arc4random()) /  Float(UInt32.max)) * 1.0 + 1.0
-                self.delay(waitDuration, completion: {
-                    if self.animating {
-                        self.spinOuter()
-                    }
-                })
+        }, completion: {_ in
+            let waitDuration = Double(Float(arc4random()) /  Float(UInt32.max)) * 1.0 + 1.0
+            self.delay(waitDuration, completion: {
+                if self.animating {
+                    self.spinOuter()
+                }
+            })
         })
     }
     
@@ -469,12 +460,12 @@ public class SwiftSpinner: UIView {
         UIView.animate(withDuration: 0.5, delay: 0.0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.0, options: [], animations: {
             self.currentInnerRotation += CGFloat(Double.pi / 4)
             self.innerCircleView.transform = CGAffineTransform(rotationAngle: self.currentInnerRotation)
-            }, completion: {_ in
-                self.delay(0.5, completion: {
-                    if self.animating {
-                        self.spinInner()
-                    }
-                })
+        }, completion: {_ in
+            self.delay(0.5, completion: {
+                if self.animating {
+                    self.spinInner()
+                }
+            })
         })
     }
     
@@ -486,7 +477,6 @@ public class SwiftSpinner: UIView {
     }
     
     // MARK: - Util methods
-    
     func delay(_ seconds: Double, completion:@escaping ()->()) {
         let popTime = DispatchTime.now() + Double(Int64( Double(NSEC_PER_SEC) * seconds )) / Double(NSEC_PER_SEC)
         

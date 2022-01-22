@@ -5,11 +5,9 @@
 //  Created by Zachary Khan on 6/8/17.
 //  Copyright © 2017 ZacharyKhan. All rights reserved.
 //
-
 import UIKit
 
 final public class ZKCarousel: UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, UICollectionViewDataSource {
-    
     public var slides : [ZKCarouselSlide] = [] {
         didSet {
             self.collectionView.reloadData()
@@ -59,7 +57,6 @@ final public class ZKCarousel: UIView, UICollectionViewDelegateFlowLayout, UICol
     }
     
     private func setupCarousel() {
-        
         self.backgroundColor = .clear
         
         self.addSubview(collectionView)
@@ -85,7 +82,7 @@ final public class ZKCarousel: UIView, UICollectionViewDelegateFlowLayout, UICol
         let visiblePoint = CGPoint(x: visibleRect.midX, y: visibleRect.midY)
         let visibleIndexPath: IndexPath = collectionView.indexPathForItem(at: visiblePoint) ?? IndexPath(item: 0, section: 0)
         let index = visibleIndexPath.item
-
+        
         if index == (slides.count-1) {
             let indexPathToShow = IndexPath(item: 0, section: 0)
             self.collectionView.selectItem(at: indexPathToShow, animated: true, scrollPosition: .centeredHorizontally)
@@ -128,9 +125,7 @@ final public class ZKCarousel: UIView, UICollectionViewDelegateFlowLayout, UICol
         return self.slides.count
     }
     
-    public func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
+    public func numberOfSections(in collectionView: UICollectionView) -> Int {return 1}
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let size = CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
@@ -149,7 +144,6 @@ final public class ZKCarousel: UIView, UICollectionViewDelegateFlowLayout, UICol
 }
 
 fileprivate class carouselCollectionViewCell: UICollectionViewCell {
-    
     fileprivate var slide : ZKCarouselSlide? {
         didSet {
             guard let slide = slide else { return }
@@ -193,9 +187,7 @@ fileprivate class carouselCollectionViewCell: UICollectionViewCell {
         setup()
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    required init?(coder aDecoder: NSCoder) {fatalError("init(coder:) has not been implemented")}
     
     private func setup() {
         self.backgroundColor = .clear
@@ -239,11 +231,9 @@ fileprivate class carouselCollectionViewCell: UICollectionViewCell {
         
         return
     }
-
 }
 
 final public class ZKCarouselSlide : NSObject {
-    
     public var slideImage : UIImage?
     public var slideTitle : String?
     public var slideDescription: String?
@@ -261,10 +251,9 @@ final public class ZKCarouselSlide : NSObject {
 }
 
 extension UIView {
-    
     func addConstraintsWithFormat(_ format: String, views: UIView...) {
-        
         var viewsDictionary = [String: UIView]()
+
         for (index, view) in views.enumerated() {
             let key = "v\(index)"
             viewsDictionary[key] = view
@@ -273,17 +262,15 @@ extension UIView {
         
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: format, options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: viewsDictionary))
     }
-    
-    
 }
 
 extension UIImageView {
     func addBlackGradientLayer(frame: CGRect){
         let gradient = CAGradientLayer()
         gradient.frame = CGRect(x: frame.origin.x,
-                               y: frame.origin.y,
-                           width: frame.size.width,
-                          height: frame.size.height * 2)
+                                y: frame.origin.y,
+                                width: frame.size.width,
+                                height: frame.size.height * 2)
         gradient.colors = [UIColor.clear.cgColor, UIColor.black.withAlphaComponent(0.4).cgColor]
         gradient.locations = [0.0, 0.4]
         self.layer.insertSublayer(gradient, at: 0)

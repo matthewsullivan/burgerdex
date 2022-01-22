@@ -3,13 +3,13 @@
 //  Burgerdex
 //
 //  Created by Matthew Sullivan on 2018-01-03.
-//  Copyright © 2018 Dev & Barrel Inc. All rights reserved.
+//  Copyright © 2020 Dev & Barrel Inc. All rights reserved.
 //
 import UIKit
 
 class BurgerDashboardVC: UITableViewController {
     private let kLazyLoadCollectionCellImage = 1
-    
+
     var badges = [Badge]()
     var burger: BurgerPreview!
     var burgerAttr = [Array<BurgerObject>]()
@@ -23,32 +23,131 @@ class BurgerDashboardVC: UITableViewController {
         super.viewDidLoad()
         
         scrollSize = view.frame.size.width;
-
+        
         layoutBurgerView()
     }
     
-    let statusBarBgView = { () -> UIView in
-        let statusBarWindow: UIView = UIApplication.shared.value(forKey: "statusBarWindow") as! UIView
-        let statusBarBgView = UIView(frame: (statusBarWindow.statusBar?.bounds)!)
-
-        return statusBarBgView
-    }()
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
         
-        var preferredStatusBarStyle : UIStatusBarStyle {
-            return .lightContent
-        }
-        
-        let navigationBar = self.navigationController?.navigationBar
-        let colour = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: 1)
-        
-        self.statusBarBgView.backgroundColor = colour
-
-        navigationBar?.superview?.insertSubview(self.statusBarBgView, aboveSubview: navigationBar!)
+        self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0),
+                                   at: UITableView.ScrollPosition.top,
+                                   animated: false)
     }
     
+    override func numberOfSections(in tableView: UITableView) -> Int {return burgerAttr.count}
+    
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if let _ = scrollView as? UITableView {
+            updateCarouselViewHeight()
+            
+            var offset = scrollView.contentOffset.y / 40
+            
+            if offset > 1 {
+                offset = 1
+                
+                let colour = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: offset)
+                
+                self.navigationController?.navigationBar.tintColor = UIColor(red: 222/255,
+                                                                             green: 173/255,
+                                                                             blue: 107/255,
+                                                                             alpha: 1)
+                self.navigationController?.navigationBar.backgroundColor = colour
+                
+            } else {
+                let colour = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: offset)
+                
+                self.navigationController?.navigationBar.tintColor = UIColor.white
+                self.navigationController?.navigationBar.backgroundColor = colour
+            }
+            
+            let headerView = self.tableView.tableHeaderView as! BurgerHeaderView
+            
+            headerView.scrollViewDidScroll(scrollView: scrollView)
+        }
+    }
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if indexPath.section == 0 {
+            let burger = burgerAttr[indexPath.section][indexPath.row] as! Burger
+            let cellIdentifier = "BurgerInfoCell"
+            let ingredients = "• " + burger.ingredients.replacingOccurrences(of: ",", with: "\n\n• ")
+            let locationTitle = burger.locationCount > 1 ? " locations" : " location"
+            let sightingsTotal : Int = burger.sightings.count
+            let totalSightings = String(sightingsTotal)
+            
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? BurgerDashboardTableViewCell
+            else {
+                fatalError("The dequeued cell is not an instance of BurgerTableViewCell.")
+            }
+            
+            cell.averagePrice.text = burger.averagePrice
+            cell.sightings.text = "Catalogued " + totalSightings + " times"
+            cell.locations.text = String(burger.locationCount) + locationTitle + " documented"
+            cell.ingredients.text = ingredients
+            
+            return cell
+        } else {
+            let burger = burgerAttr[indexPath.section][indexPath.row] as! BurgerPreview
+            let cellIdentifier = "CatalogueTableViewCell"
+            
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? CatalogueTableViewCell
+            else {
+                fatalError("The dequeued cell is not an instance of CatalogueTableViewCell.")
+            }
+            
+            cell.burgerName.text = burger.name
+            cell.kitchenName.text = burger.kitchen
+            cell.catalogueNumberLabel.text = burger.displayTag
+            cell.catalogueNumberNumber.text = burger.displayText
+            
+            cell.burgerID = burger.burgerID
+            
+            updateImageForCell(cell,
+                               inTableView: tableView,
+                               withImageURL: burger.photoUrl,
+                               andImageView: cell.burgerImage!,
+                               atIndexPath: indexPath)
+            
+            return cell
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.section != 0 {
+            let patty = burgerAttr[indexPath.section][indexPath.row] as! BurgerPreview
+            
+            selectedBurger = patty
+            
+            self.performSegue(withIdentifier: "sightingBurgerDetails", sender: self)
+        }
+    }
+
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {return section == 1 ? 0.0 : 80.0}
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {return indexPath.section == 1 ? 80 : tableView.rowHeight}
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {return burgerAttr[section].count}
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if (section == 0) {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "BurgerHeaderCell") as! BurgerDashboardHeaderTableViewCell
+            
+            cell.burgerName.text = burger.name
+            cell.kitchenName.text = burger.kitchen
+            cell.catalogueNumberLabel.text = "No."
+            cell.catalogueNumberNumber.text = String(burger.catalogueNumber)
+            
+            return cell
+        }
+            
+        return nil
+    }
+    
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        guard let tableViewCell = cell as? BurgerDashboardTableViewCell else { return }
+           
+        tableViewCell.setCollectionViewDataSourceDelegate(self, forRow: indexPath.row)
+    }
+
     func layoutBurgerView(){
         badges.removeAll()
         burgerAttr.removeAll()
@@ -63,18 +162,18 @@ class BurgerDashboardVC: UITableViewController {
         burgerHeaderView.burgerImage.image =  burgerThumbnail
         
         self.tableView.tableHeaderView  = burgerHeaderView
-
+        
         blurEffectView.frame = burgerHeaderView.burgerImage.bounds
         blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         blurEffectView.alpha = 0.9
         
         burgerHeaderView.burgerImage.addSubview(blurEffectView)
-    
+        
         tableView.estimatedRowHeight = 85.0
         tableView.rowHeight = UITableView.automaticDimension
         
         self.burgerAttr.append([burgerInfo as BurgerObject])
-    
+        
         self.tableView.allowsSelection = false
         self.tableView.isScrollEnabled = false
         self.tableView.reloadData()
@@ -136,14 +235,14 @@ class BurgerDashboardVC: UITableViewController {
                             if error != nil {
                                 return
                             }
-
+                            
                             DispatchQueue.main.async(execute: {
                                 UIView.animate(withDuration: 0.5, animations: {
                                     blurEffectView.alpha = 0.0
                                 }, completion: { _ in
                                     let title = burgerPreview.displayTag + " " + burgerPreview.displayText
                                     let slide = ZKCarouselSlide(image: UIImage(data: data!)!, title:title, description: descript)
-                                   
+                                    
                                     self.carousel.slides.append(slide)
                                     
                                     if imageCount == burgerInfo.sightings.count{
@@ -151,7 +250,7 @@ class BurgerDashboardVC: UITableViewController {
                                         self.setupCarousel()
                                     }
                                     
-                                   imageCount = imageCount + 1
+                                    imageCount = imageCount + 1
                                 })
                             })
                         }).resume()
@@ -160,7 +259,7 @@ class BurgerDashboardVC: UITableViewController {
                 
                 self.tableView.allowsSelection = true
                 self.tableView.isScrollEnabled = true
-
+                
                 TableLoader.removeLoaderFrom(self.tableView)
                 
                 self.burgerAttr[0] = [burgerInfo as BurgerObject]
@@ -175,7 +274,7 @@ class BurgerDashboardVC: UITableViewController {
                 
                 self.badges += [ratingBadge]
                 
-                if burgerInfo.fusion {
+                if (burgerInfo.fusion) {
                     guard let fusionBadge = Badge.init(ratingTitle: "",
                                                        badgeTitle: "fusion",
                                                        badgeIcon: UIImage(named: "fusion")!)
@@ -186,7 +285,7 @@ class BurgerDashboardVC: UITableViewController {
                     self.badges += [fusionBadge]
                 }
                 
-                if burgerInfo.veggie {
+                if (burgerInfo.veggie) {
                     guard let veggieBadge = Badge.init(ratingTitle: "",
                                                        badgeTitle: "veggie",
                                                        badgeIcon: UIImage(named: "veggie")!)
@@ -197,7 +296,7 @@ class BurgerDashboardVC: UITableViewController {
                     self.badges += [veggieBadge]
                 }
                 
-                if burgerInfo.spicy {
+                if (burgerInfo.spicy) {
                     guard let spicyBadge = Badge.init(ratingTitle: "",
                                                       badgeTitle: "spicy",
                                                       badgeIcon: UIImage(named: "spicy")!)
@@ -208,7 +307,7 @@ class BurgerDashboardVC: UITableViewController {
                     self.badges += [spicyBadge]
                 }
                 
-                if burgerInfo.extinct {
+                if (burgerInfo.extinct) {
                     guard let extinctBadge = Badge.init(ratingTitle: "",
                                                         badgeTitle: "extinct",
                                                         badgeIcon: UIImage(named: "available")!)
@@ -219,7 +318,7 @@ class BurgerDashboardVC: UITableViewController {
                     self.badges += [extinctBadge]
                 }
                 
-                if burgerInfo.seasonal {
+                if (burgerInfo.seasonal) {
                     guard let seasonalBadge = Badge.init(ratingTitle: "",
                                                          badgeTitle: "limited",
                                                          badgeIcon: UIImage(named: "seasonal")!)
@@ -230,7 +329,7 @@ class BurgerDashboardVC: UITableViewController {
                     self.badges += [seasonalBadge]
                 }
                 
-                if burgerInfo.hasChallenge {
+                if (burgerInfo.hasChallenge) {
                     guard let hasChallengeBadge = Badge.init(ratingTitle: "",
                                                              badgeTitle: "challenge",
                                                              badgeIcon: UIImage(named: "hasChallenge")!)
@@ -241,7 +340,7 @@ class BurgerDashboardVC: UITableViewController {
                     self.badges += [hasChallengeBadge]
                 }
                 
-                if burgerInfo.hasMods {
+                if (burgerInfo.hasMods) {
                     guard let hasModsBadge = Badge.init(ratingTitle: "",
                                                         badgeTitle: "mods",
                                                         badgeIcon: UIImage(named: "hasMods")!)
@@ -263,14 +362,16 @@ class BurgerDashboardVC: UITableViewController {
                 
                 var locationTitle = "location"
                 
-                if burgerInfo.locationCount > 1 { locationTitle = "locations" }
-
-                    guard let locationsBadge = Badge.init(ratingTitle: String(burgerInfo.locationCount),
-                                                   badgeTitle: locationTitle,
-                                                   badgeIcon: UIImage(named: "locations")!)
-                    else {
-                        fatalError("Unable to instantiate fusion badge")
-                    }
+                if (burgerInfo.locationCount > 1) {
+                    locationTitle = "locations"
+                }
+                
+                guard let locationsBadge = Badge.init(ratingTitle: String(burgerInfo.locationCount),
+                                                      badgeTitle: locationTitle,
+                                                      badgeIcon: UIImage(named: "locations")!)
+                else {
+                    fatalError("Unable to instantiate fusion badge")
+                }
                 
                 self.badges += [locationsBadge]
                 
@@ -281,12 +382,12 @@ class BurgerDashboardVC: UITableViewController {
     
     func setupCarousel(){
         let burgerHeaderView = self.tableView.tableHeaderView as! BurgerHeaderView
-    
+        
         self.carousel.frame = burgerHeaderView.burgerImage.frame
         self.carousel.contentMode = .scaleAspectFill
         self.carousel.pageControl.numberOfPages = self.carousel.slides.count
         self.carousel.alpha = 0.0
-
+        
         burgerHeaderView.containerView.addSubview(self.carousel)
         
         UIView.animate(withDuration: 0.5, animations: {
@@ -296,80 +397,17 @@ class BurgerDashboardVC: UITableViewController {
         })
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
-    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        guard let tableViewCell = cell as? BurgerDashboardTableViewCell else { return }
+    func updateCarouselViewHeight(){
+        var headerRect = CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 0)
         
-        tableViewCell.setCollectionViewDataSourceDelegate(self, forRow: indexPath.row)
-    }
-    
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return burgerAttr.count
-    }
-    
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return burgerAttr[section].count
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-         if indexPath.section == 0 {
-            let burger = burgerAttr[indexPath.section][indexPath.row] as! Burger
-            let cellIdentifier = "BurgerInfoCell"
-            let ingredients = "• " + burger.ingredients.replacingOccurrences(of: ",", with: "\n\n• ")
-            let locationTitle = burger.locationCount > 1 ? " locations" : " location"
-            let sightingsTotal : Int = burger.sightings.count
-            let totalSightings = String(sightingsTotal)
-        
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? BurgerDashboardTableViewCell
-            else {
-                fatalError("The dequeued cell is not an instance of BurgerTableViewCell.")
-            }
-            
-            cell.averagePrice.text = burger.averagePrice
-            cell.sightings.text = "Catalogued " + totalSightings + " times"
-            cell.locations.text = String(burger.locationCount) + locationTitle + " documented"
-            cell.ingredients.text = ingredients
-        
-            return cell
-         } else {
-            let burger = burgerAttr[indexPath.section][indexPath.row] as! BurgerPreview
-            let cellIdentifier = "CatalogueTableViewCell"
-            
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? CatalogueTableViewCell
-            else {
-                fatalError("The dequeued cell is not an instance of CatalogueTableViewCell.")
-            }
-
-            cell.burgerName.text = burger.name
-            cell.kitchenName.text = burger.kitchen
-            cell.catalogueNumberLabel.text = burger.displayTag
-            cell.catalogueNumberNumber.text = burger.displayText
-            
-            cell.burgerID = burger.burgerID
-            
-            updateImageForCell(cell,
-                               inTableView: tableView,
-                               withImageURL: burger.photoUrl,
-                               andImageView: cell.burgerImage!,
-                               atIndexPath: indexPath)
-            
-            return cell
+        if (tableView.contentOffset.y < 200) {
+            headerRect.origin.y = tableView.contentOffset.y
+            headerRect.size.height = -tableView.contentOffset.y + 200
         }
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-         if indexPath.section != 0 {
-            let patty = burgerAttr[indexPath.section][indexPath.row] as! BurgerPreview
-            
-            selectedBurger = patty
         
-            self.performSegue(withIdentifier: "sightingBurgerDetails", sender: self)
-        }
+        self.carousel.collectionView.collectionViewLayout.invalidateLayout()
+        self.carousel.frame = headerRect
     }
-    
     
     func updateImageForCell(_ cell: UITableViewCell,
                             inTableView tableView: UITableView,
@@ -379,125 +417,22 @@ class BurgerDashboardVC: UITableViewController {
         let burger = burgerAttr[indexPath.section][indexPath.row] as! BurgerPreview
         let imageView = andImageView
         let imageURL = burger.photoUrl
-
+        
         imageView.image = kLazyLoadPlaceholderImage
-
+        
         ImageManager.sharedInstance.downloadImageFromURL(imageURL) { (success, image) -> Void in
             if success && image != nil {
                 if (tableView.indexPath(for: cell) as NSIndexPath?)?.row == (indexPath as NSIndexPath).row {
                     imageView.image = image
-
+                    
                     burger.photo = imageView.image!
                 }
             }
         }
     }
-
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-         if section == 0 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "BurgerHeaderCell") as! BurgerDashboardHeaderTableViewCell
-            
-            cell.burgerName.text = burger.name
-            cell.kitchenName.text = burger.kitchen
-            cell.catalogueNumberLabel.text = "No."
-            cell.catalogueNumberNumber.text = String(burger.catalogueNumber)
-            
-            return cell
-         } else {
-            return nil
-        }
-    }
-    
-    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if let _ = scrollView as? UITableView {
-            updateCarouselViewHeight()
-            
-            var offset = scrollView.contentOffset.y / 40
-            
-            if offset > 1 {
-                offset = 1
-                
-                let colour = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: offset)
-                
-                self.navigationController?.navigationBar.tintColor = UIColor(red: 222/255,
-                                                                             green: 173/255,
-                                                                             blue: 107/255,
-                                                                             alpha: 1)
-                self.navigationController?.navigationBar.backgroundColor = colour
-                
-            } else {
-                let colour = UIColor(red: 56/255, green: 49/255, blue: 40/255, alpha: offset)
-                
-                self.navigationController?.navigationBar.tintColor = UIColor.white
-                self.navigationController?.navigationBar.backgroundColor = colour
-            }
-            
-            let headerView = self.tableView.tableHeaderView as! BurgerHeaderView
-            
-            headerView.scrollViewDidScroll(scrollView: scrollView)
-        }
-    }
-    
-    func updateCarouselViewHeight(){
-        var headerRect = CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 0)
-        
-        if tableView.contentOffset.y < 200 {
-            headerRect.origin.y = tableView.contentOffset.y
-            headerRect.size.height = -tableView.contentOffset.y + 200
-        }
-        
-        self.carousel.collectionView.collectionViewLayout.invalidateLayout()
-        self.carousel.frame = headerRect
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0),
-                                   at: UITableView.ScrollPosition.top,
-                                   animated: false)
-        
-        self.statusBarBgView.removeFromSuperview()
-    }
-        
-    
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == 1 {
-            return 80
-        } else {
-            return tableView.rowHeight
-        }
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 1 {
-            return 0.0
-        } else {
-            return 80.0
-        }
-    }
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if (segue.identifier == "sightingBurgerDetails") {
-            let burgerViewController = segue.destination as! BurgerVC
-            
-            if burgerThumbnail.size.width == 0.0 {
-                burgerViewController.burgerThumbnail = UIImage(named:"baconBeast")
-            } else {
-                burgerViewController.burgerThumbnail = burgerThumbnail
-            }
-            
-            burgerViewController.burger = selectedBurger
-        }
-    }
 }
 
-
 extension BurgerDashboardVC: UICollectionViewDelegate, UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return badges.count
-    }
-    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let burgerBadge = badges[indexPath.row]
         
@@ -512,6 +447,6 @@ extension BurgerDashboardVC: UICollectionViewDelegate, UICollectionViewDataSourc
         
         return cell
     }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {}
+
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {return badges.count}
 }
